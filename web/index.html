@@ -1610,7 +1610,7 @@ const CLIENT_TE_WORDS = {
   "nunchi": "నుంచి", "nundi": "నుండి", "kosam": "కోసం",
   "mariyu": "మరియు", "leda": "లేదా", "gani": "కానీ", "kani": "కానీ",
   "undi": "ఉంది", "vundi": "ఉంది", "ledu": "లేదు",
-  "unnav": "ఉన్నావ్", "unnavu": "ఉన్నావు", "vunnav": "ఉన్నావ్", "vunnavu": "ఉన్నావు",
+  "unnav": "ఉన్నావ్", "unnavu": "ఉన్నావు", "vunnav": "ఉన్నావ్", "vunnavu": "ఉన్నావు", "vunnvu": "ఉన్నావు", "unnvu": "ఉన్నావు", "unvu": "ఉన్నావు", "vunvu": "ఉన్నావు", "vunnu": "ఉన్నావు",
   "unnaru": "ఉన్నారు", "unaru": "ఉన్నారు", "vunnaru": "ఉన్నారు",
   "unnanu": "ఉన్నాను", "vunnanu": "ఉన్నాను",
   "vellali": "వెళ్లాలి", "velali": "వెళ్లాలి", "vellanu": "వెళ్లాను",
@@ -1666,8 +1666,40 @@ function clientFoldPhonetics(s) {
   t = t.replace(/aa/g, "a").replace(/ee/g, "e").replace(/ii/g, "i").replace(/oo/g, "o").replace(/uu/g, "u");
   t = t.replace(/kh/g, "k").replace(/gh/g, "g").replace(/jh/g, "j").replace(/th/g, "t").replace(/dh/g, "d");
   t = t.replace(/ph/g, "f").replace(/bh/g, "b").replace(/sh/g, "s").replace(/ch/g, "c");
-  return t;
+  t = t.replace(/[^\w\s\u0C00-\u0C7F]/g, " ");
+  const tokens = t.split(/\s+/).filter(Boolean);
+  const folded = tokens.map(tok => {
+    let w = tok;
+    if (/^(hi|hai|hello|helo|hey)$/i.test(w)) return "hello";
+    if (/^y?e[l]+a$/i.test(w)) return "ela";
+    w = w.replace(/nn+/g, "n").replace(/ll+/g, "l").replace(/dd+/g, "d").replace(/tt+/g, "t").replace(/ss+/g, "s").replace(/pp+/g, "p");
+    if (/^v?un(r[a-z]*|ar[a-z]*|ara)$/i.test(w)) return "unnaru";
+    if (/^v?un(v[a-z]*|av[a-z]*|vu|va)?$/i.test(w)) return "unnav";
+    if (/^v?un(n[a-z]*|an[a-z]*)$/i.test(w)) return "unnanu";
+    if (/^v?un(d[a-z]*|di)$/i.test(w)) return "undi";
+    if (/^(bagun|bagunan|baga\s*un)/i.test(w)) return "bagun";
+    return w;
+  });
+  return folded.join(" ");
 }
+
+const CLIENT_TELUGU_TO_ENGLISH_GLOSS = {
+  "hi": "hello", "hai": "hello", "hello": "hello", "hey": "hello",
+  "ela": "how", "ella": "how", "yela": "how", "ఎలా": "how",
+  "unnav": "are you", "unnavu": "are you", "vunnav": "are you", "vunnavu": "are you",
+  "vunnvu": "are you", "unnvu": "are you", "unvu": "are you", "vunvu": "are you", "vunnu": "are you",
+  "unnaru": "are you", "vunnaru": "are you", "ఉన్నారు": "are you", "ఉన్నావు": "are you", "ఉన్నావ్": "are you",
+  "unnanu": "am I", "vunnanu": "am I", "ఉన్నాను": "am I",
+  "naku": "to me", "naaku": "to me", "నాకు": "to me",
+  "nenu": "I", "నేను": "I", "nuvvu": "you", "nuv": "you", "నువ్వు": "you", "meeru": "you", "మీరు": "you",
+  "chala": "very", "చాలా": "very", "baga": "well", "బాగా": "well",
+  "bagundi": "is good", "బాగుంది": "is good", "bagunaru": "are good", "bagunnaru": "are good", "బాగున్నారు": "are good",
+  "undi": "is there", "ఉంది": "is there", "ledu": "is not", "లేదు": "is not",
+  "ivala": "today", "ఇవాళ": "today", "repu": "tomorrow", "రేపు": "tomorrow", "ninna": "yesterday", "నిన్న": "yesterday", "ippudu": "now", "ఇప్పుడు": "now",
+  "ekkada": "where", "ఎక్కడ": "where", "enti": "what", "ఏంటి": "what", "enduku": "why", "ఎందుకు": "why",
+  "pani": "work", "పని": "work", "cheyali": "must do", "చేయాలి": "must do", "chesanu": "did", "చేశాను": "did", "chesaru": "did", "చేశారు": "did", "chey": "do", "చేయ్": "do",
+  "kavali": "need", "కావాలి": "need", "sahayam": "help", "సహాయం": "help", "dhanyavadalu": "thank you", "ధన్యవాదాలు": "thank you", "namaskaram": "greetings", "నమస్కారం": "greetings"
+};
 
 function clientElevateToPureEnglish(text) {
   if (!text) return "";
@@ -1689,7 +1721,9 @@ function clientElevateToPureEnglish(text) {
     [/\bwant\b/gi, "require"],
     [/\bwill go\b/gi, "shall proceed"],
     [/\bcall me now\b/gi, "please contact me by telephone at once"],
-    [/\bhow are you\b/gi, "how do you do"],
+    [/\b(hello|hi)[,\s]+how are you[?\.]*/gi, "Greetings. How do you do? I trust you are well."],
+    [/^how are you[?\.]*/gi, "How do you do? I trust you are well."],
+    [/\bhow are you[?\.]*/gi, "how do you do? I trust you are well."],
     [/\bi am doing well\b/gi, "I am in sound health and good spirits"],
     [/\byou look very good\b/gi, "you appear exceptionally well"],
     [/\bconvert this sentence into english\b/gi, "please convert this sentence into English"]
@@ -1711,10 +1745,10 @@ function clientTranslateClauseToEnglish(raw) {
   const detrans = clientDetransliterateTeluguLoanwords(clean);
   const folded = clientFoldPhonetics(detrans);
 
-  if (/(mer|meru|meeru)\s+(chala|chaala)\s+(bagunaru|bagunnaru|bagunaaru|bagunnaaru)/i.test(folded)) {
+  if (/(mer|meru|meeru)\s+(chala|chaala|cala)\s+(bagun|bagunaru|bagunnaru|bagunaaru|bagunnaaru)/i.test(folded)) {
     return "You look very good";
   }
-  if (/(nuv|nuvu|nuvvu)\s+(chala|chaala)\s+(bagunav|bagunnav)/i.test(folded)) {
+  if (/(nuv|nuvu|nuvvu)\s+(chala|chaala|cala)\s+(bagun|bagunav|bagunnav)/i.test(folded)) {
     return "You look very good";
   }
   if (/(convert|kanvart|translate|traslet)\s+(this|dis)\s+(an\s+|a\s+|aan\s+)?(sentence|sentns)\s+(in\s*to|into|to)\s+(english|ingles|englis)/i.test(folded)) {
@@ -1723,13 +1757,13 @@ function clientTranslateClauseToEnglish(raw) {
   if (/(convert|kanvart|translate|traslet)\s+(this|dis)\s+(an\s+|a\s+|aan\s+)?(sentence|sentns)/i.test(folded)) {
     return "convert this sentence";
   }
-  if (/^(helo|hello|hi)\s+(ela|yela|ella)\s+(unav|unnav|unaru|unnaru|vunnav)/i.test(folded)) {
+  if (/^(helo|hello|hi)\s+(meeru|meru|nuvvu|nuv)?\s*(ela|yela|ella)\s+(unav[a-z]*|unnav[a-z]*|unaru|unnaru|vunnav[a-z]*|vunnvu|unnvu|vunvu|unvu|vunnu)/i.test(folded)) {
     return "Hello, how are you?";
   }
-  if (/^(ela|yela|ella)\s+(unav|unnav|unaru|unnaru|vunnav)/i.test(folded)) {
+  if (/^(meeru|meru|nuvvu|nuv)?\s*(ela|yela|ella)\s+(unav[a-z]*|unnav[a-z]*|unaru|unnaru|vunnav[a-z]*|vunnvu|unnvu|vunvu|unvu|vunnu)/i.test(folded) || /^(మీరు|నువ్వు)?\s*ఎలా\s+(ఉన్నారు|ఉన్నావు|ఉన్నావ్)/i.test(clean)) {
     return "How are you?";
   }
-  if (/^(nuv|nuvu|nuvvu)\s+ekada\s+unav/i.test(folded)) {
+  if (/^(nuv|nuvu|nuvvu)\s+(ekada|ekkada)\s+(unav|unnav|vunnav)/i.test(folded)) {
     return "Where are you?";
   }
   if (/(nenu|nen)\s+(chala\s+)?(bagunanu|bagunnanu)/i.test(folded)) {
@@ -1788,7 +1822,9 @@ function clientTranslateClauseToEnglish(raw) {
   const engWords = [];
   for (const t of tokens) {
     const cleanTok = t.replace(/[^\w\u0C00-\u0C7F]/g, "").toLowerCase();
-    if (CLIENT_PURE_TE_MAP[cleanTok]) {
+    if (CLIENT_TELUGU_TO_ENGLISH_GLOSS && CLIENT_TELUGU_TO_ENGLISH_GLOSS[cleanTok]) {
+      engWords.push(CLIENT_TELUGU_TO_ENGLISH_GLOSS[cleanTok]);
+    } else if (CLIENT_PURE_TE_MAP[cleanTok]) {
       engWords.push(cleanTok);
     } else if (CLIENT_LOANWORDS.has(cleanTok)) {
       engWords.push(cleanTok);
@@ -1820,10 +1856,10 @@ function clientTranslateClauseToPureEnglish(raw) {
   const detrans = clientDetransliterateTeluguLoanwords(clean);
   const folded = clientFoldPhonetics(detrans);
 
-  if (/(mer|meru|meeru)\s+(chala|chaala)\s+(bagunaru|bagunnaru|bagunaaru|bagunnaaru)/i.test(folded)) {
+  if (/(mer|meru|meeru)\s+(chala|chaala|cala)\s+(bagun|bagunaru|bagunnaru|bagunaaru|bagunnaaru)/i.test(folded)) {
     return "You appear exceptionally well";
   }
-  if (/(nuv|nuvu|nuvvu)\s+(chala|chaala)\s+(bagunav|bagunnav)/i.test(folded)) {
+  if (/(nuv|nuvu|nuvvu)\s+(chala|chaala|cala)\s+(bagun|bagunav|bagunnav)/i.test(folded)) {
     return "You appear in excellent health and spirits";
   }
   if (/(convert|kanvart|translate|traslet)\s+(this|dis)\s+(an\s+|a\s+|aan\s+)?(sentence|sentns)\s+(in\s*to|into|to)\s+(english|ingles|englis)/i.test(folded)) {
@@ -1832,13 +1868,13 @@ function clientTranslateClauseToPureEnglish(raw) {
   if (/(convert|kanvart|translate|traslet)\s+(this|dis)\s+(an\s+|a\s+|aan\s+)?(sentence|sentns)/i.test(folded)) {
     return "please translate this sentence";
   }
-  if (/^(helo|hello|hi)\s+(ela|yela|ella)\s+(unav|unnav|unaru|unnaru|vunnav)/i.test(folded)) {
+  if (/^(helo|hello|hi)\s+(meeru|meru|nuvvu|nuv)?\s*(ela|yela|ella)\s+(unav[a-z]*|unnav[a-z]*|unaru|unnaru|vunnav[a-z]*|vunnvu|unnvu|vunvu|unvu|vunnu)/i.test(folded)) {
     return "Greetings. How do you do? I trust you are well.";
   }
-  if (/^(ela|yela|ella)\s+(unav|unnav|unaru|unnaru|vunnav)/i.test(folded)) {
+  if (/^(meeru|meru|nuvvu|nuv)?\s*(ela|yela|ella)\s+(unav[a-z]*|unnav[a-z]*|unaru|unnaru|vunnav[a-z]*|vunnvu|unnvu|vunvu|unvu|vunnu)/i.test(folded) || /^(మీరు|నువ్వు)?\s*ఎలా\s+(ఉన్నారు|ఉన్నావు|ఉన్నావ్)/i.test(clean)) {
     return "How do you do? I trust you are well.";
   }
-  if (/^(nuv|nuvu|nuvvu)\s+ekada\s+unav/i.test(folded)) {
+  if (/^(nuv|nuvu|nuvvu)\s+(ekada|ekkada)\s+(unav|unnav|vunnav)/i.test(folded)) {
     return "Where are you currently located?";
   }
   if (/(nenu|nen)\s+(chala\s+)?(bagunanu|bagunnanu)/i.test(folded)) {
@@ -1913,14 +1949,16 @@ function clientTranslateToEnglish(text) {
       if (subTrans.length > 0) {
         let joined = subTrans.join(", ");
         if (joined) joined = joined[0].toUpperCase() + joined.slice(1);
-        out.push(joined + (punct || "."));
+        const endPunct = /[.!?]$/.test(joined) ? "" : (punct || ".");
+        out.push(joined + endPunct);
         continue;
       }
     }
 
     let trans = clientTranslateClauseToEnglish(clause);
     if (trans) trans = trans[0].toUpperCase() + trans.slice(1);
-    out.push(trans + (punct || "."));
+    const endPunct = /[.!?]$/.test(trans) ? "" : (punct || ".");
+    out.push(trans + endPunct);
   }
 
   return out.join(" ").trim();
@@ -1942,14 +1980,16 @@ function clientTranslateToPureEnglish(text) {
       if (subTrans.length > 0) {
         let joined = subTrans.join("; ");
         if (joined) joined = joined[0].toUpperCase() + joined.slice(1);
-        out.push(joined + (punct || "."));
+        const endPunct = /[.!?]$/.test(joined) ? "" : (punct || ".");
+        out.push(joined + endPunct);
         continue;
       }
     }
 
     let trans = clientTranslateClauseToPureEnglish(clause);
     if (trans) trans = trans[0].toUpperCase() + trans.slice(1);
-    out.push(trans + (punct || "."));
+    const endPunct = /[.!?]$/.test(trans) ? "" : (punct || ".");
+    out.push(trans + endPunct);
   }
 
   return out.join(" ").trim();
@@ -1977,24 +2017,34 @@ const CLIENT_PHRASE_RULES = [
     meaning: "Inquiring about health and state of being."
   },
   {
-    regex: /^(hi|hello|hey)\s+(ela|yela|ella)\s+(unav[ou]*|unnav[ou]*|unaru|unnaru|vunnav[ou]*)[?\.]*$/i,
+    regex: /^(hi|hello|hey|hai)\s+(meeru|meru|nuvvu|nuv)?\s*(ela|yela|ella)\s+(unav[a-z]*|unnav[a-z]*|unaru|unnaru|vunnav[a-z]*|vunnvu|unnvu|vunvu|unvu|vunnu)[?\.]*$/i,
     norm: "హలో ఎలా ఉన్నావు?",
     pureTe: "నమస్కారం, ఎలా ఉన్నారు?",
     teScript: "హలో ఎలా ఉన్నావు?",
     rom: "hello ela unnavu?",
     en: "Hello, how are you?",
-    pureEn: "Greetings; how do you do? I hope you are doing well.",
+    pureEn: "Greetings. How do you do? I trust you are well.",
     meaning: "Conversational greeting asking how you are doing."
   },
   {
-    regex: /^(ela|yela|ella)\s+(unav[ou]*|unnav[ou]*|unaru|unnaru|vunnav[ou]*)[?\.]*$/i,
-    norm: "ఎలా ఉన్నావు?",
+    regex: /^(meeru|meru|nuvvu|nuv)?\s*(ela|yela|ella)\s+(unav[a-z]*|unnav[a-z]*|unaru|unnaru|vunnav[a-z]*|vunnvu|unnvu|vunvu|unvu|vunnu)[?\.]*$/i,
+    norm: "మీరు ఎలా ఉన్నారు?",
     pureTe: "ఎలా ఉన్నారు?",
-    teScript: "ఎలా ఉన్నావు?",
-    rom: "ela unnavu?",
+    teScript: "ఎలా ఉన్నారు?",
+    rom: "meeru ela unnaru?",
     en: "How are you?",
     pureEn: "How do you do? I trust you are well.",
     meaning: "Friendly inquiry into welfare."
+  },
+  {
+    regex: /^(మీరు|నువ్వు)?\s*ఎలా\s+(ఉన్నారు|ఉన్నావు|ఉన్నావ్)[?\.]*$/i,
+    norm: "మీరు ఎలా ఉన్నారు?",
+    pureTe: "ఎలా ఉన్నారు?",
+    teScript: "మీరు ఎలా ఉన్నారు?",
+    rom: "meeru ela unnaru?",
+    en: "How are you?",
+    pureEn: "How do you do? I trust you are well.",
+    meaning: "Inquiring in Telugu about health and state of being."
   },
   {
     regex: /^(nuvvu|nuv)\s+ekkada\s+unnav[,\s]+class\s+ki\s+vastunnava[?\.]*$/i,

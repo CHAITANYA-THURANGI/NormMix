@@ -85,7 +85,7 @@ TELUGU_TO_ENGLISH_GLOSS: dict[str, str] = {
     "ninna": "yesterday", "నిన్న": "yesterday", "ippudu": "now", "ఇప్పుడు": "now",
     "appudu": "then", "అప్పుడు": "then", "eppudu": "when", "ఎప్పుడు": "when",
     "ekkada": "where", "ఎక్కడ": "where", "ikkada": "here", "ఇక్కడ": "here",
-    "akkada": "there", "అక్కడ": "there", "ela": "how", "ఎలా": "how",
+    "akkada": "there", "అక్కడ": "there", "ela": "how", "ella": "how", "yela": "how", "ఎలా": "how",
     "enti": "what", "ఏంటి": "what", "enduku": "why", "ఎందుకు": "why",
 
     # Adverbs & Postpositions
@@ -96,7 +96,7 @@ TELUGU_TO_ENGLISH_GLOSS: dict[str, str] = {
 
     # Verbs & Predicates
     "undi": "has / is there", "ఉంది": "has / is there", "ledu": "is not / no", "లేదు": "is not / no",
-    "unnav": "are (you)", "ఉన్నావ్": "are (you)", "unnaru": "are (you/they)", "ఉన్నారు": "are (you/they)",
+    "unnav": "are (you)", "unnavu": "are (you)", "vunnav": "are (you)", "vunnavu": "are (you)", "vunnvu": "are (you)", "unnvu": "are (you)", "vunvu": "are (you)", "unvu": "are (you)", "ఉన్నావ్": "are (you)", "unnaru": "are (you/they)", "ఉన్నారు": "are (you/they)",
     "unnanu": "am (I)", "ఉన్నాను": "am (I)",
     "vellali": "need to go", "వెళ్లాలి": "need to go", "vellanu": "went", "వెళ్లాను": "went",
     "vastanu": "will come", "వస్తాను": "will come", "vastunnava": "are you coming?", "వస్తున్నావా": "are you coming?",
@@ -189,9 +189,19 @@ def fold_phonetics(s: str) -> str:
         t = re.sub(r"tt+", "t", t)
         t = re.sub(r"ss+", "s", t)
         t = re.sub(r"pp+", "p", t)
-        t = re.sub(r"([aeiou])v[ou]$", r"\1v", t)
-        t = re.sub(r"^unav[ou]*$", "unav", t)
-        t = re.sub(r"^artham$", "ardam", t)
+        # Standardize forms of unnavu/unnaru/unnanu/undi
+        if re.search(r"^v?un(r[a-z]*|ar[a-z]*|ara)$", t):
+            t = "unnaru"
+        elif re.search(r"^v?un(v[a-z]*|av[a-z]*|vu|va)?$", t):
+            t = "unnav"
+        elif re.search(r"^v?un(n[a-z]*|an[a-z]*)$", t):
+            t = "unnanu"
+        elif re.search(r"^v?un(d[a-z]*|di)$", t):
+            t = "undi"
+        else:
+            t = re.sub(r"([aeiou])v[ou]$", r"\1v", t)
+            t = re.sub(r"^unav[ou]*$", "unav", t)
+            t = re.sub(r"^artham$", "ardam", t)
         folded.append(t)
     return " ".join(folded)
 
@@ -1340,7 +1350,7 @@ PURE_TELUGU_ROMAN_MAP: dict[str, str] = {
     "appudu": "అప్పుడు", "eppudu": "ఎప్పుడు", "ekkada": "ఎక్కడ", "ikkada": "ఇక్కడ", "akkada": "అక్కడ",
     "ela": "ఎలా", "ella": "ఎలా", "yela": "ఎలా", "enti": "ఏంటి", "enduku": "ఎందుకు",
     "undi": "ఉంది", "ledu": "లేదు", "unnav": "ఉన్నావు", "unnava": "ఉన్నావా", "unnanu": "ఉన్నాను", "unnaru": "ఉన్నారు",
-    "unav": "ఉన్నావు", "vunnav": "ఉన్నావు", "vunnavu": "ఉన్నావు", "vunav": "ఉన్నావు",
+    "unav": "ఉన్నావు", "vunnav": "ఉన్నావు", "vunnavu": "ఉన్నావు", "vunav": "ఉన్నావు", "vunnvu": "ఉన్నావు", "unnvu": "ఉన్నావు", "unvu": "ఉన్నావు", "vunvu": "ఉన్నావు", "vunnu": "ఉన్నావు",
     "vellali": "వెళ్లాలి", "velthanu": "వెళ్తాను", "vachanu": "వచ్చాను", "vastanu": "వస్తాను", "vastunnanu": "వస్తున్నాను",
     "vastunnava": "వస్తున్నావా", "vellanu": "వెళ్లాను", "vastunnaru": "వస్తున్నారు", "velthunnaru": "వెళ్తున్నారు",
     "vastava": "వస్తావా", "velthava": "వెళ్తావా",

@@ -63,6 +63,12 @@ def test_pure_telugu_and_tanglish_translations():
     assert "You look very good" in en3 or "good" in en3
     assert "You appear exceptionally well" in pure_en3 or "well" in pure_en3
 
+    # Colloquial Tanglish spellings (e.g. hi ella vunnvu)
+    en4 = translate_to_english("hi ella vunnvu")
+    pure_en4 = translate_to_pure_english("hi ella vunnvu")
+    assert "Hello, how are you?" in en4 or "how are you" in en4.lower()
+    assert "Greetings. How do you do? I trust you are well." in pure_en4 or "trust you are well" in pure_en4.lower()
+
 
 def test_elevate_to_pure_english():
     elevated = elevate_to_pure_english("I can't come today, please give me some help.")
