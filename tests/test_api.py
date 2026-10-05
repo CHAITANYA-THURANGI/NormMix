@@ -120,4 +120,32 @@ def test_feedback_endpoint(client):
     assert "feedback_id" in body
 
 
+def test_feedback_endpoint_with_learning(client):
+    r = client.post("/feedback", json={
+        "input_text": "repu college ki veltaanu",
+        "output_text": "I will go to college tomorrow",
+        "rating": "negative",
+        "correction": "I shall proceed to college tomorrow",
+        "comments": "User suggested formal pure English"
+    })
+    assert r.status_code == 200
+    body = r.json()
+    assert body["status"] == "success"
+    assert body["learned"] is True
+    assert body["model_updated"] == "translation_sota"
+
+
+def test_translate_endpoint(client):
+    r = client.post("/translate", json={
+        "text": "Hi Ella, vunnavu. Are you coming to college?",
+        "target": "english"
+    })
+    assert r.status_code == 200
+    body = r.json()
+    assert "english_translation" in body
+    assert "pure_english" in body
+    assert len(body["translation"]) > 0
+
+
+
 

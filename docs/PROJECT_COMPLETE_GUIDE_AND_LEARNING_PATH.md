@@ -207,8 +207,8 @@ NormMix implements and empirically evaluates three attention families:
 - **FastAPI Backend:** Asynchronous REST API with sub-10ms response times, automated OpenAPI documentation (`/docs`), and CORS middleware.
 - **Model Registry & Dynamic Caching:** Singleton manager in [`api/services/model_registry.py`](file:///c:/projects/NormMix/api/services/model_registry.py) that pre-loads PyTorch weights into GPU VRAM on startup and maintains an in-memory fallback to `RuleBaseline`.
 - **Web Translation Studio:** Single-page application with modern glassmorphism UI, real-time phonetic auto-suggestions, Web Audio Text-to-Speech playback, Web Speech API speech recognition, and virtual on-screen Telugu keyboard.
-- **Active Learning Feedback Loop:** Users can click 👍 or 👎 and submit manual corrections. Submissions are saved immediately to [`data/feedback.jsonl`](file:///c:/projects/NormMix/data/feedback.jsonl), creating a continuous self-improving training loop.
-- **Chrome Extension (Manifest V3):** Features a popup translator and a context menu ("Normalize Tanglish") allowing users to normalize text on WhatsApp Web, Twitter, LinkedIn, and Gmail in-place.
+- **Active Learning GPU Feedback Loop:** Users can click 👍 or 👎 and submit manual corrections from both the Web Studio and Chrome Extension. Submissions are saved immediately to [`data/feedback.jsonl`](file:///c:/projects/NormMix/data/feedback.jsonl), and [`src/training/feedback_learner.py`](file:///c:/projects/NormMix/src/training/feedback_learner.py) executes real-time continuous fine-tuning on the NVIDIA GPU, dynamically updating the neural checkpoints on disk and invalidating runtime caches with immediate notification toasts.
+- **Chrome Extension (Manifest V3):** Features a popup translator with all 7 synchronized view modalities, integrated user feedback buttons (👍 / 👎 Suggest Correction) with real-time GPU training triggers, offline client-side fallback, and a context menu ("Normalize Tanglish") allowing users to normalize text on WhatsApp Web, Twitter, LinkedIn, and Gmail in-place.
 
 ---
 
