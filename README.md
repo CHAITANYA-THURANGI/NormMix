@@ -1,5 +1,7 @@
 # NormMix AI: An Attention-Based Sequence-to-Sequence Framework for Telugu-English Code-Mixed Text Normalization & Universal Translation
 
+[![Live Web Studio](https://img.shields.io/badge/Live%20Web%20Studio-Online%20(Free)-38bdf8?style=for-the-badge&logo=githubpages&logoColor=white)](https://chaitanya-thurangi.github.io/NormMix/)
+[![Chrome Extension](https://img.shields.io/badge/Chrome%20Extension-v0.5.0%20Release-f59e0b?style=for-the-badge&logo=googlechrome&logoColor=white)](https://github.com/CHAITANYA-THURANGI/NormMix/releases/tag/v0.5.0)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.11%2Bcu128-EE4C2C.svg?style=flat&logo=pytorch)](https://pytorch.org/)
 [![CUDA](https://img.shields.io/badge/CUDA-NVIDIA%20RTX%204060-76B900.svg?style=flat&logo=nvidia)](https://developer.nvidia.com/cuda-zone)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
@@ -10,6 +12,7 @@
 > **Course:** Advanced Artificial Intelligence and Neural Networks (AAN) Mini-Project & Case Study  
 > **Architecture:** 2-Layer BiGRU + Scaled Dot-Product Attention + Pointer-Generator Copy Mechanism  
 > **Hardware Acceleration:** NVIDIA GeForce RTX 4060 Laptop GPU (8.0 GB GDDR6)  
+
 
 ---
 
