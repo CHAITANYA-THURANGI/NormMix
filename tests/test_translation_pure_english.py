@@ -69,6 +69,17 @@ def test_pure_telugu_and_tanglish_translations():
     assert "Hello, how are you?" in en4 or "how are you" in en4.lower()
     assert "Greetings. How do you do? I trust you are well." in pure_en4 or "trust you are well" in pure_en4.lower()
 
+    # Tanglish motion destination with temporal adverb (eroju college ki vastunava)
+    en5 = translate_to_english("hi , eroju college ki vastunava")
+    pure_en5 = translate_to_pure_english("hi , eroju college ki vastunava")
+    assert "eroju" not in en5.lower()
+    assert "eroju" not in pure_en5.lower()
+    assert en5.endswith("?")
+    assert pure_en5.endswith("?")
+    assert "coming to college today" in en5.lower()
+    assert "attending college today" in pure_en5.lower()
+    assert "greetings" in pure_en5.lower()
+
 
 def test_elevate_to_pure_english():
     elevated = elevate_to_pure_english("I can't come today, please give me some help.")

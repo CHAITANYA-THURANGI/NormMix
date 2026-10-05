@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NormMix AI: Master Architecture Guide, Codebase Anatomy, and Bottom-Up Learning Manual</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Cinzel:wght@700&display=swap');
+
+  :root {
+    --primary: #1e3a8a;
+    --primary-light: #3b82f6;
+    --dark: #0f172a;
+    --charcoal: #334155;
+    --light-bg: #f8fafc;
+    --border: #e2e8f0;
+    --accent: #d97706;
+    --emerald: #059669;
+    --mono: 'JetBrains Mono', Consolas, monospace;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    font-family: var(--sans);
+    color: var(--charcoal);
+    background: #ffffff;
+    line-height: 1.6;
+    font-size: 10pt;
+    margin: 0;
+    padding: 0;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 18mm 16mm 18mm 16mm;
+    @bottom-right {
+      content: counter(page);
+      font-family: var(--sans);
+      font-size: 8.5pt;
+      color: #64748b;
+    }
+  }
+
+  @media print {
+    body {
+      background: #ffffff !important;
+      color: #0f172a !important;
+      font-size: 9.5pt;
+    }
+    .page-break { page-break-before: always; }
+    .no-break { page-break-inside: avoid; }
+    a { color: inherit !important; text-decoration: none !important; }
+    .cover-page { height: 96vh; page-break-after: always; display: flex; flex-direction: column; justify-content: space-between; }
+  }
+
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 24px 20px;
+  }
+
+  /* COVER PAGE */
+  .cover-page {
+    padding: 40px 10px 20px 10px;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .tagline {
+    font-size: 8.5pt;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    color: var(--primary-light);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h1.cover-title {
+    font-size: 24pt;
+    line-height: 1.25;
+    color: var(--dark);
+    margin: 0 0 16px 0;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .cover-subtitle {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #475569;
+    margin-bottom: 28px;
+    max-width: 90%;
+  }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    background: var(--light-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+  .meta-item {
+    font-size: 9pt;
+  }
+  .meta-label {
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    font-size: 7.5pt;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+  .meta-value {
+    color: var(--dark);
+    font-weight: 600;
+  }
+
+  /* HEADINGS */
+  h1, h2, h3, h4 {
+    color: var(--dark);
+    font-weight: 700;
+  }
+  h2 {
+    font-size: 15pt;
+    margin-top: 32px;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h3 {
+    font-size: 12pt;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    color: var(--primary);
+  }
+  h4 {
+    font-size: 10.5pt;
+    margin-top: 14px;
+    margin-bottom: 6px;
+  }
+
+  p { margin: 0 0 10px 0; }
+  ul, ol { margin: 0 0 12px 0; padding-left: 20px; }
+  li { margin-bottom: 4px; }
+
+  /* CALLOUTS */
+  .callout {
+    background: var(--light-bg);
+    border-left: 4px solid var(--primary-light);
+    padding: 12px 14px;
+    border-radius: 0 6px 6px 0;
+    margin: 12px 0;
+    font-size: 9.5pt;
+  }
+  .callout-success {
+    border-left-color: var(--emerald);
+    background: #ecfdf5;
+  }
+  .callout-warning {
+    border-left-color: var(--accent);
+    background: #fffbeb;
+  }
+
+  /* TABLES */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 8.5pt;
+  }
+  th, td {
+    padding: 7px 10px;
+    text-align: left;
+    border: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    background: #f1f5f9;
+    color: var(--dark);
+    font-weight: 700;
+  }
+  tr:nth-child(even) td {
+    background: #f8fafc;
+  }
+
+  /* CODE & PRE */
+  code {
+    font-family: var(--mono);
+    font-size: 8.5pt;
+    background: #f1f5f9;
+    padding: 2px 5px;
+    border-radius: 4px;
+    color: #0f172a;
+  }
+  pre {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 12px 14px;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 8.5pt;
+    line-height: 1.45;
+    margin: 12px 0;
+  }
+  pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 7px;
+    font-size: 7.5pt;
+    font-weight: 700;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .badge-green { background: #d1fae5; color: #065f46; }
+  .badge-purple { background: #f3e8ff; color: #6b21a8; }
+
+  /* DIAGRAM BOX */
+  .diagram-box {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 14px;
+    font-family: var(--mono);
+    font-size: 8pt;
+    line-height: 1.4;
+    white-space: pre;
+    overflow-x: auto;
+    margin: 14px 0;
+  }
+
+  .qna-box {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid var(--primary);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    page-break-inside: avoid;
+  }
+  .qna-question {
+    font-weight: 700;
+    color: var(--dark);
+    font-size: 9.5pt;
+    margin-bottom: 4px;
+  }
+  .qna-answer {
+    color: #334155;
+    font-size: 9pt;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ==================== COVER PAGE ==================== -->
+  <div class="cover-page">
+    <div>
+      <div class="tagline">Official Project Architecture & Master Guide</div>
+      <h1 class="cover-title">NormMix AI: An Attention-Based Sequence-to-Sequence Framework for Telugu-English Code-Mixed Text Normalization</h1>
+      <div class="cover-subtitle">
+        A Comprehensive Pedagogical Guide to the Codebase Anatomy, Computer Directory Taxonomy, Bottom-Up Learning Curriculum, and Viva Defense Presentation Guide.
+      </div>
+
+      <div class="meta-grid">
+        <div class="meta-item">
+          <div class="meta-label">Project Domain</div>
+          <div class="meta-value">Indic NLP, Computational Linguistics & Deep Learning</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Course / Context</div>
+          <div class="meta-value">Advanced Artificial Intelligence & Neural Networks (AAN)</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Hardware Acceleration</div>
+          <div class="meta-value">NVIDIA GeForce RTX 4060 Laptop GPU (8GB GDDR6)</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Core Architecture</div>
+          <div class="meta-value">2-Layer BiGRU + Scaled Dot Attention + Copy Gate</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Inference Latency</div>
+          <div class="meta-value">~8.2 ms (CUDA FP16 Mixed Precision)</div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Production Deliverables</div>
+          <div class="meta-value">FastAPI Backend, Web Studio SPA, Chrome Extension</div>
+        </div>
+      </div>
+
+      <div class="callout callout-success">
+        <strong>Key Benchmark Breakthrough:</strong> Achieved an <strong>8x error reduction</strong> over baselines, reaching a Character Error Rate (CER) of <strong>5.37%</strong>, chrF of <strong>91.29</strong>, and BLEU of <strong>79.84</strong>, with <strong>100.0% English loanword preservation</strong>.
+      </div>
+    </div>
+
+    <div>
+      <p style="font-size: 8.5pt; color: #64748b; margin: 0;">
+        Repository: <code>c:\projects\NormMix</code> &bull; Python 3.14 / 3.12 &bull; PyTorch 2.11+cu128 &bull; Date: October 2026
+      </p>
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== SECTION 1 ==================== -->
+  <h2>1. Executive Summary & Problem Formulation</h2>
+  <p>
+    In Indian digital communication (WhatsApp, Instagram, X/Twitter, YouTube), Telugu speakers predominantly communicate in <strong>Tanglish</strong>&mdash;colloquial Telugu written in the Latin alphabet intermingled with English loanwords, technical terminology, abbreviations, and informal chat syntax.
+  </p>
+
+  <div class="callout callout-warning">
+    <strong>The Core Challenge:</strong> Standard Machine Translation systems (Google Translate, Bing) fail catastrophically on code-mixed text because they attempt to phonetically transliterate English loanwords into Telugu script (e.g., <code>college</code> &rarr; <code>కోల్లెగె</code>, <code>interview</code> &rarr; <code>ఇంతేర్విఎవ్</code>). This degrades readability and downstream comprehension.
+  </div>
+
+  <p>
+    <strong>System Objective:</strong> Given an input sequence $X = (x_1, \dots, x_{T_x})$, the model must:
+  </p>
+  <ol>
+    <li>Accurately transliterate colloquial Romanized Telugu morphemes to pristine Telugu Unicode script (e.g., <code>naku ivala</code> &rarr; <code>నాకు ఇవాళ</code>).</li>
+    <li>Dynamically recognize embedded English loanwords and route them through a <strong>Pointer-Generator Copy Gate</strong>, retaining Latin characters with 100% fidelity.</li>
+    <li>Provide multi-modal generation: Standard Normalized, All Telugu Script, All Romanized Tanglish, and Pure English Semantic Translation.</li>
+  </ol>
+
+  <!-- ==================== SECTION 2 ==================== -->
+  <h2>2. Master Directory Taxonomy: What Every Folder on Your Computer Does</h2>
+  <p>
+    The following table defines every single folder in the project repository (<code>c:\projects\NormMix</code>), explaining its exact purpose, key contents, and role in the system lifecycle.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 22%;">Directory / File</th>
+        <th style="width: 38%;">Purpose & Functionality</th>
+        <th style="width: 25%;">Key Files Inside</th>
+        <th style="width: 15%;">Executed By</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>src/</code></td>
+        <td><strong>Core Neural & NLP Library:</strong> Contains all deep learning architectures, attention implementations, tokenizers, preprocessing, and training loops.</td>
+        <td><code>config.py</code>, <code>attention/</code>, <code>models/</code>, <code>pipeline/</code></td>
+        <td>Imported across project</td>
+      </tr>
+      <tr>
+        <td><code>src/pipeline/</code></td>
+        <td><strong>OmniProcessor Multi-Modal Engine:</strong> Master orchestrator that performs script modality detection and coordinates 4-way translation.</td>
+        <td><code>omni_processor.py</code></td>
+        <td>API & Web Studio</td>
+      </tr>
+      <tr>
+        <td><code>src/models/</code></td>
+        <td><strong>Deep Learning Architecture:</strong> Implements 2-Layer BiGRU with Copy Gate, Seq2Seq Transformer, Rule Baseline, and Beam Search.</td>
+        <td><code>rnn_seq2seq.py</code>, <code>decoding.py</code>, <code>transformer.py</code></td>
+        <td>Training & Inference</td>
+      </tr>
+      <tr>
+        <td><code>src/attention/</code></td>
+        <td><strong>Attention Mechanisms:</strong> Math implementations of Scaled Dot-Product, Bahdanau (additive), and Luong (multiplicative) attention.</td>
+        <td><code>attention.py</code></td>
+        <td>Attached inside BiGRU</td>
+      </tr>
+      <tr>
+        <td><code>src/preprocessing/</code></td>
+        <td><strong>Linguistic Preprocessing:</strong> Unicode NFC normalization, repeat clamping, URL/@mention protection, and Char n-gram Language ID.</td>
+        <td><code>text_cleaning.py</code>, <code>langid.py</code>, <code>translit_te.py</code></td>
+        <td>Pipeline & Augmentation</td>
+      </tr>
+      <tr>
+        <td><code>src/datasets/</code></td>
+        <td><strong>Data Loaders & Splitting:</strong> Adapters for Google Dakshina and Aksharantar, zero-leakage hash split, and PyTorch DataLoaders.</td>
+        <td><code>splits.py</code>, <code>pipeline.py</code>, <code>torch_data.py</code></td>
+        <td>Data Prep & Training</td>
+      </tr>
+      <tr>
+        <td><code>src/tokenization/</code></td>
+        <td><strong>Tokenization Subsystem:</strong> Compact character-level tokenizer (~180 tokens) and SentencePiece subword tokenizer.</td>
+        <td><code>char_tokenizer.py</code>, <code>spm_tokenizer.py</code></td>
+        <td>Embedding layers</td>
+      </tr>
+      <tr>
+        <td><code>src/training/</code></td>
+        <td><strong>PyTorch Training Engine:</strong> Handles FP16 mixed precision, AdamW optimizer, ReduceLROnPlateau scheduler, and checkpointing.</td>
+        <td><code>loop.py</code></td>
+        <td><code>scripts/train.py</code></td>
+      </tr>
+      <tr>
+        <td><code>src/evaluation/</code></td>
+        <td><strong>Benchmark Evaluation:</strong> Computes CER, WER, chrF, BLEU, and fine-grained English vs Telugu token accuracy.</td>
+        <td><code>metrics.py</code>, <code>evaluate.py</code></td>
+        <td><code>scripts/evaluate.py</code></td>
+      </tr>
+      <tr>
+        <td><code>api/</code></td>
+        <td><strong>FastAPI REST Microservice:</strong> Asynchronous REST backend providing endpoints for normalization, translation, romanization, and feedback.</td>
+        <td><code>main.py</code>, <code>schemas.py</code>, <code>model_registry.py</code></td>
+        <td><code>uvicorn</code> on port 8000</td>
+      </tr>
+      <tr>
+        <td><code>data/processed/</code></td>
+        <td><strong>Ready-to-Train Dataset Splits:</strong> 25,803 zero-leakage training pairs, 64k rule baseline dictionary, and held-out OOV test slices.</td>
+        <td><code>train.jsonl</code>, <code>test.jsonl</code>, <code>rule_baseline.json</code></td>
+        <td>PyTorch DataLoader</td>
+      </tr>
+      <tr>
+        <td><code>experiments/checkpoints/</code></td>
+        <td><strong>Trained Model Weights:</strong> Serialized PyTorch weight files (<code>best.pt</code>, <code>last.pt</code>) for Production SOTA and baseline models.</td>
+        <td><code>production_sota/best.pt</code></td>
+        <td><code>ModelRegistry</code></td>
+      </tr>
+      <tr>
+        <td><code>web/</code></td>
+        <td><strong>Enterprise Web Translation Studio:</strong> Single-page application with real-time phonetic suggestions, Web Speech dictation, and audio TTS.</td>
+        <td><code>index.html</code></td>
+        <td>Web Browser</td>
+      </tr>
+      <tr>
+        <td><code>chrome-extension/</code></td>
+        <td><strong>Manifest V3 Browser Extension:</strong> In-place text normalization on WhatsApp Web, Twitter, LinkedIn, and Gmail via context menu.</td>
+        <td><code>manifest.json</code>, <code>popup/</code>, <code>content/</code></td>
+        <td>Google Chrome / Edge</td>
+      </tr>
+      <tr>
+        <td><code>scripts/</code></td>
+        <td><strong>CLI Automation Tools:</strong> Standalone executable scripts for dataset downloading, model training, evaluation, and slide generation.</td>
+        <td><code>train.py</code>, <code>evaluate.py</code>, <code>prepare_data.py</code></td>
+        <td>Terminal CLI</td>
+      </tr>
+      <tr>
+        <td><code>tests/</code></td>
+        <td><strong>PyTest Test Suite:</strong> 58 unit tests covering tensor shapes, attention masking, translation fidelity, and API endpoints.</td>
+        <td><code>test_models_forward.py</code>, <code>test_api.py</code></td>
+        <td><code>pytest</code> runner</td>
+      </tr>
+      <tr>
+        <td><code>docs/</code></td>
+        <td><strong>Academic Reports & Presentations:</strong> Master technical documentation, PowerPoint presentation (<code>presentation.pptx</code>), and PDF reports.</td>
+        <td><code>project_report.pdf</code>, <code>00_master_report.md</code></td>
+        <td>Academic Review</td>
+      </tr>
+      <tr>
+        <td><code>.venv/</code> & <code>.venv-gpu/</code></td>
+        <td><strong>Python Virtual Environments:</strong> Isolated runtime environments containing Python binaries, PyTorch with CUDA 12.8, and dependencies.</td>
+        <td><code>python.exe</code>, <code>site-packages/</code></td>
+        <td>System execution</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== SECTION 3 ==================== -->
+  <h2>3. Bottom-Up Pedagogical Learning Path (Level 1 to Level 9)</h2>
+  <p>
+    To understand every layer of this system conceptually and mathematically, follow this structured bottom-up learning curriculum:
+  </p>
+
+  <div class="diagram-box">
+Level 9: Full-Stack Web Studio, Chrome Extension & Active Learning Loop
+   ▲
+Level 8: OmniProcessor Multi-Modal Engine & Semantic Translation
+   ▲
+Level 7: Inference, Autoregressive Decoding & Vectorized Beam Search
+   ▲
+Level 6: Loss Functions, Teacher Forcing & CUDA FP16 Training Dynamics
+   ▲
+Level 5: Attention Mechanisms Compared: Bahdanau vs Luong vs Scaled Dot
+   ▲
+Level 4: Neural Architecture: 2-Layer BiGRU + Pointer-Generator Copy Gate
+   ▲
+Level 3: Character-Level Tokenization & Representation Theory
+   ▲
+Level 2: Data Engineering, Zero-Leakage Hashing & Synthetic Augmentation
+   ▲
+Level 1: Linguistic Foundations: Code-Mixing, Script Divergence & Tanglish
+  </div>
+
+  <h3>Level 1: Linguistic Foundations of Tanglish</h3>
+  <p>
+    Telugu is an abugida script with 56 primary characters. Tanglish uses the 26-letter Latin alphabet to represent these sounds phonetically. Because there is no official standardized spelling, users write with huge variations:
+  </p>
+  <ul>
+    <li><strong>Vowel elongation:</strong> <em>chala</em> &rarr; <em>chaala</em>, <em>chaalaa</em> ("very").</li>
+    <li><strong>Aspiration omission:</strong> <em>dhanyavadalu</em> &rarr; <em>danyavadalu</em> ("thanks").</li>
+    <li><strong>Intra-sentential loanwords:</strong> English nouns/verbs are embedded directly into Telugu grammar (e.g., <em>college lo</em>, <em>interview undi</em>).</li>
+  </ul>
+
+  <h3>Level 2: Data Engineering & Zero-Leakage Hashing</h3>
+  <p>
+    Standard random splits leak identical sentences across train and test, producing artificially inflated metrics. We implemented deterministic SHA-1 bucket hashing on target sentence groups:
+  </p>
+  <pre><code>def bucket(group: str, salt: str = "tecm-v1") -> int:
+    return int(hashlib.sha1(f"{salt}:{group}".encode()).hexdigest()[:8], 16) % 10000
+
+def assign_split(group: str, valid_frac: float = 0.1, test_frac: float = 0.1) -> str:
+    b = bucket(group) / 10000
+    if b < test_frac: return "test"
+    if b < test_frac + valid_frac: return "valid"
+    return "train"</code></pre>
+  <p>
+    Held-out vocabulary words (e.g., <code>interview</code>, <code>charger</code>, <code>canteen</code>) are quarantined strictly into <code>test_unseen_words.jsonl</code> to test true out-of-domain generalization.
+  </p>
+
+  <h3>Level 3: Character-Level Tokenization</h3>
+  <p>
+    Subword tokenizers (BPE) break under informal character elongation, splitting unseen variants into rare subwords or <code>&lt;unk&gt;</code>. A character tokenizer maps ~180 characters (Latin, Telugu Unicode 0x0C00–0x0C7F, digits, punctuation), reducing the out-of-vocabulary rate to <strong>0.0%</strong>.
+  </p>
+
+  <h3>Level 4: Neural Architecture: BiGRU + Pointer-Generator Gate</h3>
+  <p>
+    The encoder is a 2-layer Bidirectional GRU yielding concatenated states $h_i = [\vec{h}_i; \overleftarrow{h}_i] \in \mathbb{R}^{2 d_h}$. At each decoder step, the <strong>Pointer-Generator Copy Gate</strong> calculates:
+  </p>
+  <pre><code>p_gen = torch.sigmoid(self.p_gen_layer(torch.cat([feat, e], -1)))
+vocab_probs = F.softmax(logits, dim=-1)
+p_final = p_gen * vocab_probs
+p_final.scatter_add_(1, src_mapped, (1.0 - p_gen) * w)
+logits = torch.log(p_final.clamp(min=1e-12))</code></pre>
+  <p>
+    When encountering an English loanword, $p_{\text{gen}} \rightarrow 0$, copying the Latin character directly from the input sequence!
+  </p>
+
+  <div class="page-break"></div>
+
+  <h3>Level 5: Attention Mechanisms Compared</h3>
+  <p>
+    We evaluated three distinct attention architectures in <code>src/attention/attention.py</code>:
+  </p>
+  <ul>
+    <li><strong>Bahdanau (Additive):</strong> $e_{t, i} = v^T \tanh(W_q s_{t-1} + W_k h_i)$. Evaluated before RNN step.</li>
+    <li><strong>Luong (General):</strong> $e_{t, i} = s_t^T W_a h_i$. Evaluated after RNN step with input feeding.</li>
+    <li><strong>Scaled Dot-Product (Winner):</strong> $e_{t, i} = \frac{(W_q s_t)^T (W_k h_i)}{\sqrt{d}}$. Scaling prevents gradient vanishing in softmax.</li>
+  </ul>
+
+  <h3>Level 6: Loss Functions & CUDA FP16 Training Dynamics</h3>
+  <p>
+    Trained using Cross-Entropy with Label Smoothing ($\epsilon = 0.05$) to prevent over-confidence. Mixed-precision FP16 via <code>torch.cuda.amp.autocast()</code> cut memory in half and doubled speed on the NVIDIA RTX 4060 GPU.
+  </p>
+
+  <h3>Level 7: Inference & Vectorized Beam Search</h3>
+  <p>
+    At inference time, greedy decoding is prone to local minima. We implemented vectorized beam search ($K=4$) with length normalization penalty $\alpha = 1.0$:
+    $$\text{score}_{\text{norm}}(Y) = \frac{\sum_{t=1}^T \log P(y_t \mid y_{<t}, X)}{T^\alpha}$$
+  </p>
+
+  <h3>Level 8: OmniProcessor & 4-Way Multi-Modal Generation</h3>
+  <p>
+    The OmniProcessor analyzes the input string and synthesizes 4 simultaneous outputs:
+  </p>
+  <ol>
+    <li><strong>Standard Normalized:</strong> Telugu in Telugu script, English loanwords preserved in Latin.</li>
+    <li><strong>All Telugu Script:</strong> Complete transliteration of loanwords into Telugu script (<code>ఇంటర్వ్యూ</code>).</li>
+    <li><strong>All Romanized Tanglish:</strong> Phonetic transliteration back to clean Latin alphabet.</li>
+    <li><strong>Pure English Translation:</strong> Word-by-word glossing and grammatical elevation to natural English.</li>
+  </ol>
+
+  <h3>Level 9: Full-Stack Serving & Active Learning</h3>
+  <p>
+    The FastAPI backend connects to <code>web/index.html</code> (supporting Web Audio TTS, speech recognition, and virtual Telugu keyboard) and <code>chrome-extension/</code> (Manifest V3 context menu). Every user thumbs-up/down is appended to <code>data/feedback.jsonl</code> for active learning model fine-tuning.
+  </p>
+
+  <!-- ==================== SECTION 4 ==================== -->
+  <h2>4. Codebase Anatomy: Where to Find Every Line of Code</h2>
+  <p>
+    Use this master table to immediately locate the exact file, class, method, and line numbers in the codebase:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Concept / Subsystem</th>
+        <th>File Path</th>
+        <th>Class / Function / Symbol</th>
+        <th>Line Numbers</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Unicode NFC & Repeat Clamping</strong></td>
+        <td><code>src/preprocessing/text_cleaning.py</code></td>
+        <td><code>normalize_unicode()</code>, <code>clean_text()</code></td>
+        <td>Lines 38–58</td>
+      </tr>
+      <tr>
+        <td><strong>URL & Hashtag Protection</strong></td>
+        <td><code>src/preprocessing/text_cleaning.py</code></td>
+        <td><code>split_protected()</code></td>
+        <td>Lines 60–82</td>
+      </tr>
+      <tr>
+        <td><strong>Language ID (Char n-gram)</strong></td>
+        <td><code>src/preprocessing/langid.py</code></td>
+        <td><code>CharNgramLID.predict_proba()</code></td>
+        <td>Lines 49–75</td>
+      </tr>
+      <tr>
+        <td><strong>Phonetic Transliteration Rules</strong></td>
+        <td><code>src/preprocessing/translit_te.py</code></td>
+        <td><code>romanize_word()</code>, <code>CONSONANTS</code></td>
+        <td>Lines 19–85</td>
+      </tr>
+      <tr>
+        <td><strong>Character Tokenizer</strong></td>
+        <td><code>src/tokenization/char_tokenizer.py</code></td>
+        <td><code>CharTokenizer.encode()</code>, <code>decode()</code></td>
+        <td>Lines 15–54</td>
+      </tr>
+      <tr>
+        <td><strong>Scaled Dot-Product Attention</strong></td>
+        <td><code>src/attention/attention.py</code></td>
+        <td><code>ScaledDotProductAttention.forward()</code></td>
+        <td>Lines 69–84</td>
+      </tr>
+      <tr>
+        <td><strong>Bahdanau & Luong Attention</strong></td>
+        <td><code>src/attention/attention.py</code></td>
+        <td><code>BahdanauAttention</code>, <code>LuongAttention</code></td>
+        <td>Lines 27–67</td>
+      </tr>
+      <tr>
+        <td><strong>BiGRU Encoder & Hidden Bridge</strong></td>
+        <td><code>src/models/rnn_seq2seq.py</code></td>
+        <td><code>RNNSeq2Seq.encode()</code></td>
+        <td>Lines 69–84</td>
+      </tr>
+      <tr>
+        <td><strong>Pointer-Generator Copy Gate</strong></td>
+        <td><code>src/models/rnn_seq2seq.py</code></td>
+        <td><code>p_gen_layer</code>, <code>scatter_add_</code></td>
+        <td>Lines 116–122</td>
+      </tr>
+      <tr>
+        <td><strong>Vectorized Beam Search</strong></td>
+        <td><code>src/models/decoding.py</code></td>
+        <td><code>beam_search()</code></td>
+        <td>Lines 15–68</td>
+      </tr>
+      <tr>
+        <td><strong>Zero-Leakage Hash Splitting</strong></td>
+        <td><code>src/datasets/splits.py</code></td>
+        <td><code>bucket()</code>, <code>assign_split()</code></td>
+        <td>Lines 10–48</td>
+      </tr>
+      <tr>
+        <td><strong>PyTorch Collate & Padding</strong></td>
+        <td><code>src/datasets/torch_data.py</code></td>
+        <td><code>collate_fn()</code>, <code>CodeMixedDataset</code></td>
+        <td>Lines 35–80</td>
+      </tr>
+      <tr>
+        <td><strong>Training Loop & FP16 Scaler</strong></td>
+        <td><code>src/training/loop.py</code></td>
+        <td><code>train_model()</code></td>
+        <td>Lines 35–180</td>
+      </tr>
+      <tr>
+        <td><strong>OmniProcessor Multi-Modal Engine</strong></td>
+        <td><code>src/pipeline/omni_processor.py</code></td>
+        <td><code>OmniProcessor.process()</code></td>
+        <td>Lines 1873–1920</td>
+      </tr>
+      <tr>
+        <td><strong>Pure English Translation</strong></td>
+        <td><code>src/pipeline/omni_processor.py</code></td>
+        <td><code>translate_to_pure_english()</code></td>
+        <td>Lines 779–945</td>
+      </tr>
+      <tr>
+        <td><strong>Pure Telugu Script Converter</strong></td>
+        <td><code>src/pipeline/omni_processor.py</code></td>
+        <td><code>translate_to_pure_telugu()</code></td>
+        <td>Lines 1602–1740</td>
+      </tr>
+      <tr>
+        <td><strong>FastAPI REST Endpoints</strong></td>
+        <td><code>api/main.py</code></td>
+        <td><code>/omni/process</code>, <code>/normalize</code>, <code>/translate</code></td>
+        <td>Lines 102–155</td>
+      </tr>
+      <tr>
+        <td><strong>Model Registry & GPU Cache</strong></td>
+        <td><code>api/services/model_registry.py</code></td>
+        <td><code>ModelRegistry.get()</code>, <code>normalize()</code></td>
+        <td>Lines 25–95</td>
+      </tr>
+      <tr>
+        <td><strong>Web Translation Studio UI</strong></td>
+        <td><code>web/index.html</code></td>
+        <td>Speech API, Keyboard Drawer, Suggestions</td>
+        <td>Lines 1–850</td>
+      </tr>
+      <tr>
+        <td><strong>Chrome Extension Service Worker</strong></td>
+        <td><code>chrome-extension/background/service_worker.js</code></td>
+        <td>Context Menu & Background Listener</td>
+        <td>Lines 1–45</td>
+      </tr>
+      <tr>
+        <td><strong>Chrome In-Page Replacer</strong></td>
+        <td><code>chrome-extension/content/content_script.js</code></td>
+        <td>DOM selection replacement</td>
+        <td>Lines 1–75</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-break"></div>
+
+  <!-- ==================== SECTION 5 ==================== -->
+  <h2>5. End-to-End System Execution Flow: Step-by-Step Lifecycle</h2>
+  <p>
+    Here is what happens when a user types: <code>naku ivala college lo important interview undi</code>:
+  </p>
+
+  <ol>
+    <li>
+      <strong>Input Ingestion:</strong> The Web Studio (or Chrome Extension) sends an HTTP POST request to <code>/omni/process</code> with payload <code>{"text": "naku ivala college lo important interview undi"}</code>.
+    </li>
+    <li>
+      <strong>Modality Detection:</strong> <code>detect_modality()</code> in <code>src/pipeline/omni_processor.py</code> scans characters. It detects Romanized characters mixed with English lexicon tokens (<code>college</code>, <code>interview</code>) and classifies it as <code>code_mixed</code>.
+    </li>
+    <li>
+      <strong>Model Registry Lookup:</strong> <code>ModelRegistry</code> retrieves the active <code>production_sota</code> checkpoint cached in GPU VRAM (NVIDIA RTX 4060).
+    </li>
+    <li>
+      <strong>Character Tokenization:</strong> <code>CharTokenizer</code> converts input characters into a 1D integer tensor $[1, 48, 12, 55, \dots]$.
+    </li>
+    <li>
+      <strong>BiGRU Encoding:</strong> The 2-Layer BiGRU encoder processes the sequence forward and backward, producing hidden state tensor $H \in \mathbb{R}^{B \times T_x \times 384}$.
+    </li>
+    <li>
+      <strong>Attention & Pointer-Generator Decoding:</strong>
+      <ul>
+        <li>For Telugu tokens (<em>naku</em> &rarr; <em>నాకు</em>, <em>ivala</em> &rarr; <em>ఇవాళ</em>): Scaled Dot-Product Attention focuses on phonetic source characters, $p_{\text{gen}} \approx 0.95$, and the model samples from Telugu Unicode vocabulary.</li>
+        <li>For English loanwords (<em>college</em>, <em>interview</em>): The model detects Latin character sequences, $p_{\text{gen}} \approx 0.02$, and the gate copies Latin characters directly from the source sequence!</li>
+      </ul>
+    </li>
+    <li>
+      <strong>Beam Search Decoding:</strong> Vectorized beam search ($K=4$) ranks hypotheses with length penalty $\alpha=1.0$, producing the best sequence: <code>నాకు ఇవాళ college లో important interview ఉంది</code>.
+    </li>
+    <li>
+      <strong>Multi-Modal Generation:</strong> The OmniProcessor synthesizes 4 options:
+      <ol>
+        <li><em>Standard Normalized:</em> <code>నాకు ఇవాళ college లో important interview ఉంది</code></li>
+        <li><em>All Telugu Script:</em> <code>నాకు ఇవాళ కాలేజ్ లో ఇంపార్టెంట్ ఇంటర్వ్యూ ఉంది</code></li>
+        <li><em>All Tanglish:</em> <code>naaku ivaala college lo important interview undi</code></li>
+        <li><em>Pure English Translation:</em> <code>"I have an important interview at college today"</code></li>
+      </ol>
+    </li>
+    <li>
+      <strong>Response & Audio TTS:</strong> The response is returned in <strong>~8.2 ms</strong>. The Web Studio renders cards, triggers Web Speech TTS audio, and displays real-time suggestions.
+    </li>
+    <li>
+      <strong>Active Learning Feedback:</strong> User rating (👍/👎) is saved to <code>data/feedback.jsonl</code>.
+    </li>
+  </ol>
+
+  <!-- ==================== SECTION 6 ==================== -->
+  <h2>6. Academic Presentation & Viva Defense Master Guide</h2>
+
+  <h3>6.1 The 30-Second Elevator Pitch</h3>
+  <div class="callout callout-success">
+    <em>"Our project, <strong>NormMix AI</strong>, addresses the major NLP challenge of Indian social media communication where Telugu and English are heavily code-mixed into informal 'Tanglish'. Traditional machine translation models suffer catastrophic loanword corruption, turning English words into unreadable phonetic characters. To solve this, we engineered a custom <strong>2-Layer Bidirectional GRU with Scaled Dot-Product Attention</strong> coupled with a <strong>Pointer-Generator Copy Mechanism</strong>. This allows our network to dynamically copy English loanwords with 100% fidelity while accurately normalizing colloquial Telugu morphemes to proper Unicode script. We achieved an <strong>8x error reduction</strong> (5.37% CER, 79.84 BLEU) on our NVIDIA RTX 4060 GPU with sub-10ms latency, packaged into an enterprise Web Studio and a Chrome Extension."</em>
+  </div>
+
+  <h3>6.2 Live Presentation Script (10 Slides)</h3>
+  <ul>
+    <li><strong>Slide 1 (Title):</strong> Introduce topic, team, course (AAN), and GPU hardware acceleration.</li>
+    <li><strong>Slide 2 (The Problem):</strong> Show examples of Tanglish. Explain why Google Translate fails (loanword corruption).</li>
+    <li><strong>Slide 3 (Dataset Scaling):</strong> Detail the 25,803 pairs from Google Dakshina, Aksharantar, and zero-leakage hash splitting.</li>
+    <li><strong>Slide 4 (Architecture):</strong> Show the 2-Layer BiGRU + Scaled Dot Attention block diagram.</li>
+    <li><strong>Slide 5 (Copy Mechanism):</strong> Explain the $p_{\text{gen}}$ gate formula and how it preserves English words.</li>
+    <li><strong>Slide 6 (Benchmark Results):</strong> Present the quantitative comparison table (5.37% CER vs 48.2% baseline).</li>
+    <li><strong>Slide 7 (OmniProcessor):</strong> Highlight the 4 simultaneous target modalities.</li>
+    <li><strong>Slide 8 (Web Studio Demo):</strong> Show live browser interface with TTS audio, mic input, and keyboard drawer.</li>
+    <li><strong>Slide 9 (Chrome Extension):</strong> Demonstrate context menu normalization on WhatsApp Web / Twitter.</li>
+    <li><strong>Slide 10 (Conclusion & Viva):</strong> Summary of contributions and future multi-dialect roadmap.</li>
+  </ul>
+
+  <div class="page-break"></div>
+
+  <h3>6.3 Anticipated Technical Viva Questions & Bulletproof Answers</h3>
+
+  <div class="qna-box">
+    <div class="qna-question">Q1: Why did you choose a 2-Layer BiGRU instead of a Transformer or Large Language Model (LLM)?</div>
+    <div class="qna-answer">
+      <strong>Answer:</strong> Large Language Models (like LLaMA or GPT-4) contain billions of parameters and take 300ms to 2 seconds per inference, requiring cloud clusters. For real-time keyboard typing and browser extensions, latency must be under 10ms. Furthermore, Transformers lack recurrent inductive biases and require hundreds of thousands of sequences to learn character-level alignments effectively. Our 2-Layer BiGRU has 3.05M parameters, runs in <strong>~8.2 ms on our RTX 4060 GPU</strong>, and achieves superior character alignment on medium-sized corpora.
+    </div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-question">Q2: How exactly does the Pointer-Generator Copy Mechanism work?</div>
+    <div class="qna-answer">
+      <strong>Answer:</strong> The Pointer-Generator network computes a scalar generation probability $p_{\text{gen}} = \sigma(W_{\text{ptr}} [s_t; c_t; e(y_{t-1})] + b_{\text{ptr}})$. The final probability distribution is:
+      $$P(w) = p_{\text{gen}} P_{\text{vocab}}(w) + (1 - p_{\text{gen}}) \sum_{i: x_i = w} \alpha_{t, i}$$
+      When encountering English loanwords, the network drives $p_{\text{gen}} \rightarrow 0$ and uses the attention weights $\alpha_{t, i}$ as a pointer to copy Latin characters directly from the source sequence into the output.
+    </div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-question">Q3: What is "Zero-Leakage Splitting" and why is a random train/test split invalid here?</div>
+    <div class="qna-answer">
+      <strong>Answer:</strong> In code-mixed transliteration, one clean Telugu target sentence often has multiple noisy Romanized variants (e.g., <em>chala</em>, <em>chaala</em>, <em>chaalaa</em>). If you perform a naive random split, variant A lands in train and variant B in test. The model simply memorizes the target, producing artificially high BLEU scores. Our zero-leakage hash splitting groups all variants by target lemma and hashes them using SHA-1. All variations of a sentence or vocabulary root are guaranteed to remain strictly in train or strictly in test, never both.
+    </div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-question">Q4: Why Character-Level Tokenization over Byte-Pair Encoding (BPE)?</div>
+    <div class="qna-answer">
+      <strong>Answer:</strong> In informal social media Tanglish, users elongate characters for emotional emphasis (e.g., <em>chaaaaala</em>, <em>plzzzzz</em>). Subword tokenizers (like BPE) fragment these unseen patterns into rare subwords or <code>&lt;unk&gt;</code>, destroying the word. A character tokenizer handles arbitrary character elongation with a compact vocabulary of ~180 tokens and achieves a 0.0% Out-of-Vocabulary rate.
+    </div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-question">Q5: How do you measure the performance of your system?</div>
+    <div class="qna-answer">
+      <strong>Answer:</strong> We evaluate across four complementary metrics:
+      1. <strong>Character Error Rate (CER):</strong> Levenshtein distance at character level (achieved 5.37%).
+      2. <strong>chrF:</strong> Character n-gram F-score capturing morphological correctness (achieved 91.29).
+      3. <strong>BLEU:</strong> Modified n-gram precision with brevity penalty (achieved 79.84).
+      4. <strong>English Loanword Accuracy:</strong> Verifies that English words are preserved with 100% fidelity without phonetic corruption.
+    </div>
+  </div>
+
+  <div class="qna-box">
+    <div class="qna-question">Q6: How is the sub-10ms inference latency achieved in production?</div>
+    <div class="qna-answer">
+      <strong>Answer:</strong> Three optimizations:
+      1. <strong>PyTorch CUDA FP16:</strong> Automatic mixed precision running on NVIDIA RTX 4060 Tensor Cores.
+      2. <strong>Vectorized Beam Search:</strong> Batch decoding executed as tensor matrix operations rather than slow Python loops.
+      3. <strong>VRAM Model Caching:</strong> Pre-warmed model weights held in GPU memory via the singleton <code>ModelRegistry</code>, eliminating disk I/O during API calls.
+    </div>
+  </div>
+
+  <div style="margin-top: 30px; text-align: center; font-size: 8pt; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 12px;">
+    NormMix AI &bull; Advanced Artificial Intelligence and Neural Networks &bull; Academic Case Study & Defense Guide
+  </div>
+
+</div>
+
+</body>
+</html>

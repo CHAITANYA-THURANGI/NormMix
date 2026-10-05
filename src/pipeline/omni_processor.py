@@ -81,7 +81,7 @@ TELUGU_TO_ENGLISH_GLOSS: dict[str, str] = {
     "vaallu": "they", "వాళ్లు": "they", "manamu": "we", "మనము": "we",
 
     # Time & Questions
-    "ivala": "today", "ఇవాళ": "today", "repu": "tomorrow", "రేపు": "tomorrow",
+    "ivala": "today", "ఇవాళ": "today", "eroju": "today", "eeroju": "today", "ఈరోజు": "today", "repu": "tomorrow", "రేపు": "tomorrow",
     "ninna": "yesterday", "నిన్న": "yesterday", "ippudu": "now", "ఇప్పుడు": "now",
     "appudu": "then", "అప్పుడు": "then", "eppudu": "when", "ఎప్పుడు": "when",
     "ekkada": "where", "ఎక్కడ": "where", "ikkada": "here", "ఇక్కడ": "here",
@@ -99,7 +99,7 @@ TELUGU_TO_ENGLISH_GLOSS: dict[str, str] = {
     "unnav": "are (you)", "unnavu": "are (you)", "vunnav": "are (you)", "vunnavu": "are (you)", "vunnvu": "are (you)", "unnvu": "are (you)", "vunvu": "are (you)", "unvu": "are (you)", "ఉన్నావ్": "are (you)", "unnaru": "are (you/they)", "ఉన్నారు": "are (you/they)",
     "unnanu": "am (I)", "ఉన్నాను": "am (I)",
     "vellali": "need to go", "వెళ్లాలి": "need to go", "vellanu": "went", "వెళ్లాను": "went",
-    "vastanu": "will come", "వస్తాను": "will come", "vastunnava": "are you coming?", "వస్తున్నావా": "are you coming?",
+    "vastanu": "will come", "వస్తాను": "will come", "vastunnava": "are you coming?", "vastunava": "are you coming?", "వస్తున్నావా": "are you coming?", "vastara": "will you come?", "వస్తారా": "will you come?",
     "vastunnanu": "am coming", "వస్తున్నాను": "am coming",
     "pani": "work", "పని": "work", "cheyali": "must do", "చేయాలి": "must do",
     "chesanu": "did", "చేశాను": "did", "chesaru": "did (they)", "చేశారు": "did (they)",
@@ -347,8 +347,118 @@ CONVERSATIONAL_PURE_ENGLISH_PATTERNS: list[tuple[str, Any]] = [
     (r"^(naku|naaku)\s+(urgent\s+ga\s+)?(help|sahayam)\s+(kavali)[\.]*$", "I require immediate assistance."),
     (r"^(naku|naaku)\s+koncham\s+(help|sahayam)\s+(kavali)[\.]*$", "I would be grateful for your assistance."),
     (r"^(ippudu|ipudu)\s+(naku|naaku)\s+call\s+(cheyi|chey|cheyandi)[\.]*$", "Kindly contact me by telephone at this moment."),
+    (r"^(hi|hello|hey|hai)[\.!,]*$", "Greetings."),
 ]
 
+
+def _translate_motion_destination_clause(folded: str, pure: bool = False) -> str | None:
+    """Translates motion and destination clauses like 'eroju college ki vastunava' cleanly."""
+    m = re.search(
+        r"^(.+?)\s+(ki|ku)\s+(vastunava|vastunnava|vastava|vastara|vastunara|vastunnara|velthunava|velthunnava|velthava|velthara|veltanu|velthanu|velta|veltha|vastanu|vasta)[\?\.]*$",
+        folded
+    )
+    if not m:
+        return None
+    pre = m.group(1).strip()
+    verb_tok = m.group(3)
+    subj = "you"
+    if re.search(r"\b(nenu|nen)\b", pre):
+        subj = "I"
+        pre = re.sub(r"\b(nenu|nen)\b", "", pre)
+    elif re.search(r"\b(nuvvu|nuv|nuvu)\b", pre):
+        subj = "you"
+        pre = re.sub(r"\b(nuvvu|nuv|nuvu)\b", "", pre)
+    elif re.search(r"\b(meeru|meru)\b", pre):
+        subj = "you"
+        pre = re.sub(r"\b(meeru|meru)\b", "", pre)
+    elif re.search(r"\b(manam|manamu)\b", pre):
+        subj = "we"
+        pre = re.sub(r"\b(manam|manamu)\b", "", pre)
+
+    time_str = ""
+    if re.search(r"\b(repu\s+(morning|udayam))\b", pre):
+        time_str = "tomorrow morning"
+        pre = re.sub(r"\b(repu\s+(morning|udayam))\b", "", pre)
+    elif re.search(r"\b(repu\s+(sayantram|evening))\b", pre):
+        time_str = "tomorrow evening"
+        pre = re.sub(r"\b(repu\s+(sayantram|evening))\b", "", pre)
+    elif re.search(r"\b(eroju|eeroju|ivala|e\s+roju)\s+(morning|udayam)\b", pre):
+        time_str = "this morning"
+        pre = re.sub(r"\b(eroju|eeroju|ivala|e\s+roju)\s+(morning|udayam)\b", "", pre)
+    elif re.search(r"\b(eroju|eeroju|ivala|e\s+roju)\s+(sayantram|evening)\b", pre):
+        time_str = "this evening"
+        pre = re.sub(r"\b(eroju|eeroju|ivala|e\s+roju)\s+(sayantram|evening)\b", "", pre)
+    elif re.search(r"\b(eroju|eeroju|ivala|e\s+roju)\b", pre):
+        time_str = "today"
+        pre = re.sub(r"\b(eroju|eeroju|ivala|e\s+roju)\b", "", pre)
+    elif re.search(r"\b(repu)\b", pre):
+        time_str = "tomorrow"
+        pre = re.sub(r"\b(repu)\b", "", pre)
+    elif re.search(r"\b(ninna)\b", pre):
+        time_str = "yesterday"
+        pre = re.sub(r"\b(ninna)\b", "", pre)
+    elif re.search(r"\b(ippudu|ipudu)\b", pre):
+        time_str = "now"
+        pre = re.sub(r"\b(ippudu|ipudu)\b", "", pre)
+
+    dest = pre.strip()
+    dest_map = {
+        "intiki": "home", "illu": "home", "pani": "work",
+        "kalasala": "college", "patasala": "school",
+        "karyalayam": "office", "samavesam": "meeting",
+        "mukhamukhi": "interview", "asupatri": "hospital"
+    }
+    dest = dest_map.get(dest, dest)
+
+    if dest == "home":
+        prep_dest = "home"
+    elif dest in {"office", "meeting", "hospital", "station", "airport", "gym", "market", "bank", "library", "lab", "interview", "party"}:
+        prep_dest = f"to the {dest}"
+    elif dest:
+        prep_dest = f"to {dest}"
+    else:
+        prep_dest = ""
+
+    t_sfx = f" {time_str}" if time_str else ""
+
+    if pure:
+        if verb_tok in {"vastunava", "vastunnava", "vastava", "vastara", "vastunara", "vastunnara"}:
+            if dest in {"college", "school", "class", "university", "office", "meeting", "interview"}:
+                art = "the " if dest in {"office", "meeting", "interview"} else ""
+                return f"Will you be attending {art}{dest}{t_sfx}?"
+            elif dest == "home":
+                return f"Will you be returning home{t_sfx}?"
+            elif dest:
+                return f"Will you be arriving at {dest}{t_sfx}?"
+            else:
+                return f"Will you be arriving{t_sfx}?"
+        elif verb_tok in {"velthunava", "velthunnava", "velthava", "velthara", "velthunara", "velthunnara"}:
+            if dest in {"college", "school", "class", "university", "office", "meeting", "interview"}:
+                art = "the " if dest in {"office", "meeting", "interview"} else ""
+                return f"Will you be attending {art}{dest}{t_sfx}?"
+            elif dest:
+                return f"Will you be proceeding to {dest}{t_sfx}?"
+            else:
+                return f"Will you be departing{t_sfx}?"
+        elif verb_tok in {"veltanu", "velthanu", "velta", "veltha"}:
+            if dest in {"college", "school", "class", "university", "office", "meeting", "interview"}:
+                art = "the " if dest in {"office", "meeting", "interview"} else ""
+                return f"{subj} shall attend {art}{dest}{t_sfx}."
+            else:
+                return f"{subj} shall proceed to {dest}{t_sfx}."
+        elif verb_tok in {"vastanu", "vasta"}:
+            return f"{subj} shall arrive at {dest}{t_sfx}."
+    else:
+        if verb_tok in {"vastunava", "vastunnava", "vastava", "vastara", "vastunara", "vastunnara"}:
+            return f"Are you coming {prep_dest}{t_sfx}?" if prep_dest else f"Are you coming{t_sfx}?"
+        elif verb_tok in {"velthunava", "velthunnava", "velthava", "velthara", "velthunara", "velthunnara"}:
+            return f"Are you going {prep_dest}{t_sfx}?" if prep_dest else f"Are you going{t_sfx}?"
+        elif verb_tok in {"veltanu", "velthanu", "velta", "veltha"}:
+            return f"{subj} will go {prep_dest}{t_sfx}."
+        elif verb_tok in {"vastanu", "vasta"}:
+            return f"{subj} will come {prep_dest}{t_sfx}."
+
+    return None
 
 
 def _translate_single_clause_to_english(raw: str, normalized: str = "") -> str:
@@ -406,15 +516,19 @@ def _translate_single_clause_to_english(raw: str, normalized: str = "") -> str:
         subclauses = [c.strip() for c in re.split(r'[,;]\s*', raw_clean) if c.strip()]
         if len(subclauses) > 1:
             parts = []
+            has_q = False
             for i, c in enumerate(subclauses):
                 res = _translate_single_clause_to_english(c)
                 if res:
+                    if res.endswith("?"):
+                        has_q = True
                     clean_res = res.rstrip(".!?")
                     if i > 0 and clean_res and not clean_res.startswith("I "):
                         clean_res = clean_res[0].lower() + clean_res[1:]
                     parts.append(clean_res)
             if parts:
-                return ", ".join(parts) + "."
+                term = "?" if (has_q or raw_clean.endswith("?")) else "."
+                return ", ".join(parts) + term
 
     # 2. Template matching for common syntactic patterns
     m = re.search(r"^(.+?)\s+(ready|charge|miss)\s+ayindi[\.]*$", folded)
@@ -450,10 +564,9 @@ def _translate_single_clause_to_english(raw: str, normalized: str = "") -> str:
         item = m.group(2).strip()
         return f"Did you complete the {item}?"
 
-    m = re.search(r"^(.+?)\s+(ki|ku)\s+vastunava[\?\.]*$", folded)
-    if m:
-        item = m.group(1).strip()
-        return f"Are you coming to {item}?"
+    res_motion = _translate_motion_destination_clause(folded, pure=False)
+    if res_motion:
+        return res_motion
 
     # 3. Structured Telugu / Tanglish Clause Parser (SOV -> SVO alignment)
     s = folded
@@ -735,15 +848,26 @@ def _translate_single_clause_to_pure_english(raw: str, normalized: str = "") -> 
         subclauses = [c.strip() for c in re.split(r'[,;]\s*', raw_clean) if c.strip()]
         if len(subclauses) > 1:
             parts = []
+            has_q = False
             for i, c in enumerate(subclauses):
                 res = _translate_single_clause_to_pure_english(c)
                 if res:
+                    if res.endswith("?"):
+                        has_q = True
                     clean_res = res.rstrip(".!?")
-                    if i > 0 and clean_res and not clean_res.startswith("I "):
-                        clean_res = clean_res[0].lower() + clean_res[1:]
                     parts.append(clean_res)
             if parts:
-                return "; ".join(parts) + "."
+                term = "?" if (has_q or raw_clean.endswith("?")) else "."
+                if parts[0].lower() in {"greetings", "hello", "good morning", "good evening", "good afternoon"}:
+                    first = parts[0]
+                    if not first.endswith("."):
+                        first += "."
+                    second = parts[1]
+                    if second:
+                        second = second[0].upper() + second[1:]
+                    rest = parts[2:]
+                    return " ".join([first, second] + rest) + term
+                return "; ".join(parts) + term
 
     m = re.search(r"^(.+?)\s+(ready|charge|miss)\s+ayindi[\.]*$", folded)
     if m:
@@ -771,10 +895,9 @@ def _translate_single_clause_to_pure_english(raw: str, normalized: str = "") -> 
         item = m.group(2).strip()
         return f"Have you finalized the {item}?"
 
-    m = re.search(r"^(.+?)\s+(ki|ku)\s+vastunava[\?\.]*$", folded)
-    if m:
-        item = m.group(1).strip()
-        return f"Will you be arriving at {item}?"
+    res_motion_pure = _translate_motion_destination_clause(folded, pure=True)
+    if res_motion_pure:
+        return res_motion_pure
 
     m = re.search(r"^(nenu\s+)?repu\s+(.+?)\s+(ki|ku)\s+(veltanu|velthanu)[\.]*$", folded)
     if m:
@@ -1074,7 +1197,15 @@ PURE_TELUGU_IDIOMS: list[tuple[str, Any]] = [
     (r"^i\s+will\s+come\s+tomorrow[\.]*$", "నేను రేపు వస్తాను."),
     (r"^i\s+will\s+come\s+now[\.]*$", "నేను ఇప్పుడు వస్తాను."),
 
-    # Multi-sentence: "Hi Ella vunnavu. Are you coming to college?"
+    # Multi-sentence & movement patterns
+    (r"^(hi|hello|hey|hai)\s*,?\s*(nuvvu|nuv|meeru|meru)?\s*(eroju|eeroju|ivala)\s+(college|school|office|class|university|meeting)\s*(ki|ku)\s*(vastunava|vastunnava|vastava|vastara)[?\.]*$",
+     lambda m: "నమస్కారం, మీరు ఈరోజు " + {"college": "కళాశాలకు", "school": "పాఠశాలకు", "office": "కార్యాలయానికి", "class": "తరగతికి", "university": "విశ్వవిద్యాలయానికి", "meeting": "సమావేశానికి"}.get(m.group(4).lower(), "కళాశాలకు") + " వస్తున్నారా?"),
+    (r"^(nuvvu|nuv|meeru|meru)?\s*(eroju|eeroju|ivala)\s+(college|school|office|class|university|meeting)\s*(ki|ku)\s*(vastunava|vastunnava|vastava|vastara)[?\.]*$",
+     lambda m: "మీరు ఈరోజు " + {"college": "కళాశాలకు", "school": "పాఠశాలకు", "office": "కార్యాలయానికి", "class": "తరగతికి", "university": "విశ్వవిద్యాలయానికి", "meeting": "సమావేశానికి"}.get(m.group(3).lower(), "కళాశాలకు") + " వస్తున్నారా?"),
+    (r"^(hi|hello|hey|hai)\s*,?\s*(nuvvu|nuv|meeru|meru)?\s*repu\s+(college|school|office|class|university|meeting)\s*(ki|ku)\s*(vastunava|vastunnava|vastava|vastara)[?\.]*$",
+     lambda m: "నమస్కారం, మీరు రేపు " + {"college": "కళాశాలకు", "school": "పాఠశాలకు", "office": "కార్యాలయానికి", "class": "తరగతికి", "university": "విశ్వవిద్యాలయానికి", "meeting": "సమావేశానికి"}.get(m.group(3).lower(), "కళాశాలకు") + " వస్తున్నారా?"),
+    (r"^(nuvvu|nuv|meeru|meru)?\s*repu\s+(college|school|office|class|university|meeting)\s*(ki|ku)\s*(vastunava|vastunnava|vastava|vastara)[?\.]*$",
+     lambda m: "మీరు రేపు " + {"college": "కళాశాలకు", "school": "పాఠశాలకు", "office": "కార్యాలయానికి", "class": "తరగతికి", "university": "విశ్వవిద్యాలయానికి", "meeting": "సమావేశానికి"}.get(m.group(2).lower(), "కళాశాలకు") + " వస్తున్నారా?"),
     (r"^(hi|hello|hey)\s+(ela|yela|ella),?\s+(unav|unnav|vunav|vunnav|vunnavu)\.?\s+are\s+you\s+coming\s+to\s+(college|school|university|office)[?\.]*$",
      lambda m: "నమస్కారం, ఎలా ఉన్నారు? మీరు " + {"college": "కళాశాలకు", "school": "పాఠశాలకు", "university": "విశ్వవిద్యాలయానికి", "office": "కార్యాలయానికి"}[m.group(4).lower()] + " వస్తున్నారా?"),
 
@@ -1344,16 +1475,17 @@ PURE_TELUGU_WORDS: dict[str, str] = {
 }
 
 PURE_TELUGU_ROMAN_MAP: dict[str, str] = {
+    "hi": "హలో", "hai": "హలో", "hello": "హలో", "hey": "హలో",
     "naku": "నాకు", "naaku": "నాకు", "nenu": "నేను", "nuvvu": "నువ్వు", "nuvu": "నువ్వు", "meeru": "మీరు",
     "atanu": "అతను", "aame": "ఆమె", "idi": "ఇది", "adi": "అది", "manamu": "మనం", "manam": "మనం",
-    "ivala": "ఈ రోజు", "repu": "రేపు", "ninna": "నిన్న", "ippudu": "ఇప్పుడు", "ipudu": "ఇప్పుడు",
+    "ivala": "ఈ రోజు", "eroju": "ఈరోజు", "eeroju": "ఈరోజు", "repu": "రేపు", "ninna": "నిన్న", "ippudu": "ఇప్పుడు", "ipudu": "ఇప్పుడు",
     "appudu": "అప్పుడు", "eppudu": "ఎప్పుడు", "ekkada": "ఎక్కడ", "ikkada": "ఇక్కడ", "akkada": "అక్కడ",
     "ela": "ఎలా", "ella": "ఎలా", "yela": "ఎలా", "enti": "ఏంటి", "enduku": "ఎందుకు",
     "undi": "ఉంది", "ledu": "లేదు", "unnav": "ఉన్నావు", "unnava": "ఉన్నావా", "unnanu": "ఉన్నాను", "unnaru": "ఉన్నారు",
     "unav": "ఉన్నావు", "vunnav": "ఉన్నావు", "vunnavu": "ఉన్నావు", "vunav": "ఉన్నావు", "vunnvu": "ఉన్నావు", "unnvu": "ఉన్నావు", "unvu": "ఉన్నావు", "vunvu": "ఉన్నావు", "vunnu": "ఉన్నావు",
     "vellali": "వెళ్లాలి", "velthanu": "వెళ్తాను", "vachanu": "వచ్చాను", "vastanu": "వస్తాను", "vastunnanu": "వస్తున్నాను",
-    "vastunnava": "వస్తున్నావా", "vellanu": "వెళ్లాను", "vastunnaru": "వస్తున్నారు", "velthunnaru": "వెళ్తున్నారు",
-    "vastava": "వస్తావా", "velthava": "వెళ్తావా",
+    "vastunnava": "వస్తున్నావా", "vastunava": "వస్తున్నావా", "vellanu": "వెళ్లాను", "vastunnaru": "వస్తున్నారు", "velthunnaru": "వెళ్తున్నారు",
+    "vastava": "వస్తావా", "vastara": "వస్తారా", "vastunara": "వస్తున్నారు", "velthava": "వెళ్తావా",
     "chala": "చాలా", "baga": "బాగా", "pani": "పని", "help": "సహాయం",
     "amma": "అమ్మ", "ammaki": "అమ్మకి", "nanna": "నాన్న", "nannagaru": "నాన్నగారు",
     "chesanu": "చేశాను", "chey": "చేయి", "cheyali": "చేయాలి", "cheyandi": "చేయండి", "chestanu": "చేస్తాను", "chesaru": "చేశారు",

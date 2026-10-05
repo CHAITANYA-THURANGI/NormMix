@@ -209,7 +209,23 @@ def download_report():
     raise HTTPException(status_code=404, detail="Project report PDF not generated yet.")
 
 
+@app.get("/guide.pdf")
+def download_guide_pdf():
+    pdf_path = ROOT / "docs" / "PROJECT_COMPLETE_GUIDE_AND_LEARNING_PATH.pdf"
+    if pdf_path.exists():
+        return FileResponse(pdf_path, media_type="application/pdf", filename="NormMix_Project_Complete_Guide_And_Learning_Path.pdf")
+    raise HTTPException(status_code=404, detail="Project learning guide PDF not found.")
+
+
+@app.get("/guide.html")
+def view_guide_html():
+    html_path = ROOT / "docs" / "PROJECT_COMPLETE_GUIDE_AND_LEARNING_PATH.html"
+    if html_path.exists():
+        return FileResponse(html_path, media_type="text/html")
+    raise HTTPException(status_code=404, detail="Project learning guide HTML not found.")
+
+
 @app.get("/api")
 def api_info():
-    return {"name": "Telugu-English Code-Mixed Text Normalization API", "docs": "/docs", "health": "/health"}
+    return {"name": "Telugu-English Code-Mixed Text Normalization API", "docs": "/docs", "health": "/health", "guide": "/guide.pdf"}
 

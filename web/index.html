@@ -1589,10 +1589,14 @@ const CLIENT_PURE_TE_MAP = {
   "restaurant": "భోజనశాల", "morning": "ఉదయం", "evening": "సాయంత్రం", "night": "రాత్రి",
   "please": "దయచేసి", "thanks": "ధన్యవాదాలు", "sorry": "క్షమించండి", "confirm": "ఖరారు",
   "cancel": "రద్దు", "help": "సహాయం", "problem": "సమస్య", "idea": "ఆలోచన",
-  "plan": "ప్రణాళిక", "food": "ఆహారం", "water": "మంచినీరు", "money": "డబ్బులు"
+  "plan": "ప్రణాళిక", "food": "ఆహారం", "water": "మంచినీరు", "money": "డబ్బులు",
+  "hi": "నమస్కారం", "hai": "నమస్కారం", "hello": "నమస్కారం", "hey": "నమస్కారం",
+  "eroju": "ఈరోజు", "eeroju": "ఈరోజు", "ivala": "ఈరోజు",
+  "vastunava": "వస్తున్నారా", "vastunnava": "వస్తున్నారా", "vastara": "వస్తారా"
 };
 
 const CLIENT_TE_WORDS = {
+  "hi": "హాయ్", "hai": "హాయ్", "hello": "హలో", "hey": "హే",
   "naku": "నాకు", "naaku": "నాకు", "nenu": "నేను", "nen": "నేను",
   "nuvvu": "నువ్వు", "nuv": "నువ్వు", "nuvu": "నువ్వు",
   "meeru": "మీరు", "meru": "మీరు", "mer": "మీరు",
@@ -1616,6 +1620,7 @@ const CLIENT_TE_WORDS = {
   "vellali": "వెళ్లాలి", "velali": "వెళ్లాలి", "vellanu": "వెళ్లాను",
   "veltanu": "వెళ్తాను", "velthanu": "వెళ్తాను", "veldam": "వెళ్దాం",
   "vastanu": "వస్తాను", "vasta": "వస్తాను", "vastunnava": "వస్తున్నావా", "vastunava": "వస్తున్నావా",
+  "vastara": "వస్తారా", "vastaraa": "వస్తారా", "vastunara": "వస్తున్నారా", "vastunnara": "వస్తున్నారా",
   "vastunnanu": "వస్తున్నాను", "vastundi": "వస్తుంది", "vachanu": "వచ్చాను",
   "pani": "పని", "cheyali": "చేయాలి", "cheyyali": "చేయాలి", "chesanu": "చేశాను",
   "chesaru": "చేశారు", "chey": "చెయ్", "cheyi": "చేయి", "cheyandi": "చేయండి",
@@ -1663,13 +1668,17 @@ function clientDetransliterateTeluguLoanwords(text) {
 
 function clientFoldPhonetics(s) {
   let t = s.toLowerCase();
-  t = t.replace(/aa/g, "a").replace(/ee/g, "e").replace(/ii/g, "i").replace(/oo/g, "o").replace(/uu/g, "u");
-  t = t.replace(/kh/g, "k").replace(/gh/g, "g").replace(/jh/g, "j").replace(/th/g, "t").replace(/dh/g, "d");
-  t = t.replace(/ph/g, "f").replace(/bh/g, "b").replace(/sh/g, "s").replace(/ch/g, "c");
   t = t.replace(/[^\w\s\u0C00-\u0C7F]/g, " ");
   const tokens = t.split(/\s+/).filter(Boolean);
   const folded = tokens.map(tok => {
+    const clean = tok.replace(/[^a-z]/g, "");
+    if (CLIENT_LOANWORDS.has(clean) || ["class", "meeting", "office", "college", "school", "report", "notes", "interview", "important"].includes(clean)) {
+      return clean;
+    }
     let w = tok;
+    w = w.replace(/aa/g, "a").replace(/ee/g, "e").replace(/ii/g, "i").replace(/oo/g, "o").replace(/uu/g, "u");
+    w = w.replace(/kh/g, "k").replace(/gh/g, "g").replace(/jh/g, "j").replace(/th/g, "t").replace(/dh/g, "d");
+    w = w.replace(/ph/g, "f").replace(/bh/g, "b").replace(/sh/g, "s").replace(/ch/g, "c");
     if (/^(hi|hai|hello|helo|hey)$/i.test(w)) return "hello";
     if (/^y?e[l]+a$/i.test(w)) return "ela";
     w = w.replace(/nn+/g, "n").replace(/ll+/g, "l").replace(/dd+/g, "d").replace(/tt+/g, "t").replace(/ss+/g, "s").replace(/pp+/g, "p");
@@ -1696,10 +1705,127 @@ const CLIENT_TELUGU_TO_ENGLISH_GLOSS = {
   "bagundi": "is good", "బాగుంది": "is good", "bagunaru": "are good", "bagunnaru": "are good", "బాగున్నారు": "are good",
   "undi": "is there", "ఉంది": "is there", "ledu": "is not", "లేదు": "is not",
   "ivala": "today", "ఇవాళ": "today", "repu": "tomorrow", "రేపు": "tomorrow", "ninna": "yesterday", "నిన్న": "yesterday", "ippudu": "now", "ఇప్పుడు": "now",
+  "eroju": "today", "eeroju": "today", "ఈరోజు": "today",
+  "vastunava": "are you coming", "vastunnava": "are you coming", "vastara": "will you come", "vastaraa": "will you come", "vastunara": "are you coming", "vastunnara": "are you coming",
+  "velthunava": "are you going", "velthunnava": "are you going", "veltanu": "I will go", "velthanu": "I will go",
   "ekkada": "where", "ఎక్కడ": "where", "enti": "what", "ఏంటి": "what", "enduku": "why", "ఎందుకు": "why",
   "pani": "work", "పని": "work", "cheyali": "must do", "చేయాలి": "must do", "chesanu": "did", "చేశాను": "did", "chesaru": "did", "చేశారు": "did", "chey": "do", "చేయ్": "do",
   "kavali": "need", "కావాలి": "need", "sahayam": "help", "సహాయం": "help", "dhanyavadalu": "thank you", "ధన్యవాదాలు": "thank you", "namaskaram": "greetings", "నమస్కారం": "greetings"
 };
+
+function clientTranslateMotionDestinationClause(folded, pure = false) {
+  const m = folded.match(/^(.+?)\s+(ki|ku)\s+(vastunava|vastunnava|vastava|vastara|vastunara|vastunnara|velthunava|velthunnava|velthava|velthara|veltanu|velthanu|velta|veltha|vastanu|vasta)[\?\.]*$/i);
+  if (!m) return null;
+  let pre = m[1].trim();
+  const verbTok = m[3].toLowerCase();
+
+  let subj = "you";
+  if (/\b(nenu|nen)\b/i.test(pre)) {
+    subj = "I";
+    pre = pre.replace(/\b(nenu|nen)\b/gi, "");
+  } else if (/\b(nuvvu|nuv|nuvu)\b/i.test(pre)) {
+    subj = "you";
+    pre = pre.replace(/\b(nuvvu|nuv|nuvu)\b/gi, "");
+  } else if (/\b(meeru|meru)\b/i.test(pre)) {
+    subj = "you";
+    pre = pre.replace(/\b(meeru|meru)\b/gi, "");
+  } else if (/\b(manam|manamu)\b/i.test(pre)) {
+    subj = "we";
+    pre = pre.replace(/\b(manam|manamu)\b/gi, "");
+  }
+
+  let timeStr = "";
+  if (/\b(repu\s+(morning|udayam))\b/i.test(pre)) {
+    timeStr = "tomorrow morning";
+    pre = pre.replace(/\b(repu\s+(morning|udayam))\b/gi, "");
+  } else if (/\b(repu\s+(sayantram|evening))\b/i.test(pre)) {
+    timeStr = "tomorrow evening";
+    pre = pre.replace(/\b(repu\s+(sayantram|evening))\b/gi, "");
+  } else if (/\b(eroju|eeroju|ivala|e\s+roju)\s+(morning|udayam)\b/i.test(pre)) {
+    timeStr = "this morning";
+    pre = pre.replace(/\b(eroju|eeroju|ivala|e\s+roju)\s+(morning|udayam)\b/gi, "");
+  } else if (/\b(eroju|eeroju|ivala|e\s+roju)\s+(sayantram|evening)\b/i.test(pre)) {
+    timeStr = "this evening";
+    pre = pre.replace(/\b(eroju|eeroju|ivala|e\s+roju)\s+(sayantram|evening)\b/gi, "");
+  } else if (/\b(eroju|eeroju|ivala|e\s+roju)\b/i.test(pre)) {
+    timeStr = "today";
+    pre = pre.replace(/\b(eroju|eeroju|ivala|e\s+roju)\b/gi, "");
+  } else if (/\b(repu)\b/i.test(pre)) {
+    timeStr = "tomorrow";
+    pre = pre.replace(/\b(repu)\b/gi, "");
+  } else if (/\b(ninna)\b/i.test(pre)) {
+    timeStr = "yesterday";
+    pre = pre.replace(/\b(ninna)\b/gi, "");
+  } else if (/\b(ippudu|ipudu)\b/i.test(pre)) {
+    timeStr = "now";
+    pre = pre.replace(/\b(ippudu|ipudu)\b/gi, "");
+  }
+
+  let dest = pre.trim().toLowerCase();
+  const destMap = {
+    "intiki": "home", "illu": "home", "pani": "work",
+    "kalasala": "college", "patasala": "school",
+    "karyalayam": "office", "samavesam": "meeting",
+    "mukhamukhi": "interview", "asupatri": "hospital",
+    "colege": "college", "collage": "college"
+  };
+  dest = destMap[dest] || dest;
+
+  let prepDest = "";
+  if (dest === "home") {
+    prepDest = "home";
+  } else if (["office", "meeting", "hospital", "station", "airport", "gym", "market", "bank", "library", "lab", "interview", "party"].includes(dest)) {
+    prepDest = `to the ${dest}`;
+  } else if (dest) {
+    prepDest = `to ${dest}`;
+  }
+
+  const tSfx = timeStr ? ` ${timeStr}` : "";
+
+  if (pure) {
+    if (["vastunava", "vastunnava", "vastava", "vastara", "vastunara", "vastunnara"].includes(verbTok)) {
+      if (["college", "school", "class", "university", "office", "meeting", "interview"].includes(dest)) {
+        const art = ["office", "meeting", "interview"].includes(dest) ? "the " : "";
+        return `Will you be attending ${art}${dest}${tSfx}?`;
+      } else if (dest === "home") {
+        return `Will you be returning home${tSfx}?`;
+      } else if (dest) {
+        return `Will you be arriving at ${dest}${tSfx}?`;
+      } else {
+        return `Will you be arriving${tSfx}?`;
+      }
+    } else if (["velthunava", "velthunnava", "velthava", "velthara", "velthunara", "velthunnara"].includes(verbTok)) {
+      if (["college", "school", "class", "university", "office", "meeting", "interview"].includes(dest)) {
+        const art = ["office", "meeting", "interview"].includes(dest) ? "the " : "";
+        return `Will you be attending ${art}${dest}${tSfx}?`;
+      } else if (dest) {
+        return `Will you be proceeding to ${dest}${tSfx}?`;
+      } else {
+        return `Will you be departing${tSfx}?`;
+      }
+    } else if (["veltanu", "velthanu", "velta", "veltha"].includes(verbTok)) {
+      if (["college", "school", "class", "university", "office", "meeting", "interview"].includes(dest)) {
+        const art = ["office", "meeting", "interview"].includes(dest) ? "the " : "";
+        return `${subj} shall attend ${art}${dest}${tSfx}.`;
+      } else {
+        return `${subj} shall proceed to ${dest}${tSfx}.`;
+      }
+    } else if (["vastanu", "vasta"].includes(verbTok)) {
+      return `${subj} shall arrive at ${dest}${tSfx}.`;
+    }
+  } else {
+    if (["vastunava", "vastunnava", "vastava", "vastara", "vastunara", "vastunnara"].includes(verbTok)) {
+      return prepDest ? `Are you coming ${prepDest}${tSfx}?` : `Are you coming${tSfx}?`;
+    } else if (["velthunava", "velthunnava", "velthava", "velthara", "velthunara", "velthunnara"].includes(verbTok)) {
+      return prepDest ? `Are you going ${prepDest}${tSfx}?` : `Are you going${tSfx}?`;
+    } else if (["veltanu", "velthanu", "velta", "veltha"].includes(verbTok)) {
+      return `${subj} will go ${prepDest}${tSfx}.`;
+    } else if (["vastanu", "vasta"].includes(verbTok)) {
+      return `${subj} will come ${prepDest}${tSfx}.`;
+    }
+  }
+  return null;
+}
 
 function clientElevateToPureEnglish(text) {
   if (!text) return "";
@@ -1744,6 +1870,13 @@ function clientTranslateClauseToEnglish(raw) {
 
   const detrans = clientDetransliterateTeluguLoanwords(clean);
   const folded = clientFoldPhonetics(detrans);
+
+  if (/^(hi|hello|hey|hai)$/i.test(folded)) {
+    return "Hello";
+  }
+
+  const motionRes = clientTranslateMotionDestinationClause(folded, false);
+  if (motionRes) return motionRes;
 
   if (/(mer|meru|meeru)\s+(chala|chaala|cala)\s+(bagun|bagunaru|bagunnaru|bagunaaru|bagunnaaru)/i.test(folded)) {
     return "You look very good";
@@ -1856,6 +1989,13 @@ function clientTranslateClauseToPureEnglish(raw) {
   const detrans = clientDetransliterateTeluguLoanwords(clean);
   const folded = clientFoldPhonetics(detrans);
 
+  if (/^(hi|hello|hey|hai)$/i.test(folded)) {
+    return "Greetings";
+  }
+
+  const motionPureRes = clientTranslateMotionDestinationClause(folded, true);
+  if (motionPureRes) return motionPureRes;
+
   if (/(mer|meru|meeru)\s+(chala|chaala|cala)\s+(bagun|bagunaru|bagunnaru|bagunaaru|bagunnaaru)/i.test(folded)) {
     return "You appear exceptionally well";
   }
@@ -1945,12 +2085,22 @@ function clientTranslateToEnglish(text) {
 
     if (clause.includes(",") || clause.includes(";")) {
       const sub = clause.split(/[,;]\s*/).filter(Boolean);
-      const subTrans = sub.map(s => clientTranslateClauseToEnglish(s)).filter(Boolean);
+      const subTrans = [];
+      let hasQ = false;
+      for (let j = 0; j < sub.length; j++) {
+        let res = clientTranslateClauseToEnglish(sub[j]);
+        if (res) {
+          if (res.endsWith("?")) hasQ = true;
+          let cleanRes = res.replace(/[.!?]+$/, "");
+          if (j > 0 && cleanRes && !cleanRes.startsWith("I ")) {
+            cleanRes = cleanRes[0].toLowerCase() + cleanRes.slice(1);
+          }
+          subTrans.push(cleanRes);
+        }
+      }
       if (subTrans.length > 0) {
-        let joined = subTrans.join(", ");
-        if (joined) joined = joined[0].toUpperCase() + joined.slice(1);
-        const endPunct = /[.!?]$/.test(joined) ? "" : (punct || ".");
-        out.push(joined + endPunct);
+        const term = hasQ || punct === "?" ? "?" : (punct || ".");
+        out.push(subTrans.join(", ") + term);
         continue;
       }
     }
@@ -1976,12 +2126,30 @@ function clientTranslateToPureEnglish(text) {
 
     if (clause.includes(",") || clause.includes(";")) {
       const sub = clause.split(/[,;]\s*/).filter(Boolean);
-      const subTrans = sub.map(s => clientTranslateClauseToPureEnglish(s)).filter(Boolean);
+      const subTrans = [];
+      let hasQ = false;
+      for (let j = 0; j < sub.length; j++) {
+        let res = clientTranslateClauseToPureEnglish(sub[j]);
+        if (res) {
+          if (res.endsWith("?")) hasQ = true;
+          let cleanRes = res.replace(/[.!?]+$/, "");
+          subTrans.push(cleanRes);
+        }
+      }
       if (subTrans.length > 0) {
-        let joined = subTrans.join("; ");
-        if (joined) joined = joined[0].toUpperCase() + joined.slice(1);
-        const endPunct = /[.!?]$/.test(joined) ? "" : (punct || ".");
-        out.push(joined + endPunct);
+        let joined = "";
+        for (let j = 0; j < subTrans.length; j++) {
+          const item = subTrans[j];
+          if (j === 0) {
+            joined = item;
+          } else {
+            const prev = subTrans[j - 1].toLowerCase();
+            const sep = (prev === "greetings" || prev === "hello" || prev === "good morning") ? ". " : "; ";
+            joined += sep + (item[0].toUpperCase() + item.slice(1));
+          }
+        }
+        const term = hasQ || punct === "?" ? "?" : (punct || ".");
+        out.push(joined + term);
         continue;
       }
     }
@@ -1996,6 +2164,26 @@ function clientTranslateToPureEnglish(text) {
 }
 
 const CLIENT_PHRASE_RULES = [
+  {
+    regex: /^(hi|hello|hey|hai)[,\s]+(eroju|eeroju|ivala)\s+college\s+(ki|ku)\s+(vastunava|vastunnava|vastava|vastara)[?\.]*$/i,
+    norm: "హాయ్, ఈరోజు college కి వస్తున్నావా?",
+    pureTe: "నమస్కారం, మీరు ఈరోజు కళాశాలకు వస్తున్నారా?",
+    teScript: "హాయ్, ఈరోజు కాలేజీ కి వస్తున్నావా?",
+    rom: "hi, eroju college ki vastunava?",
+    en: "Hello, are you coming to college today?",
+    pureEn: "Greetings. Will you be attending college today?",
+    meaning: "Greeting a friend and asking if they are attending college today."
+  },
+  {
+    regex: /^(eroju|eeroju|ivala)\s+college\s+(ki|ku)\s+(vastunava|vastunnava|vastava|vastara)[?\.]*$/i,
+    norm: "ఈరోజు college కి వస్తున్నావా?",
+    pureTe: "మీరు ఈరోజు కళాశాలకు వస్తున్నారా?",
+    teScript: "ఈరోజు కాలేజీ కి వస్తున్నావా?",
+    rom: "eroju college ki vastunava?",
+    en: "Are you coming to college today?",
+    pureEn: "Will you be attending college today?",
+    meaning: "Asking if someone is coming to college today."
+  },
   {
     regex: /^(hi|hello|hey)\s+(how\s+are\s+you|how\s+r\s+u)[?\.]*$/i,
     norm: "హాయ్ మీరు ఎలా ఉన్నారు?",
@@ -2471,10 +2659,10 @@ function clientOmniProcess(text) {
       } else if (CLIENT_TE_WORDS[low]) {
         normTok = CLIENT_TE_WORDS[low];
         tag = "TE";
-        pureTok = CLIENT_TE_WORDS[low];
+        pureTok = CLIENT_PURE_TE_MAP[low] || CLIENT_TE_WORDS[low];
         allTeTok = CLIENT_TE_WORDS[low];
         allRomTok = low;
-        gloss = low;
+        gloss = CLIENT_PURE_TE_MAP[low] || low;
       } else {
         if (modality === "english") {
           normTok = core;
