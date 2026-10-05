@@ -1,0 +1,3229 @@
+{
+  "attn_bahdanau": {
+    "test": {
+      "overall": {
+        "n": 280,
+        "cer": 0.14015645371577576,
+        "wer": 0.16725352112676056,
+        "em": 0.5785714285714286,
+        "ned": 0.15060766414540477,
+        "chrf": 76.46559727400688,
+        "bleu": 73.4306208402441,
+        "token_acc": 0.8600352112676056,
+        "english_token_acc": 0.7713178294573644,
+        "telugu_token_acc": 0.993920972644377,
+        "english_tokens": 258,
+        "telugu_tokens": 658
+      },
+      "slices": {
+        "mix": {
+          "balanced": {
+            "n": 126,
+            "cer": 0.23144286905754796,
+            "wer": 0.2680652680652681,
+            "em": 0.4365079365079365,
+            "ned": 0.2217183795959166,
+            "chrf": 69.37975245647816,
+            "bleu": 48.79639407498663,
+            "token_acc": 0.8041958041958042
+          },
+          "telugu_heavy": {
+            "n": 154,
+            "cer": 0.0815944355270198,
+            "wer": 0.10608203677510608,
+            "em": 0.6948051948051948,
+            "ned": 0.09242616968589508,
+            "chrf": 82.26310667016672,
+            "bleu": 80.96345205480452,
+            "token_acc": 0.8939179632248939
+          }
+        },
+        "src_script": {
+          "mixed_script": {
+            "n": 47,
+            "cer": 0.10256410256410256,
+            "wer": 0.11594202898550725,
+            "em": 0.6382978723404256,
+            "ned": 0.10158726482283102,
+            "chrf": 82.67290648837202,
+            "bleu": 74.62215374217858,
+            "token_acc": 0.8985507246376812
+          },
+          "romanized": {
+            "n": 233,
+            "cer": 0.14829500396510706,
+            "wer": 0.17868675995694294,
+            "em": 0.5665236051502146,
+            "ned": 0.16049589920188959,
+            "chrf": 75.2134791063023,
+            "bleu": 73.1524429105241,
+            "token_acc": 0.8514531754574811
+          }
+        },
+        "kind": {
+          "identity": {
+            "n": 8,
+            "cer": 0.10382513661202186,
+            "wer": 0.12121212121212122,
+            "em": 0.75,
+            "ned": 0.10261904761904761,
+            "chrf": 83.62952820695135,
+            "bleu": 82.21474134359207,
+            "token_acc": 0.9090909090909091
+          },
+          "noisy": {
+            "n": 272,
+            "cer": 0.14127330757601209,
+            "wer": 0.1686310063463282,
+            "em": 0.5735294117647058,
+            "ned": 0.1520190940432388,
+            "chrf": 76.25489342303793,
+            "bleu": 73.19771355414684,
+            "token_acc": 0.8585675430643699
+          }
+        },
+        "length": {
+          "medium": {
+            "n": 113,
+            "cer": 0.07710843373493977,
+            "wer": 0.09457092819614711,
+            "em": 0.6548672566371682,
+            "ned": 0.08747345453771002,
+            "chrf": 84.13675998640561,
+            "bleu": 78.33163488562373,
+            "token_acc": 0.9071803852889667
+          },
+          "short(<=4w)": {
+            "n": 167,
+            "cer": 0.1968430826369545,
+            "wer": 0.2407079646017699,
+            "em": 0.5269461077844312,
+            "ned": 0.19332721914941375,
+            "chrf": 71.27493028897061,
+            "bleu": 64.29095698910446,
+            "token_acc": 0.8123893805309734
+          }
+        }
+      },
+      "errors": {
+        "n_sentences": 280,
+        "n_error_sentences": 118,
+        "sentence_error_rate": 0.42142857142857143,
+        "categories": {
+          "english_other": 61,
+          "insertion": 31,
+          "deletion": 31,
+          "english_as_telugu": 26,
+          "telugu_left_romanized": 22,
+          "telugu_vocab": 17,
+          "telugu_char_error": 2
+        },
+        "category_share": {
+          "english_other": 0.321,
+          "english_as_telugu": 0.137,
+          "insertion": 0.163,
+          "deletion": 0.163,
+          "telugu_vocab": 0.089,
+          "telugu_char_error": 0.011,
+          "telugu_left_romanized": 0.116
+        },
+        "flags": {
+          "unknown_word": 58,
+          "hallucinated": 10
+        },
+        "examples": {
+          "english_other": [
+            {
+              "src": "repu mtg undi",
+              "ref": "రేపు meeting ఉంది",
+              "hyp": "రేపు movie ఉంది",
+              "ref_tok": "meeting",
+              "hyp_tok": "movie"
+            },
+            {
+              "src": "raepu meeting uundi 😂",
+              "ref": "రేపు meeting ఉంది 😂",
+              "hyp": "రేపు movie ఉంది 😂",
+              "ref_tok": "meeting",
+              "hyp_tok": "movie"
+            },
+            {
+              "src": "repu meeting undhi",
+              "ref": "రేపు meeting ఉంది",
+              "hyp": "రేపు movie ఉంది",
+              "ref_tok": "meeting",
+              "hyp_tok": "movie"
+            },
+            {
+              "src": "Repu meting undi",
+              "ref": "రేపు meeting ఉంది",
+              "hyp": "రేపు movie ఉంది",
+              "ref_tok": "meeting",
+              "hyp_tok": "movie"
+            }
+          ],
+          "english_as_telugu": [
+            {
+              "src": "naaku notes kawaali",
+              "ref": "నాకు notes కావాలి",
+              "hyp": "నాకు ఇంకా complete కావాలి",
+              "ref_tok": "notes",
+              "hyp_tok": "ఇంకా"
+            },
+            {
+              "src": "naku nores kaawaale",
+              "ref": "నాకు notes కావాలి",
+              "hyp": "నాకు అర్థం కావాలి",
+              "ref_tok": "notes",
+              "hyp_tok": "అర్థం"
+            },
+            {
+              "src": "naaaku notes kavale",
+              "ref": "నాకు notes కావాలి",
+              "hyp": "నాకు ఇంకా complete కావాలి",
+              "ref_tok": "notes",
+              "hyp_tok": "ఇంకా"
+            },
+            {
+              "src": "నాకు notes kaavaali",
+              "ref": "నాకు notes కావాలి",
+              "hyp": "నాకు ఇంకా complete కావాలి",
+              "ref_tok": "notes",
+              "hyp_tok": "ఇంకా"
+            }
+          ],
+          "insertion": [
+            {
+              "src": "naaku notes kawaali",
+              "ref": "నాకు notes కావాలి",
+              "hyp": "నాకు ఇంకా complete కావాలి",
+              "ref_tok": "",
+              "hyp_tok": "complete"
+            },
+            {
+              "src": "naaaku notes kavale",
+              "ref": "నాకు notes కావాలి",
+              "hyp": "నాకు ఇంకా complete కావాలి",
+              "ref_tok": "",
+              "hyp_tok": "complete"
+            },
+            {
+              "src": "నాకు notes kaavaali",
+              "ref": "నాకు notes కావాలి",
+              "hyp": "నాకు ఇంకా complete కావాలి",
+              "ref_tok": "",
+              "hyp_tok": "complete"
+            },
+            {
+              "src": "naaku notes kaavali",
+              "ref": "నాకు notes కావాలి",
+              "hyp": "నాకు ఇంకా complete కావాలి",
+              "ref_tok": "",
+              "hyp_tok": "complete"
+            }
+          ],
+          "deletion": [
+            {
+              "src": "prjct enkaa COMPLETE kaalaedhu",
+              "ref": "project ఇంకా complete కాలేదు",
+              "hyp": "project complete కాలేదు",
+              "ref_tok": "ఇంకా",
+              "hyp_tok": ""
+            },
+            {
+              "src": "wif loo probleem undi",
+              "ref": "wifi లో problem ఉంది",
+              "hyp": "problem ఉంది",
+              "ref_tok": "wifi",
+              "hyp_tok": ""
+            },
+            {
+              "src": "wif loo probleem undi",
+              "ref": "wifi లో problem ఉంది",
+              "hyp": "problem ఉంది",
+              "ref_tok": "లో",
+              "hyp_tok": ""
+            },
+            {
+              "src": "WIFI lo problm undi",
+              "ref": "wifi లో problem ఉంది",
+              "hyp": "problem ఉంది",
+              "ref_tok": "wifi",
+              "hyp_tok": ""
+            }
+          ],
+          "telugu_vocab": [
+            {
+              "src": "naaku nidra wastondi",
+              "ref": "నాకు నిద్ర వస్తోంది",
+              "hyp": "నాకు వస్తుంది",
+              "ref_tok": "నిద్ర",
+              "hyp_tok": "వస్తుంది"
+            },
+            {
+              "src": "naaku nedra wastondhi 🔥",
+              "ref": "నాకు నిద్ర వస్తోంది 🔥",
+              "hyp": "నాకు వస్తుంది 🔥",
+              "ref_tok": "నిద్ర",
+              "hyp_tok": "వస్తుంది"
+            },
+            {
+              "src": "naaku nidhra vasthonde",
+              "ref": "నాకు నిద్ర వస్తోంది",
+              "hyp": "నాకు ఈ వస్తుంది",
+              "ref_tok": "నిద్ర",
+              "hyp_tok": "ఈ"
+            },
+            {
+              "src": "naaku nidra wasthondhi 🙏",
+              "ref": "నాకు నిద్ర వస్తోంది 🙏",
+              "hyp": "నాకు వస్తుంది 🙏",
+              "ref_tok": "నిద్ర",
+              "hyp_tok": "వస్తుంది"
+            }
+          ],
+          "telugu_char_error": [
+            {
+              "src": "naaku nidhra vasthonde",
+              "ref": "నాకు నిద్ర వస్తోంది",
+              "hyp": "నాకు ఈ వస్తుంది",
+              "ref_tok": "వస్తోంది",
+              "hyp_tok": "వస్తుంది"
+            },
+            {
+              "src": "Naakuuu nedhra vastondi",
+              "ref": "నాకు నిద్ర వస్తోంది",
+              "hyp": "నాకు అర్పుడే వస్తుంది",
+              "ref_tok": "వస్తోంది",
+              "hyp_tok": "వస్తుంది"
+            }
+          ],
+          "telugu_left_romanized": [
+            {
+              "src": "ee roju naaku time ledu",
+              "ref": "ఈ రోజు నాకు time లేదు",
+              "hyp": "ఈ రోజు exam లేదు",
+              "ref_tok": "నాకు",
+              "hyp_tok": "exam"
+            },
+            {
+              "src": "i roju naku time ledu",
+              "ref": "ఈ రోజు నాకు time లేదు",
+              "hyp": "ఈ రోజు exam లేదు",
+              "ref_tok": "నాకు",
+              "hyp_tok": "exam"
+            },
+            {
+              "src": "i roju నాకు time ledu",
+              "ref": "ఈ రోజు నాకు time లేదు",
+              "hyp": "ఈ రోజు exam లేదు",
+              "ref_tok": "నాకు",
+              "hyp_tok": "exam"
+            },
+            {
+              "src": "i roju naaku time ledhu",
+              "ref": "ఈ రోజు నాకు time లేదు",
+              "hyp": "ఈ రోజు exam లేదు",
+              "ref_tok": "నాకు",
+              "hyp_tok": "exam"
+            }
+          ]
+        }
+      }
+    },
+    "test_hard": {
+      "overall": {
+        "n": 40,
+        "cer": 0.15528634361233482,
+        "wer": 0.17415730337078653,
+        "em": 0.55,
+        "ned": 0.15970076977546016,
+        "chrf": 74.52911010244075,
+        "bleu": 70.16745894056945,
+        "token_acc": 0.8651685393258427,
+        "english_token_acc": 0.7714285714285715,
+        "telugu_token_acc": 1.0,
+        "english_tokens": 35,
+        "telugu_tokens": 88
+      },
+      "slices": {
+        "mix": {
+          "balanced": {
+            "n": 18,
+            "cer": 0.21508379888268156,
+            "wer": 0.21739130434782608,
+            "em": 0.4444444444444444,
+            "ned": 0.19670083496622884,
+            "chrf": 70.94924896121555,
+            "bleu": 57.975946260438924,
+            "token_acc": 0.855072463768116
+          },
+          "telugu_heavy": {
+            "n": 22,
+            "cer": 0.11636363636363636,
+            "wer": 0.14678899082568808,
+            "em": 0.6363636363636364,
+            "ned": 0.12942798916483128,
+            "chrf": 77.45808739980681,
+            "bleu": 75.9414989146142,
+            "token_acc": 0.8715596330275229
+          }
+        },
+        "src_script": {
+          "mixed_script": {
+            "n": 14,
+            "cer": 0.07954545454545454,
+            "wer": 0.10606060606060606,
+            "em": 0.7142857142857143,
+            "ned": 0.0932873149259704,
+            "chrf": 82.93651343558201,
+            "bleu": 82.07986507737508,
+            "token_acc": 0.9090909090909091
+          },
+          "romanized": {
+            "n": 26,
+            "cer": 0.20323741007194246,
+            "wer": 0.21428571428571427,
+            "em": 0.46153846153846156,
+            "ned": 0.19546186084826236,
+            "chrf": 70.00204676921084,
+            "bleu": 63.13303439467731,
+            "token_acc": 0.8392857142857143
+          }
+        },
+        "kind": {
+          "noisy": {
+            "n": 40,
+            "cer": 0.15528634361233482,
+            "wer": 0.17415730337078653,
+            "em": 0.55,
+            "ned": 0.15970076977546016,
+            "chrf": 74.52911010244075,
+            "bleu": 70.16745894056945,
+            "token_acc": 0.8651685393258427
+          }
+        },
+        "length": {
+          "medium": {
+            "n": 21,
+            "cer": 0.12222222222222222,
+            "wer": 0.14285714285714285,
+            "em": 0.5238095238095238,
+            "ned": 0.13113392780059446,
+            "chrf": 78.46703715598383,
+            "bleu": 72.36965359961766,
+            "token_acc": 0.875
+          },
+          "short(<=4w)": {
+            "n": 19,
+            "cer": 0.20380434782608695,
+            "wer": 0.22727272727272727,
+            "em": 0.5789473684210527,
+            "ned": 0.1912746477476802,
+            "chrf": 70.17666441168261,
+            "bleu": 65.54913610595182,
+            "token_acc": 0.8484848484848485
+          }
+        }
+      },
+      "errors": {
+        "n_sentences": 40,
+        "n_error_sentences": 18,
+        "sentence_error_rate": 0.45,
+        "categories": {
+          "english_other": 10,
+          "insertion": 7,
+          "deletion": 4,
+          "english_as_telugu": 4,
+          "telugu_vocab": 3,
+          "telugu_left_romanized": 3
+        },
+        "category_share": {
+          "english_other": 0.323,
+          "telugu_vocab": 0.097,
+          "insertion": 0.226,
+          "deletion": 0.129,
+          "english_as_telugu": 0.129,
+          "telugu_left_romanized": 0.097
+        },
+        "flags": {
+          "unknown_word": 9,
+          "hallucinated": 4
+        },
+        "examples": {
+          "english_other": [
+            {
+              "src": "repu meeting unde",
+              "ref": "రేపు meeting ఉంది",
+              "hyp": "రేపు movie ఉంది",
+              "ref_tok": "meeting",
+              "hyp_tok": "movie"
+            },
+            {
+              "src": "repu meetong unde 🙏",
+              "ref": "రేపు meeting ఉంది 🙏",
+              "hyp": "రేపు exam ఉంది 🙏",
+              "ref_tok": "meeting",
+              "hyp_tok": "exam"
+            },
+            {
+              "src": "ee roju mtg ladu 😊",
+              "ref": "ఈ రోజు meeting లేదు 😊",
+              "hyp": "ఈ రోజు movie లో ఉన్నాడు 😊",
+              "ref_tok": "meeting",
+              "hyp_tok": "movie"
+            },
+            {
+              "src": "I ROOJU meting లేదు 😊",
+              "ref": "ఈ రోజు meeting లేదు 😊",
+              "hyp": "ఈ రోజు movie లేదు 😊",
+              "ref_tok": "meeting",
+              "hyp_tok": "movie"
+            }
+          ],
+          "telugu_vocab": [
+            {
+              "src": "ee roju mtg ladu 😊",
+              "ref": "ఈ రోజు meeting లేదు 😊",
+              "hyp": "ఈ రోజు movie లో ఉన్నాడు 😊",
+              "ref_tok": "లేదు",
+              "hyp_tok": "లో"
+            },
+            {
+              "src": "Naaku nidhra wastondhi",
+              "ref": "నాకు నిద్ర వస్తోంది",
+              "hyp": "నాకు వస్తుంది",
+              "ref_tok": "నిద్ర",
+              "hyp_tok": "వస్తుంది"
+            },
+            {
+              "src": "Naaku ndra వస్తోంది",
+              "ref": "నాకు నిద్ర వస్తోంది",
+              "hyp": "నాకు train ఎక్కడ ఉంది",
+              "ref_tok": "వస్తోంది",
+              "hyp_tok": "ఎక్కడ"
+            }
+          ],
+          "insertion": [
+            {
+              "src": "ee roju mtg ladu 😊",
+              "ref": "ఈ రోజు meeting లేదు 😊",
+              "hyp": "ఈ రోజు movie లో ఉన్నాడు 😊",
+              "ref_tok": "",
+              "hyp_tok": "ఉన్నాడు"
+            },
+            {
+              "src": "naaku notes kawali 😊",
+              "ref": "నాకు notes కావాలి 😊",
+              "hyp": "నాకు ఇంకా complete కావాలి 😊",
+              "ref_tok": "",
+              "hyp_tok": "complete"
+            },
+            {
+              "src": "Wifi loo problm unde 😅",
+              "ref": "wifi లో problem ఉంది 😅",
+              "hyp": "రోజు form లో problem ఉంది 😅",
+              "ref_tok": "",
+              "hyp_tok": "form"
+            },
+            {
+              "src": "Naaku ndra వస్తోంది",
+              "ref": "నాకు నిద్ర వస్తోంది",
+              "hyp": "నాకు train ఎక్కడ ఉంది",
+              "ref_tok": "",
+              "hyp_tok": "ఉంది"
+            }
+          ],
+          "deletion": [
+            {
+              "src": "na notes ekkada పెట్టావు? 🙏 🔥",
+              "ref": "నా notes ఎక్కడ పెట్టావు? 🙏 🔥",
+              "hyp": "నా ticke ఎక్కడ పెట్టావు? 🔥",
+              "ref_tok": "🙏",
+              "hyp_tok": ""
+            },
+            {
+              "src": "Naaku nidhra wastondhi",
+              "ref": "నాకు నిద్ర వస్తోంది",
+              "hyp": "నాకు వస్తుంది",
+              "ref_tok": "వస్తోంది",
+              "hyp_tok": ""
+            },
+            {
+              "src": "Ee roju naaku time leedhu",
+              "ref": "ఈ రోజు నాకు time లేదు",
+              "hyp": "ఈ రోజు exam లేదు",
+              "ref_tok": "time",
+              "hyp_tok": ""
+            },
+            {
+              "src": "ee roju naaku time ledu",
+              "ref": "ఈ రోజు నాకు time లేదు",
+              "hyp": "ఈ రోజు exam లేదు",
+              "ref_tok": "time",
+              "hyp_tok": ""
+            }
+          ],
+          "english_as_telugu": [
+            {
+              "src": "naaku notes kawali 😊",
+              "ref": "నాకు notes కావాలి 😊",
+              "hyp": "నాకు ఇంకా complete కావాలి 😊",
+              "ref_tok": "notes",
+              "hyp_tok": "ఇంకా"
+            },
+            {
+              "src": "Wifi loo problm unde 😅",
+              "ref": "wifi లో problem ఉంది 😅",
+              "hyp": "రోజు form లో problem ఉంది 😅",
+              "ref_tok": "wifi",
+              "hyp_tok": "రోజు"
+            },
+            {
+              "src": "chalaaaa thx 😂",
+              "ref": "చాలా thanks 😂",
+              "hyp": "phote చాలా వేడిగా ఉంది 😂",
+              "ref_tok": "thanks",
+              "hyp_tok": "వేడిగా"
+            },
+            {
+              "src": "chaalaa thx",
+              "ref": "చాలా thanks",
+              "hyp": "phote చాలా వస్తాను",
+              "ref_tok": "thanks",
+              "hyp_tok": "వస్తాను"
+            }
+          ],
+          "telugu_left_romanized": [
+            {
+              "src": "Naaku ndra వస్తోంది",
+              "ref": "నాకు నిద్ర వస్తోంది",
+              "hyp": "నాకు train ఎక్కడ ఉంది",
+              "ref_tok": "నిద్ర",
+              "hyp_tok": "train"
+            },
+            {
+              "src": "Ee roju naaku time leedhu",
+              "ref": "ఈ రోజు నాకు time లేదు",
+              "hyp": "ఈ రోజు exam లేదు",
+              "ref_tok": "నాకు",
+              "hyp_tok": "exam"
+            },
+            {
+              "src": "ee roju naaku time ledu",
+              "ref": "ఈ రోజు నాకు time లేదు",
+              "hyp": "ఈ రోజు exam లేదు",
+              "ref_tok": "నాకు",
+              "hyp_tok": "exam"
+            }
+          ]
+        }
+      }
+    },
+    "test_unseen_words": {
+      "overall": {
+        "n": 322,
+        "cer": 0.24907885040530583,
+        "wer": 0.33903133903133903,
+        "em": 0.0,
+        "ned": 0.26420762703745976,
+        "chrf": 55.419437678829695,
+        "bleu": 9.09831629160217,
+        "token_acc": 0.6609686609686609,
+        "english_token_acc": 0.058333333333333334,
+        "telugu_token_acc": 0.9847856154910097,
+        "english_tokens": 240,
+        "telugu_tokens": 723
+      },
+      "slices": {
+        "mix": {
+          "balanced": {
+            "n": 84,
+            "cer": 0.27808370044052866,
+            "wer": 0.3543859649122807,
+            "em": 0.0,
+            "ned": 0.3066595059076262,
+            "chrf": 47.68705534614997,
+            "bleu": 20.405109208315906,
+            "token_acc": 0.6456140350877193
+          },
+          "telugu_heavy": {
+            "n": 238,
+            "cer": 0.2407524502055011,
+            "wer": 0.3351206434316354,
+            "em": 0.0,
+            "ned": 0.2492246109656363,
+            "chrf": 58.148513796246064,
+            "bleu": 7.197337454930241,
+            "token_acc": 0.6648793565683646
+          }
+        },
+        "src_script": {
+          "mixed_script": {
+            "n": 63,
+            "cer": 0.24129505192425169,
+            "wer": 0.3229166666666667,
+            "em": 0.0,
+            "ned": 0.25498809688287605,
+            "chrf": 56.49938483259658,
+            "bleu": 10.971390909621922,
+            "token_acc": 0.6770833333333334
+          },
+          "romanized": {
+            "n": 259,
+            "cer": 0.25103766333589544,
+            "wer": 0.3431899641577061,
+            "em": 0.0,
+            "ned": 0.26645021545343955,
+            "chrf": 55.15674783061612,
+            "bleu": 9.799709079558616,
+            "token_acc": 0.6568100358422939
+          }
+        },
+        "kind": {
+          "identity": {
+            "n": 10,
+            "cer": 0.2480916030534351,
+            "wer": 0.3409090909090909,
+            "em": 0.0,
+            "ned": 0.2467255681224935,
+            "chrf": 56.547572484320256,
+            "bleu": 22.232446720474755,
+            "token_acc": 0.6590909090909091
+          },
+          "noisy": {
+            "n": 312,
+            "cer": 0.24911167512690355,
+            "wer": 0.33897058823529413,
+            "em": 0.0,
+            "ned": 0.26476794943858045,
+            "chrf": 55.38327951198704,
+            "bleu": 9.118905211365297,
+            "token_acc": 0.6610294117647059
+          }
+        },
+        "length": {
+          "medium": {
+            "n": 165,
+            "cer": 0.20008643042350907,
+            "wer": 0.28741092636579574,
+            "em": 0.0,
+            "ned": 0.2061415338930291,
+            "chrf": 62.90389281935397,
+            "bleu": 10.972406098030017,
+            "token_acc": 0.7125890736342043
+          },
+          "short(<=4w)": {
+            "n": 157,
+            "cer": 0.31360273192942517,
+            "wer": 0.41637010676156583,
+            "em": 0.0,
+            "ned": 0.3252325019981671,
+            "chrf": 47.55360902796022,
+            "bleu": 7.5704428276792015,
+            "token_acc": 0.5836298932384342
+          }
+        }
+      },
+      "errors": {
+        "n_sentences": 322,
+        "n_error_sentences": 322,
+        "sentence_error_rate": 1.0,
+        "categories": {
+          "english_other": 166,
+          "deletion": 126,
+          "english_as_telugu": 123,
+          "english_spelling": 31,
+          "telugu_vocab": 30
+        },
+        "category_share": {
+          "english_other": 0.349,
+          "english_as_telugu": 0.258,
+          "telugu_vocab": 0.063,
+          "deletion": 0.265,
+          "english_spelling": 0.065
+        },
+        "flags": {
+          "unknown_word": 321,
+          "hallucinated": 131
+        },
+        "examples": {
+          "english_other": [
+            {
+              "src": "Nenu repu canteen ke veltaanu",
+              "ref": "నేను రేపు canteen కి వెళ్తాను",
+              "hyp": "నేను రేపు cank కి వెళ్తాను",
+              "ref_tok": "canteen",
+              "hyp_tok": "cank"
+            },
+            {
+              "src": "nenu repu cantwenku velthanu",
+              "ref": "నేను రేపు canteen కి వెళ్తాను",
+              "hyp": "నేను రేపు carty కి వెళ్తాను",
+              "ref_tok": "canteen",
+              "hyp_tok": "carty"
+            },
+            {
+              "src": "nenu repu CANTEEN ki welthanu",
+              "ref": "నేను రేపు canteen కి వెళ్తాను",
+              "hyp": "నేను రేపు complete కి వెళ్తాను",
+              "ref_tok": "canteen",
+              "hyp_tok": "complete"
+            },
+            {
+              "src": "nenu repu canteen ki veltanu",
+              "ref": "నేను రేపు canteen కి వెళ్తాను",
+              "hyp": "నేను రేపు cank కి వెళ్తాను",
+              "ref_tok": "canteen",
+              "hyp_tok": "cank"
+            }
+          ],
+          "english_as_telugu": [
+            {
+              "src": "nenu repu mall కి welthanu",
+              "ref": "నేను రేపు mall కి వెళ్తాను",
+              "hyp": "నేను రేపు మాట్లా వస్తాను",
+              "ref_tok": "mall",
+              "hyp_tok": "మాట్లా"
+            },
+            {
+              "src": "nenu raepu mall kii weltaanu",
+              "ref": "నేను రేపు mall కి వెళ్తాను",
+              "hyp": "నేను రేపు మాట్లాను",
+              "ref_tok": "mall",
+              "hyp_tok": "మాట్లాను"
+            },
+            {
+              "src": "nenu repu mallki veltaaanu 🙏",
+              "ref": "నేను రేపు mall కి వెళ్తాను 🙏",
+              "hyp": "నేను రేపు మాట్లా వస్తాను 🙏",
+              "ref_tok": "mall",
+              "hyp_tok": "మాట్లా"
+            },
+            {
+              "src": "Nenu reepu mallku velthanu",
+              "ref": "నేను రేపు mall కి వెళ్తాను",
+              "hyp": "నేను రేపు మాట్లాను",
+              "ref_tok": "mall",
+              "hyp_tok": "మాట్లాను"
+            }
+          ],
+          "telugu_vocab": [
+            {
+              "src": "nenu repu mall కి welthanu",
+              "ref": "నేను రేపు mall కి వెళ్తాను",
+              "hyp": "నేను రేపు మాట్లా వస్తాను",
+              "ref_tok": "కి",
+              "hyp_tok": "వస్తాను"
+            },
+            {
+              "src": "nenu repu mallki veltaaanu 🙏",
+              "ref": "నేను రేపు mall కి వెళ్తాను 🙏",
+              "hyp": "నేను రేపు మాట్లా వస్తాను 🙏",
+              "ref_tok": "కి",
+              "hyp_tok": "వస్తాను"
+            },
+            {
+              "src": "Nenu repu mall ke weltaanu",
+              "ref": "నేను రేపు mall కి వెళ్తాను",
+              "hyp": "నేను రేపు మాట్లా వస్తాను",
+              "ref_tok": "కి",
+              "hyp_tok": "వస్తాను"
+            },
+            {
+              "src": "nenu repu mall ki weltaanu",
+              "ref": "నేను రేపు mall కి వెళ్తాను",
+              "hyp": "నేను రేపు మాట్లా వస్తాను",
+              "ref_tok": "కి",
+              "hyp_tok": "వస్తాను"
+            }
+          ],
+          "deletion": [
+            {
+              "src": "nenu repu mall కి welthanu",
+              "ref": "నేను రేపు mall కి వెళ్తాను",
+              "hyp": "నేను రేపు మాట్లా వస్తాను",
+              "ref_tok": "వెళ్తాను",
+              "hyp_tok": ""
+            },
+            {
+              "src": "nenu raepu mall kii weltaanu",
+              "ref": "నేను రేపు mall కి వెళ్తాను",
+              "hyp": "నేను రేపు మాట్లాను",
+              "ref_tok": "కి",
+              "hyp_tok": ""
+            },
+            {
+              "src": "nenu raepu mall kii weltaanu",
+              "ref": "నేను రేపు mall కి వెళ్తాను",
+              "hyp": "నేను రేపు మాట్లాను",
+              "ref_tok": "వెళ్తాను",
+              "hyp_tok": ""
+            },
+            {
+              "src": "nenu repu mallki veltaaanu 🙏",
+              "ref": "నేను రేపు mall కి వెళ్తాను 🙏",
+              "hyp": "నేను రేపు మాట్లా వస్తాను 🙏",
+              "ref_tok": "వెళ్తాను",
+              "hyp_tok": ""
+            }
+          ],
+          "english_spelling": [
+            {
+              "src": "manam sayanthram mall ke weeeldhaam",
+              "ref": "మనం సాయంత్రం mall కి వెళ్దాం",
+              "hyp": "మనం సాయంత్రం call కి వెళ్దాం",
+              "ref_tok": "mall",
+              "hyp_tok": "call"
+            },
+            {
+              "src": "manam SAYANTHRAM mallki veldhaam",
+              "ref": "మనం సాయంత్రం mall కి వెళ్దాం",
+              "hyp": "మనం సాయంత్రం call కి వెళ్దాం",
+              "ref_tok": "mall",
+              "hyp_tok": "call"
+            },
+            {
+              "src": "manam saayanthram MAALL ki VELDHAAM",
+              "ref": "మనం సాయంత్రం mall కి వెళ్దాం",
+              "hyp": "మనం సాయంత్రం call కి వెళ్దాం",
+              "ref_tok": "mall",
+              "hyp_tok": "call"
+            },
+            {
+              "src": "మనం sayanthram mall ke veeeldaam",
+              "ref": "మనం సాయంత్రం mall కి వెళ్దాం",
+              "hyp": "మనం సాయంత్రం call కి వెళ్దాం",
+              "ref_tok": "mall",
+              "hyp_tok": "call"
+            }
+          ]
+        }
+      }
+    },
+    "gold_demo": {
+      "overall": {
+        "n": 4,
+        "cer": 0.3763440860215054,
+        "wer": 0.4666666666666667,
+        "em": 0.25,
+        "ned": 0.3350439882697947,
+        "chrf": 57.406478906583324,
+        "bleu": 52.66403878479265,
+        "token_acc": 0.6666666666666666,
+        "english_token_acc": 1.0,
+        "telugu_token_acc": 0.8333333333333334,
+        "english_tokens": 2,
+        "telugu_tokens": 6
+      },
+      "slices": {
+        "mix": {
+          "balanced": {
+            "n": 1,
+            "cer": 0.09523809523809523,
+            "wer": 0.3333333333333333,
+            "em": 0.0,
+            "ned": 0.09090909090909091,
+            "chrf": 76.54316877943265,
+            "bleu": 68.65890479690393,
+            "token_acc": 0.6666666666666666
+          },
+          "telugu_heavy": {
+            "n": 3,
+            "cer": 0.4583333333333333,
+            "wer": 0.5,
+            "em": 0.3333333333333333,
+            "ned": 0.41642228739002934,
+            "chrf": 51.02758228230022,
+            "bleu": 53.82218220688944,
+            "token_acc": 0.6666666666666666
+          }
+        },
+        "src_script": {
+          "romanized": {
+            "n": 4,
+            "cer": 0.3763440860215054,
+            "wer": 0.4666666666666667,
+            "em": 0.25,
+            "ned": 0.3350439882697947,
+            "chrf": 57.406478906583324,
+            "bleu": 52.66403878479265,
+            "token_acc": 0.6666666666666666
+          }
+        },
+        "kind": {
+          "gold": {
+            "n": 4,
+            "cer": 0.3763440860215054,
+            "wer": 0.4666666666666667,
+            "em": 0.25,
+            "ned": 0.3350439882697947,
+            "chrf": 57.406478906583324,
+            "bleu": 52.66403878479265,
+            "token_acc": 0.6666666666666666
+          }
+        },
+        "length": {
+          "medium": {
+            "n": 1,
+            "cer": 0.0,
+            "wer": 0.0,
+            "em": 1.0,
+            "ned": 0.0,
+            "chrf": 100.0,
+            "bleu": 100.0,
+            "token_acc": 1.0
+          },
+          "short(<=4w)": {
+            "n": 3,
+            "cer": 0.546875,
+            "wer": 0.7,
+            "em": 0.0,
+            "ned": 0.4467253176930596,
+            "chrf": 43.20863854211111,
+            "bleu": 27.369891455621286,
+            "token_acc": 0.5
+          }
+        }
+      },
+      "errors": {
+        "n_sentences": 4,
+        "n_error_sentences": 3,
+        "sentence_error_rate": 0.75,
+        "categories": {
+          "insertion": 2,
+          "telugu_vocab": 2,
+          "telugu_char_error": 1,
+          "telugu_left_romanized": 1,
+          "deletion": 1
+        },
+        "category_share": {
+          "insertion": 0.286,
+          "telugu_vocab": 0.286,
+          "telugu_char_error": 0.143,
+          "telugu_left_romanized": 0.143,
+          "deletion": 0.143
+        },
+        "flags": {
+          "unknown_word": 3,
+          "hallucinated": 2
+        },
+        "examples": {
+          "insertion": [
+            {
+              "src": "nuvvu ekkada unnav",
+              "ref": "నువ్వు ఎక్కడ ఉన్నావు?",
+              "hyp": "నువ్వు ఇప్పుడు exam ఎక్కడ ఉంది?",
+              "ref_tok": "",
+              "hyp_tok": "ఇప్పుడు"
+            },
+            {
+              "src": "nuvvu ekkada unnav",
+              "ref": "నువ్వు ఎక్కడ ఉన్నావు?",
+              "hyp": "నువ్వు ఇప్పుడు exam ఎక్కడ ఉంది?",
+              "ref_tok": "",
+              "hyp_tok": "exam"
+            }
+          ],
+          "telugu_vocab": [
+            {
+              "src": "nuvvu ekkada unnav",
+              "ref": "నువ్వు ఎక్కడ ఉన్నావు?",
+              "hyp": "నువ్వు ఇప్పుడు exam ఎక్కడ ఉంది?",
+              "ref_tok": "ఉన్నావు?",
+              "hyp_tok": "ఉంది?"
+            },
+            {
+              "src": "naku telugu chala istam",
+              "ref": "నాకు తెలుగు చాలా ఇష్టం",
+              "hyp": "నాకు ticke కాలేదు",
+              "ref_tok": "చాలా",
+              "hyp_tok": "కాలేదు"
+            }
+          ],
+          "telugu_char_error": [
+            {
+              "src": "class ki vastunnava?",
+              "ref": "class కి వస్తున్నావా?",
+              "hyp": "class కి వెళ్తున్నావా?",
+              "ref_tok": "వస్తున్నావా?",
+              "hyp_tok": "వెళ్తున్నావా?"
+            }
+          ],
+          "telugu_left_romanized": [
+            {
+              "src": "naku telugu chala istam",
+              "ref": "నాకు తెలుగు చాలా ఇష్టం",
+              "hyp": "నాకు ticke కాలేదు",
+              "ref_tok": "తెలుగు",
+              "hyp_tok": "ticke"
+            }
+          ],
+          "deletion": [
+            {
+              "src": "naku telugu chala istam",
+              "ref": "నాకు తెలుగు చాలా ఇష్టం",
+              "hyp": "నాకు ticke కాలేదు",
+              "ref_tok": "ఇష్టం",
+              "hyp_tok": ""
+            }
+          ]
+        }
+      }
+    }
+  },
+  "plain_seq2seq": {
+    "test": {
+      "overall": {
+        "n": 280,
+        "cer": 0.40596479791395046,
+        "wer": 0.4375,
+        "em": 0.017857142857142856,
+        "ned": 0.3758126214983992,
+        "chrf": 44.13111281864917,
+        "bleu": 6.727783654950345,
+        "token_acc": 0.5985915492957746,
+        "english_token_acc": 0.12719298245614036,
+        "telugu_token_acc": 0.8681135225375626,
+        "english_tokens": 228,
+        "telugu_tokens": 599
+      },
+      "slices": {
+        "mix": {
+          "balanced": {
+            "n": 126,
+            "cer": 0.5967472894078398,
+            "wer": 0.6456876456876457,
+            "em": 0.03968253968253968,
+            "ned": 0.48916937757393547,
+            "chrf": 34.49322769868949,
+            "bleu": 9.728176444148035,
+            "token_acc": 0.4382284382284382
+          },
+          "telugu_heavy": {
+            "n": 154,
+            "cer": 0.2835741037988229,
+            "wer": 0.31117397454031115,
+            "em": 0.0,
+            "ned": 0.28306618470932415,
+            "chrf": 52.016655189525274,
+            "bleu": 4.149636021360207,
+            "token_acc": 0.695898161244696
+          }
+        },
+        "src_script": {
+          "mixed_script": {
+            "n": 47,
+            "cer": 0.3315018315018315,
+            "wer": 0.357487922705314,
+            "em": 0.0,
+            "ned": 0.3160393727461401,
+            "chrf": 48.82865708287548,
+            "bleu": 9.127679639312733,
+            "token_acc": 0.6473429951690821
+          },
+          "romanized": {
+            "n": 233,
+            "cer": 0.42208564631245044,
+            "wer": 0.45532831001076424,
+            "em": 0.02145922746781116,
+            "ned": 0.38786988626816826,
+            "chrf": 43.18353951213141,
+            "bleu": 7.280512564546903,
+            "token_acc": 0.5877287405812702
+          }
+        },
+        "kind": {
+          "identity": {
+            "n": 8,
+            "cer": 0.34972677595628415,
+            "wer": 0.36363636363636365,
+            "em": 0.0,
+            "ned": 0.3254889116731222,
+            "chrf": 45.45432817986673,
+            "bleu": 19.213142066026595,
+            "token_acc": 0.6363636363636364
+          },
+          "noisy": {
+            "n": 272,
+            "cer": 0.407693599865614,
+            "wer": 0.4397098821396192,
+            "em": 0.01838235294117647,
+            "ned": 0.3772927306109074,
+            "chrf": 44.09219471978982,
+            "bleu": 6.8189569062617075,
+            "token_acc": 0.5974614687216682
+          }
+        },
+        "length": {
+          "medium": {
+            "n": 113,
+            "cer": 0.2784853700516351,
+            "wer": 0.30823117338003503,
+            "em": 0.0,
+            "ned": 0.2706316459132319,
+            "chrf": 55.57478786566683,
+            "bleu": 8.346503093805705,
+            "token_acc": 0.691768826619965
+          },
+          "short(<=4w)": {
+            "n": 167,
+            "cer": 0.5205818632002476,
+            "wer": 0.5681415929203539,
+            "em": 0.029940119760479042,
+            "ned": 0.4469829822236921,
+            "chrf": 36.387787786834814,
+            "bleu": 7.169908334990488,
+            "token_acc": 0.504424778761062
+          }
+        }
+      },
+      "errors": {
+        "n_sentences": 280,
+        "n_error_sentences": 275,
+        "sentence_error_rate": 0.9821428571428571,
+        "categories": {
+          "english_other": 225,
+          "telugu_vocab": 101,
+          "deletion": 51,
+          "telugu_left_romanized": 49,
+          "insertion": 41,
+          "english_as_telugu": 30
+        },
+        "category_share": {
+          "english_other": 0.453,
+          "telugu_left_romanized": 0.099,
+          "telugu_vocab": 0.203,
+          "deletion": 0.103,
+          "english_as_telugu": 0.06,
+          "insertion": 0.082
+        },
+        "flags": {
+          "unknown_word": 70
+        },
+        "examples": {
+          "english_other": [
+            {
+              "src": "naenu repu office ki weltanu",
+              "ref": "నేను రేపు office కి వెళ్తాను",
+              "hyp": "నేను రేపు hostel కి వెళ్తాను",
+              "ref_tok": "office",
+              "hyp_tok": "hostel"
+            },
+            {
+              "src": "neenu repu office ke veltanu",
+              "ref": "నేను రేపు office కి వెళ్తాను",
+              "hyp": "నేను రేపు hostel కి వెళ్తాను",
+              "ref_tok": "office",
+              "hyp_tok": "hostel"
+            },
+            {
+              "src": "nenu repu offce ki welthanu",
+              "ref": "నేను రేపు office కి వెళ్తాను",
+              "hyp": "నేను రేపు hostel కి వెళ్తాను",
+              "ref_tok": "office",
+              "hyp_tok": "hostel"
+            },
+            {
+              "src": "neenu repu office ke veltaanu",
+              "ref": "నేను రేపు office కి వెళ్తాను",
+              "hyp": "నేను రేపు hostel కి వెళ్తాను",
+              "ref_tok": "office",
+              "hyp_tok": "hostel"
+            }
+          ],
+          "telugu_left_romanized": [
+            {
+              "src": "నేను రేపు office కి వెళ్తాను",
+              "ref": "నేను రేపు office కి వెళ్తాను",
+              "hyp": "నేను రేపు assignment check చేస్తాను",
+              "ref_tok": "కి",
+              "hyp_tok": "check"
+            },
+            {
+              "src": "NA phone ekkada pettaavu?",
+              "ref": "నా phone ఎక్కడ పెట్టావు?",
+              "hyp": "నా phone లో problem ఉంది",
+              "ref_tok": "పెట్టావు?",
+              "hyp_tok": "problem"
+            },
+            {
+              "src": "naa phone ekkada pettawu???",
+              "ref": "నా phone ఎక్కడ పెట్టావు?",
+              "hyp": "నా phone లో problem ఉంది",
+              "ref_tok": "పెట్టావు?",
+              "hyp_tok": "problem"
+            },
+            {
+              "src": "Naa phone ekkada pettaaavu?",
+              "ref": "నా phone ఎక్కడ పెట్టావు?",
+              "hyp": "నా phone లో problem ఉంది",
+              "ref_tok": "పెట్టావు?",
+              "hyp_tok": "problem"
+            }
+          ],
+          "telugu_vocab": [
+            {
+              "src": "నేను రేపు office కి వెళ్తాను",
+              "ref": "నేను రేపు office కి వెళ్తాను",
+              "hyp": "నేను రేపు assignment check చేస్తాను",
+              "ref_tok": "వెళ్తాను",
+              "hyp_tok": "చేస్తాను"
+            },
+            {
+              "src": "nuuuvwu ippudu HOSTELlo unava",
+              "ref": "నువ్వు ఇప్పుడు hostel లో ఉన్నావా?",
+              "hyp": "నువ్వు ఇప్పుడు hospital లో వస్తున్నాను",
+              "ref_tok": "ఉన్నావా?",
+              "hyp_tok": "వస్తున్నాను"
+            },
+            {
+              "src": "nuvvu eppudu HOSTEL lo unnaava",
+              "ref": "నువ్వు ఇప్పుడు hostel లో ఉన్నావా?",
+              "hyp": "నువ్వు ఇప్పుడు hospital లో వస్తున్నాను",
+              "ref_tok": "ఉన్నావా?",
+              "hyp_tok": "వస్తున్నాను"
+            },
+            {
+              "src": "నువ్వు eppdu hotello unnaawaa",
+              "ref": "నువ్వు ఇప్పుడు hotel లో ఉన్నావా?",
+              "hyp": "నువ్వు ఇప్పుడు hospital లో వస్తున్నాను",
+              "ref_tok": "ఉన్నావా?",
+              "hyp_tok": "వస్తున్నాను"
+            }
+          ],
+          "deletion": [
+            {
+              "src": "nuwwu epudu hostle lo unnavaa 🔥",
+              "ref": "నువ్వు ఇప్పుడు hostel లో ఉన్నావా? 🔥",
+              "hyp": "నువ్వు ఇప్పుడు office లో ఉన్నావా?",
+              "ref_tok": "🔥",
+              "hyp_tok": ""
+            },
+            {
+              "src": "nuvwu ipudu hoteel lo unnaavaa?? 😊",
+              "ref": "నువ్వు ఇప్పుడు hotel లో ఉన్నావా? 😊",
+              "hyp": "నువ్వు ఇప్పుడు hospital లో వస్తున్నాను",
+              "ref_tok": "😊",
+              "hyp_tok": ""
+            },
+            {
+              "src": "vaadu ban lo unnadu 🙏",
+              "ref": "వాడు bank లో ఉన్నాడు 🙏",
+              "hyp": "వాడు hotel లో ఉన్నాడు",
+              "ref_tok": "🙏",
+              "hyp_tok": ""
+            },
+            {
+              "src": "waadu bank loo unndu 😊",
+              "ref": "వాడు bank లో ఉన్నాడు 😊",
+              "hyp": "వాడు hotel లో ఉన్నాడు",
+              "ref_tok": "😊",
+              "hyp_tok": ""
+            }
+          ],
+          "english_as_telugu": [
+            {
+              "src": "niiiku class naccinda",
+              "ref": "నీకు class నచ్చిందా?",
+              "hyp": "నీకు ఈ విషయం తెలుసా?",
+              "ref_tok": "class",
+              "hyp_tok": "ఈ"
+            },
+            {
+              "src": "neeku class nacendaa?",
+              "ref": "నీకు class నచ్చిందా?",
+              "hyp": "నీకు ఈ విషయం తెలుసా?",
+              "ref_tok": "class",
+              "hyp_tok": "ఈ"
+            },
+            {
+              "src": "neeku class nacchendha",
+              "ref": "నీకు class నచ్చిందా?",
+              "hyp": "నీకు ఈ విషయం తెలుసా?",
+              "ref_tok": "class",
+              "hyp_tok": "ఈ"
+            },
+            {
+              "src": "neeku clas nachendaa?",
+              "ref": "నీకు class నచ్చిందా?",
+              "hyp": "నీకు ఈ విషయం తెలుసా?",
+              "ref_tok": "class",
+              "hyp_tok": "ఈ"
+            }
+          ],
+          "insertion": [
+            {
+              "src": "niiiku class naccinda",
+              "ref": "నీకు class నచ్చిందా?",
+              "hyp": "నీకు ఈ విషయం తెలుసా?",
+              "ref_tok": "",
+              "hyp_tok": "తెలుసా?"
+            },
+            {
+              "src": "neeku class nacendaa?",
+              "ref": "నీకు class నచ్చిందా?",
+              "hyp": "నీకు ఈ విషయం తెలుసా?",
+              "ref_tok": "",
+              "hyp_tok": "తెలుసా?"
+            },
+            {
+              "src": "neeku class nacchendha",
+              "ref": "నీకు class నచ్చిందా?",
+              "hyp": "నీకు ఈ విషయం తెలుసా?",
+              "ref_tok": "",
+              "hyp_tok": "తెలుసా?"
+            },
+            {
+              "src": "neeku clas nachendaa?",
+              "ref": "నీకు class నచ్చిందా?",
+              "hyp": "నీకు ఈ విషయం తెలుసా?",
+              "ref_tok": "",
+              "hyp_tok": "తెలుసా?"
+            }
+          ]
+        }
+      }
+    },
+    "test_hard": {
+      "overall": {
+        "n": 40,
+        "cer": 0.44383259911894274,
+        "wer": 0.5056179775280899,
+        "em": 0.0,
+        "ned": 0.4329009767073437,
+        "chrf": 39.40619476035672,
+        "bleu": 8.853200734673056,
+        "token_acc": 0.5056179775280899,
+        "english_token_acc": 0.15789473684210525,
+        "telugu_token_acc": 0.7169811320754716,
+        "english_tokens": 19,
+        "telugu_tokens": 53
+      },
+      "slices": {
+        "mix": {
+          "balanced": {
+            "n": 18,
+            "cer": 0.6340782122905028,
+            "wer": 0.7246376811594203,
+            "em": 0.0,
+            "ned": 0.572420835616271,
+            "chrf": 26.42291153962525,
+            "bleu": 11.954150232564668,
+            "token_acc": 0.30434782608695654
+          },
+          "telugu_heavy": {
+            "n": 22,
+            "cer": 0.32,
+            "wer": 0.3669724770642202,
+            "em": 0.0,
+            "ned": 0.3187483648727668,
+            "chrf": 50.02888103186429,
+            "bleu": 9.892415598657696,
+            "token_acc": 0.6330275229357798
+          }
+        },
+        "src_script": {
+          "mixed_script": {
+            "n": 14,
+            "cer": 0.3409090909090909,
+            "wer": 0.4090909090909091,
+            "em": 0.0,
+            "ned": 0.3446292137269581,
+            "chrf": 48.56731127584009,
+            "bleu": 12.480626399324406,
+            "token_acc": 0.6060606060606061
+          },
+          "romanized": {
+            "n": 26,
+            "cer": 0.5089928057553957,
+            "wer": 0.5625,
+            "em": 0.0,
+            "ned": 0.4804319260044743,
+            "chrf": 34.473285867404144,
+            "bleu": 10.926480004771712,
+            "token_acc": 0.44642857142857145
+          }
+        },
+        "kind": {
+          "noisy": {
+            "n": 40,
+            "cer": 0.44383259911894274,
+            "wer": 0.5056179775280899,
+            "em": 0.0,
+            "ned": 0.4329009767073437,
+            "chrf": 39.40619476035672,
+            "bleu": 8.853200734673056,
+            "token_acc": 0.5056179775280899
+          }
+        },
+        "length": {
+          "medium": {
+            "n": 21,
+            "cer": 0.40185185185185185,
+            "wer": 0.4642857142857143,
+            "em": 0.0,
+            "ned": 0.3916028865576648,
+            "chrf": 44.10434405081345,
+            "bleu": 8.907618496728546,
+            "token_acc": 0.5357142857142857
+          },
+          "short(<=4w)": {
+            "n": 19,
+            "cer": 0.5054347826086957,
+            "wer": 0.5757575757575758,
+            "em": 0.0,
+            "ned": 0.47854623424119924,
+            "chrf": 34.21350343932559,
+            "bleu": 15.537914625077333,
+            "token_acc": 0.45454545454545453
+          }
+        }
+      },
+      "errors": {
+        "n_sentences": 40,
+        "n_error_sentences": 40,
+        "sentence_error_rate": 1.0,
+        "categories": {
+          "english_other": 32,
+          "deletion": 23,
+          "telugu_vocab": 18,
+          "telugu_left_romanized": 8,
+          "english_as_telugu": 4,
+          "punctuation_emoji": 3,
+          "insertion": 2
+        },
+        "category_share": {
+          "english_other": 0.356,
+          "deletion": 0.256,
+          "telugu_vocab": 0.2,
+          "english_as_telugu": 0.044,
+          "telugu_left_romanized": 0.089,
+          "punctuation_emoji": 0.033,
+          "insertion": 0.022
+        },
+        "flags": {
+          "unknown_word": 10
+        },
+        "examples": {
+          "english_other": [
+            {
+              "src": "nenu repu officeki velthanu 😅",
+              "ref": "నేను రేపు office కి వెళ్తాను 😅",
+              "hyp": "నేను రేపు hostel కి వెళ్తాను",
+              "ref_tok": "office",
+              "hyp_tok": "hostel"
+            },
+            {
+              "src": "నేను reepu offive keee welthanu 😂",
+              "ref": "నేను రేపు office కి వెళ్తాను 😂",
+              "hyp": "నేను రేపు hostel కి వెళ్తాను",
+              "ref_tok": "office",
+              "hyp_tok": "hostel"
+            },
+            {
+              "src": "nuwwu epudu hostlelo ఉన్నావా? 😅",
+              "ref": "నువ్వు ఇప్పుడు hostel లో ఉన్నావా? 😅",
+              "hyp": "నువ్వు ఇప్పుడు hospital లో ఉన్నావా?",
+              "ref_tok": "hostel",
+              "hyp_tok": "hospital"
+            },
+            {
+              "src": "nuvwu eppudu hostlelo ఉన్నావా?",
+              "ref": "నువ్వు ఇప్పుడు hostel లో ఉన్నావా?",
+              "hyp": "నువ్వు ఇప్పుడు bank లో ఉన్నావా?",
+              "ref_tok": "hostel",
+              "hyp_tok": "bank"
+            }
+          ],
+          "deletion": [
+            {
+              "src": "nenu repu officeki velthanu 😅",
+              "ref": "నేను రేపు office కి వెళ్తాను 😅",
+              "hyp": "నేను రేపు hostel కి వెళ్తాను",
+              "ref_tok": "😅",
+              "hyp_tok": ""
+            },
+            {
+              "src": "నేను reepu offive keee welthanu 😂",
+              "ref": "నేను రేపు office కి వెళ్తాను 😂",
+              "hyp": "నేను రేపు hostel కి వెళ్తాను",
+              "ref_tok": "😂",
+              "hyp_tok": ""
+            },
+            {
+              "src": "nuwwu epudu hostlelo ఉన్నావా? 😅",
+              "ref": "నువ్వు ఇప్పుడు hostel లో ఉన్నావా? 😅",
+              "hyp": "నువ్వు ఇప్పుడు hospital లో ఉన్నావా?",
+              "ref_tok": "😅",
+              "hyp_tok": ""
+            },
+            {
+              "src": "మీరు రేపు lab kii RANDI 🙏",
+              "ref": "మీరు రేపు lab కి రండి 🙏",
+              "hyp": "మీరు రేపు hostel కి రండి",
+              "ref_tok": "🙏",
+              "hyp_tok": ""
+            }
+          ],
+          "telugu_vocab": [
+            {
+              "src": "nuuvu ipudu hotello unavaa",
+              "ref": "నువ్వు ఇప్పుడు hotel లో ఉన్నావా?",
+              "hyp": "నువ్వు ఇప్పుడు hospital లో వస్తున్నాను",
+              "ref_tok": "ఉన్నావా?",
+              "hyp_tok": "వస్తున్నాను"
+            },
+            {
+              "src": "Nuvvu ippudu hotel lo ఉన్నావా",
+              "ref": "నువ్వు ఇప్పుడు hotel లో ఉన్నావా?",
+              "hyp": "నువ్వు ఇప్పుడు hospital లో వస్తున్నాను",
+              "ref_tok": "ఉన్నావా?",
+              "hyp_tok": "వస్తున్నాను"
+            },
+            {
+              "src": "Lib ekkada unde?? 😂",
+              "ref": "library ఎక్కడ ఉంది? 😂",
+              "hyp": "ఈ bike చాలా బాగుంది",
+              "ref_tok": "ఉంది?",
+              "hyp_tok": "చాలా"
+            },
+            {
+              "src": "laab ekkada undhi 😅",
+              "ref": "lab ఎక్కడ ఉంది? 😅",
+              "hyp": "laptop ఎక్కడ పెట్టావు?",
+              "ref_tok": "ఉంది?",
+              "hyp_tok": "పెట్టావు?"
+            }
+          ],
+          "english_as_telugu": [
+            {
+              "src": "Lib ekkada unde?? 😂",
+              "ref": "library ఎక్కడ ఉంది? 😂",
+              "hyp": "ఈ bike చాలా బాగుంది",
+              "ref_tok": "library",
+              "hyp_tok": "ఈ"
+            },
+            {
+              "src": "Neeku classs నచ్చిందా",
+              "ref": "నీకు class నచ్చిందా?",
+              "hyp": "నీకు ఈ విషయం తెలుసా?",
+              "ref_tok": "class",
+              "hyp_tok": "ఈ"
+            },
+            {
+              "src": "chalaaaa thx 😂",
+              "ref": "చాలా thanks 😂",
+              "hyp": "class ఎక్కడ ఉంది?",
+              "ref_tok": "thanks",
+              "hyp_tok": "ఎక్కడ"
+            },
+            {
+              "src": "chaalaa thx",
+              "ref": "చాలా thanks",
+              "hyp": "class ఎక్కడ ఉంది?",
+              "ref_tok": "thanks",
+              "hyp_tok": "ఎక్కడ"
+            }
+          ],
+          "telugu_left_romanized": [
+            {
+              "src": "Lib ekkada unde?? 😂",
+              "ref": "library ఎక్కడ ఉంది? 😂",
+              "hyp": "ఈ bike చాలా బాగుంది",
+              "ref_tok": "ఎక్కడ",
+              "hyp_tok": "bike"
+            },
+            {
+              "src": "naa phone ekkada pettaawu? 😊",
+              "ref": "నా phone ఎక్కడ పెట్టావు? 😊",
+              "hyp": "నా phone లో problem ఉంది",
+              "ref_tok": "పెట్టావు?",
+              "hyp_tok": "problem"
+            },
+            {
+              "src": "project inka complet kaledu",
+              "ref": "project ఇంకా complete కాలేదు",
+              "hyp": "project report ready అయింది",
+              "ref_tok": "ఇంకా",
+              "hyp_tok": "report"
+            },
+            {
+              "src": "prjct ఇంకా complete కాలేదు",
+              "ref": "project ఇంకా complete కాలేదు",
+              "hyp": "project report ready అయింది",
+              "ref_tok": "ఇంకా",
+              "hyp_tok": "report"
+            }
+          ],
+          "punctuation_emoji": [
+            {
+              "src": "Lib ekkada unde?? 😂",
+              "ref": "library ఎక్కడ ఉంది? 😂",
+              "hyp": "ఈ bike చాలా బాగుంది",
+              "ref_tok": "😂",
+              "hyp_tok": "బాగుంది"
+            },
+            {
+              "src": "naa phone ekkada pettaawu? 😊",
+              "ref": "నా phone ఎక్కడ పెట్టావు? 😊",
+              "hyp": "నా phone లో problem ఉంది",
+              "ref_tok": "😊",
+              "hyp_tok": "ఉంది"
+            },
+            {
+              "src": "chalaaaa thx 😂",
+              "ref": "చాలా thanks 😂",
+              "hyp": "class ఎక్కడ ఉంది?",
+              "ref_tok": "😂",
+              "hyp_tok": "ఉంది?"
+            }
+          ],
+          "insertion": [
+            {
+              "src": "Neeku classs నచ్చిందా",
+              "ref": "నీకు class నచ్చిందా?",
+              "hyp": "నీకు ఈ విషయం తెలుసా?",
+              "ref_tok": "",
+              "hyp_tok": "తెలుసా?"
+            },
+            {
+              "src": "chaalaa thx",
+              "ref": "చాలా thanks",
+              "hyp": "class ఎక్కడ ఉంది?",
+              "ref_tok": "",
+              "hyp_tok": "ఉంది?"
+            }
+          ]
+        }
+      }
+    },
+    "test_unseen_words": {
+      "overall": {
+        "n": 322,
+        "cer": 0.3399656104151314,
+        "wer": 0.41524216524216523,
+        "em": 0.0,
+        "ned": 0.3405980133631876,
+        "chrf": 46.46659975567429,
+        "bleu": 5.9553606199406,
+        "token_acc": 0.6125356125356125,
+        "english_token_acc": 0.028112449799196786,
+        "telugu_token_acc": 0.9129901960784313,
+        "english_tokens": 249,
+        "telugu_tokens": 816
+      },
+      "slices": {
+        "mix": {
+          "balanced": {
+            "n": 84,
+            "cer": 0.5583700440528634,
+            "wer": 0.7263157894736842,
+            "em": 0.0,
+            "ned": 0.5310226114737393,
+            "chrf": 26.037307140355832,
+            "bleu": 9.494392088538117,
+            "token_acc": 0.38596491228070173
+          },
+          "telugu_heavy": {
+            "n": 238,
+            "cer": 0.27726841606070185,
+            "wer": 0.3360142984807864,
+            "em": 0.0,
+            "ned": 0.2733893316771106,
+            "chrf": 53.67693832578668,
+            "bleu": 5.977668764059512,
+            "token_acc": 0.6702412868632708
+          }
+        },
+        "src_script": {
+          "mixed_script": {
+            "n": 63,
+            "cer": 0.27855833842394623,
+            "wer": 0.3368055555555556,
+            "em": 0.0,
+            "ned": 0.27945368719391855,
+            "chrf": 51.700263948847294,
+            "bleu": 8.906689384273765,
+            "token_acc": 0.6770833333333334
+          },
+          "romanized": {
+            "n": 259,
+            "cer": 0.35541890853189856,
+            "wer": 0.43548387096774194,
+            "em": 0.0,
+            "ned": 0.35547095756652336,
+            "chrf": 45.19354630328085,
+            "bleu": 6.376412268416812,
+            "token_acc": 0.5958781362007168
+          }
+        },
+        "kind": {
+          "identity": {
+            "n": 10,
+            "cer": 0.3015267175572519,
+            "wer": 0.38636363636363635,
+            "em": 0.0,
+            "ned": 0.30125671682306676,
+            "chrf": 50.41698056471962,
+            "bleu": 19.33843398646737,
+            "token_acc": 0.6590909090909091
+          },
+          "noisy": {
+            "n": 312,
+            "cer": 0.34124365482233504,
+            "wer": 0.4161764705882353,
+            "em": 0.0,
+            "ned": 0.3418589523548582,
+            "chrf": 46.3399849861536,
+            "bleu": 5.967439786139937,
+            "token_acc": 0.6110294117647059
+          }
+        },
+        "length": {
+          "medium": {
+            "n": 165,
+            "cer": 0.2445980985306828,
+            "wer": 0.2980997624703088,
+            "em": 0.0,
+            "ned": 0.24305828434402107,
+            "chrf": 57.58715403648719,
+            "bleu": 6.634480879844361,
+            "token_acc": 0.7019002375296912
+          },
+          "short(<=4w)": {
+            "n": 157,
+            "cer": 0.4655663062037564,
+            "wer": 0.5907473309608541,
+            "em": 0.0,
+            "ned": 0.44310791965721624,
+            "chrf": 34.77939302743141,
+            "bleu": 7.376016013561415,
+            "token_acc": 0.4786476868327402
+          }
+        }
+      },
+      "errors": {
+        "n_sentences": 322,
+        "n_error_sentences": 322,
+        "sentence_error_rate": 1.0,
+        "categories": {
+          "english_other": 279,
+          "telugu_vocab": 93,
+          "deletion": 64,
+          "english_as_telugu": 46,
+          "insertion": 39,
+          "telugu_left_romanized": 30,
+          "telugu_char_error": 29,
+          "punctuation_emoji": 3
+        },
+        "category_share": {
+          "english_other": 0.479,
+          "deletion": 0.11,
+          "telugu_vocab": 0.16,
+          "telugu_char_error": 0.05,
+          "english_as_telugu": 0.079,
+          "telugu_left_romanized": 0.051,
+          "insertion": 0.067,
+          "punctuation_emoji": 0.005
+        },
+        "flags": {
+          "unknown_word": 322
+        },
+        "examples": {
+          "english_other": [
+            {
+              "src": "Nenu repu canteen ke veltaanu",
+              "ref": "నేను రేపు canteen కి వెళ్తాను",
+              "hyp": "నేను రేపు class కి వెళ్తాను",
+              "ref_tok": "canteen",
+              "hyp_tok": "class"
+            },
+            {
+              "src": "nenu repu cantwenku velthanu",
+              "ref": "నేను రేపు canteen కి వెళ్తాను",
+              "hyp": "నేను రేపు class కి వెళ్తాను",
+              "ref_tok": "canteen",
+              "hyp_tok": "class"
+            },
+            {
+              "src": "nenu repu CANTEEN ki welthanu",
+              "ref": "నేను రేపు canteen కి వెళ్తాను",
+              "hyp": "నేను రేపు class కి వెళ్తాను",
+              "ref_tok": "canteen",
+              "hyp_tok": "class"
+            },
+            {
+              "src": "nenu repu canteen ki veltanu",
+              "ref": "నేను రేపు canteen కి వెళ్తాను",
+              "hyp": "నేను రేపు class కి వెళ్తాను",
+              "ref_tok": "canteen",
+              "hyp_tok": "class"
+            }
+          ],
+          "deletion": [
+            {
+              "src": "nenu repu canteen ki weltaanuuu 👍",
+              "ref": "నేను రేపు canteen కి వెళ్తాను 👍",
+              "hyp": "నేను రేపు class కి వెళ్తాను",
+              "ref_tok": "👍",
+              "hyp_tok": ""
+            },
+            {
+              "src": "నేను raepu mll ke velthaanu 🔥",
+              "ref": "నేను రేపు mall కి వెళ్తాను 🔥",
+              "hyp": "నేను రేపు class కి వెళ్తాను",
+              "ref_tok": "🔥",
+              "hyp_tok": ""
+            },
+            {
+              "src": "nenu repu mallki veltaaanu 🙏",
+              "ref": "నేను రేపు mall కి వెళ్తాను 🙏",
+              "hyp": "నేను రేపు class కి వెళ్తాను",
+              "ref_tok": "🙏",
+              "hyp_tok": ""
+            },
+            {
+              "src": "nenu repu mall ki veltaanu 😅",
+              "ref": "నేను రేపు mall కి వెళ్తాను 😅",
+              "hyp": "నేను రేపు lab కి వెళ్తాను",
+              "ref_tok": "😅",
+              "hyp_tok": ""
+            }
+          ],
+          "telugu_vocab": [
+            {
+              "src": "naku evala canteen కి wellali",
+              "ref": "నాకు ఇవాళ canteen కి వెళ్ళాలి",
+              "hyp": "నాకు ఇవాళ class కి వెళ్దాం",
+              "ref_tok": "వెళ్ళాలి",
+              "hyp_tok": "వెళ్దాం"
+            },
+            {
+              "src": "Naaku ivaala canteen ke velali",
+              "ref": "నాకు ఇవాళ canteen కి వెళ్ళాలి",
+              "hyp": "నాకు ఇవాళ class కి వెళ్దాం",
+              "ref_tok": "వెళ్ళాలి",
+              "hyp_tok": "వెళ్దాం"
+            },
+            {
+              "src": "naku evaala cantin ke wellali",
+              "ref": "నాకు ఇవాళ canteen కి వెళ్ళాలి",
+              "hyp": "నాకు ఇవాళ class కి వెళ్దాం",
+              "ref_tok": "వెళ్ళాలి",
+              "hyp_tok": "వెళ్దాం"
+            },
+            {
+              "src": "naaku evala canteen ki welali 👍",
+              "ref": "నాకు ఇవాళ canteen కి వెళ్ళాలి 👍",
+              "hyp": "నాకు ఇవాళ class కి వెళ్దాం",
+              "ref_tok": "వెళ్ళాలి",
+              "hyp_tok": "వెళ్దాం"
+            }
+          ],
+          "telugu_char_error": [
+            {
+              "src": "waadu canteen lo unnaadu",
+              "ref": "వాడు canteen లో ఉన్నాడు",
+              "hyp": "వాడు college లో ఉన్నావా?",
+              "ref_tok": "ఉన్నాడు",
+              "hyp_tok": "ఉన్నావా?"
+            },
+            {
+              "src": "Vaadu canteenlo UNNADU",
+              "ref": "వాడు canteen లో ఉన్నాడు",
+              "hyp": "వాడు college లో ఉన్నావా?",
+              "ref_tok": "ఉన్నాడు",
+              "hyp_tok": "ఉన్నావా?"
+            },
+            {
+              "src": "vadu canteen loo unnadu",
+              "ref": "వాడు canteen లో ఉన్నాడు",
+              "hyp": "వాడు college లో ఉన్నావా?",
+              "ref_tok": "ఉన్నాడు",
+              "hyp_tok": "ఉన్నావా?"
+            },
+            {
+              "src": "WADU canteen loo unnaadu",
+              "ref": "వాడు canteen లో ఉన్నాడు",
+              "hyp": "వాడు college లో ఉన్నావా?",
+              "ref_tok": "ఉన్నాడు",
+              "hyp_tok": "ఉన్నావా?"
+            }
+          ],
+          "english_as_telugu": [
+            {
+              "src": "Canteennundi ipude vachchaanu",
+              "ref": "canteen నుంచి ఇప్పుడే వచ్చాను",
+              "hyp": "నేను రేపు class కి వెళ్తాను",
+              "ref_tok": "canteen",
+              "hyp_tok": "నేను"
+            },
+            {
+              "src": "Cqnteen nunchi ippudae wachaanu",
+              "ref": "canteen నుంచి ఇప్పుడే వచ్చాను",
+              "hyp": "నేను రేపు class కి వెళ్తాను",
+              "ref_tok": "canteen",
+              "hyp_tok": "నేను"
+            },
+            {
+              "src": "cnteen nunce ippudee wachchanu 🙏",
+              "ref": "canteen నుంచి ఇప్పుడే వచ్చాను 🙏",
+              "hyp": "నేను రేపు class కి వెళ్తాను",
+              "ref_tok": "canteen",
+              "hyp_tok": "నేను"
+            },
+            {
+              "src": "mqll nunche ippude wachchanu",
+              "ref": "mall నుంచి ఇప్పుడే వచ్చాను",
+              "hyp": "మళ్ళీ చెప్పు",
+              "ref_tok": "mall",
+              "hyp_tok": "మళ్ళీ"
+            }
+          ],
+          "telugu_left_romanized": [
+            {
+              "src": "Canteennundi ipude vachchaanu",
+              "ref": "canteen నుంచి ఇప్పుడే వచ్చాను",
+              "hyp": "నేను రేపు class కి వెళ్తాను",
+              "ref_tok": "ఇప్పుడే",
+              "hyp_tok": "class"
+            },
+            {
+              "src": "Cqnteen nunchi ippudae wachaanu",
+              "ref": "canteen నుంచి ఇప్పుడే వచ్చాను",
+              "hyp": "నేను రేపు class కి వెళ్తాను",
+              "ref_tok": "ఇప్పుడే",
+              "hyp_tok": "class"
+            },
+            {
+              "src": "cnteen nunce ippudee wachchanu 🙏",
+              "ref": "canteen నుంచి ఇప్పుడే వచ్చాను 🙏",
+              "hyp": "నేను రేపు class కి వెళ్తాను",
+              "ref_tok": "ఇప్పుడే",
+              "hyp_tok": "class"
+            },
+            {
+              "src": "mallnundi ippudae vaaachchaanu 👍",
+              "ref": "mall నుంచి ఇప్పుడే వచ్చాను 👍",
+              "hyp": "మనం సాయంత్రం class కి వెళ్దాం",
+              "ref_tok": "ఇప్పుడే",
+              "hyp_tok": "class"
+            }
+          ],
+          "insertion": [
+            {
+              "src": "Canteennundi ipude vachchaanu",
+              "ref": "canteen నుంచి ఇప్పుడే వచ్చాను",
+              "hyp": "నేను రేపు class కి వెళ్తాను",
+              "ref_tok": "",
+              "hyp_tok": "వెళ్తాను"
+            },
+            {
+              "src": "Cqnteen nunchi ippudae wachaanu",
+              "ref": "canteen నుంచి ఇప్పుడే వచ్చాను",
+              "hyp": "నేను రేపు class కి వెళ్తాను",
+              "ref_tok": "",
+              "hyp_tok": "వెళ్తాను"
+            },
+            {
+              "src": "mallnundi ippude vachchaanu",
+              "ref": "mall నుంచి ఇప్పుడే వచ్చాను",
+              "hyp": "మనం సాయంత్రం class కి వెళ్దాం",
+              "ref_tok": "",
+              "hyp_tok": "వెళ్దాం"
+            },
+            {
+              "src": "mallnunchi eppude vachchaanu",
+              "ref": "mall నుంచి ఇప్పుడే వచ్చాను",
+              "hyp": "మనం సాయంత్రం class కి వెళ్దాం",
+              "ref_tok": "",
+              "hyp_tok": "వెళ్దాం"
+            }
+          ],
+          "punctuation_emoji": [
+            {
+              "src": "cnteen nunce ippudee wachchanu 🙏",
+              "ref": "canteen నుంచి ఇప్పుడే వచ్చాను 🙏",
+              "hyp": "నేను రేపు class కి వెళ్తాను",
+              "ref_tok": "🙏",
+              "hyp_tok": "వెళ్తాను"
+            },
+            {
+              "src": "mallnundi ippudae vaaachchaanu 👍",
+              "ref": "mall నుంచి ఇప్పుడే వచ్చాను 👍",
+              "hyp": "మనం సాయంత్రం class కి వెళ్దాం",
+              "ref_tok": "👍",
+              "hyp_tok": "వెళ్దాం"
+            },
+            {
+              "src": "mallnunchi epude వచ్చాను 👍",
+              "ref": "mall నుంచి ఇప్పుడే వచ్చాను 👍",
+              "hyp": "మనం సాయంత్రం class కి వెళ్దాం",
+              "ref_tok": "👍",
+              "hyp_tok": "వెళ్దాం"
+            }
+          ]
+        }
+      }
+    },
+    "gold_demo": {
+      "overall": {
+        "n": 4,
+        "cer": 0.6344086021505376,
+        "wer": 0.8,
+        "em": 0.0,
+        "ned": 0.5087803320561941,
+        "chrf": 28.90955549194267,
+        "bleu": 15.499999679101577,
+        "token_acc": 0.4,
+        "english_token_acc": 0.0,
+        "telugu_token_acc": 0.5,
+        "english_tokens": 1,
+        "telugu_tokens": 8
+      },
+      "slices": {
+        "mix": {
+          "balanced": {
+            "n": 1,
+            "cer": 0.7619047619047619,
+            "wer": 1.0,
+            "em": 0.0,
+            "ned": 0.5925925925925926,
+            "chrf": 20.122334021327827,
+            "bleu": 31.94715521231363,
+            "token_acc": 0.3333333333333333
+          },
+          "telugu_heavy": {
+            "n": 3,
+            "cer": 0.5972222222222222,
+            "wer": 0.75,
+            "em": 0.0,
+            "ned": 0.48084291187739464,
+            "chrf": 31.838629315480944,
+            "bleu": 18.22108523215156,
+            "token_acc": 0.4166666666666667
+          }
+        },
+        "src_script": {
+          "romanized": {
+            "n": 4,
+            "cer": 0.6344086021505376,
+            "wer": 0.8,
+            "em": 0.0,
+            "ned": 0.5087803320561941,
+            "chrf": 28.90955549194267,
+            "bleu": 15.499999679101577,
+            "token_acc": 0.4
+          }
+        },
+        "kind": {
+          "gold": {
+            "n": 4,
+            "cer": 0.6344086021505376,
+            "wer": 0.8,
+            "em": 0.0,
+            "ned": 0.5087803320561941,
+            "chrf": 28.90955549194267,
+            "bleu": 15.499999679101577,
+            "token_acc": 0.4
+          }
+        },
+        "length": {
+          "medium": {
+            "n": 1,
+            "cer": 0.27586206896551724,
+            "wer": 0.4,
+            "em": 0.0,
+            "ned": 0.27586206896551724,
+            "chrf": 42.47289847327189,
+            "bleu": 37.60603093086394,
+            "token_acc": 0.6
+          },
+          "short(<=4w)": {
+            "n": 3,
+            "cer": 0.796875,
+            "wer": 1.0,
+            "em": 0.0,
+            "ned": 0.5864197530864197,
+            "chrf": 24.388441164832926,
+            "bleu": 15.133218633429316,
+            "token_acc": 0.3
+          }
+        }
+      },
+      "errors": {
+        "n_sentences": 4,
+        "n_error_sentences": 4,
+        "sentence_error_rate": 1.0,
+        "categories": {
+          "telugu_vocab": 6,
+          "insertion": 3,
+          "telugu_left_romanized": 2,
+          "english_other": 1
+        },
+        "category_share": {
+          "english_other": 0.083,
+          "telugu_vocab": 0.5,
+          "telugu_left_romanized": 0.167,
+          "insertion": 0.25
+        },
+        "flags": {
+          "unknown_word": 4
+        },
+        "examples": {
+          "english_other": [
+            {
+              "src": "naku ivala college ki vellali",
+              "ref": "నాకు ఇవాళ college కి వెళ్ళాలి",
+              "hyp": "నాకు ఇవాళ hostel కి వెళ్దాం",
+              "ref_tok": "college",
+              "hyp_tok": "hostel"
+            }
+          ],
+          "telugu_vocab": [
+            {
+              "src": "naku ivala college ki vellali",
+              "ref": "నాకు ఇవాళ college కి వెళ్ళాలి",
+              "hyp": "నాకు ఇవాళ hostel కి వెళ్దాం",
+              "ref_tok": "వెళ్ళాలి",
+              "hyp_tok": "వెళ్దాం"
+            },
+            {
+              "src": "nuvvu ekkada unnav",
+              "ref": "నువ్వు ఎక్కడ ఉన్నావు?",
+              "hyp": "నువ్వు ఇప్పుడు college లో ఉన్నావా?",
+              "ref_tok": "ఎక్కడ",
+              "hyp_tok": "ఇప్పుడు"
+            },
+            {
+              "src": "class ki vastunnava?",
+              "ref": "class కి వస్తున్నావా?",
+              "hyp": "class నుంచి ఇప్పుడే వచ్చాను",
+              "ref_tok": "కి",
+              "hyp_tok": "నుంచి"
+            },
+            {
+              "src": "class ki vastunnava?",
+              "ref": "class కి వస్తున్నావా?",
+              "hyp": "class నుంచి ఇప్పుడే వచ్చాను",
+              "ref_tok": "వస్తున్నావా?",
+              "hyp_tok": "ఇప్పుడే"
+            }
+          ],
+          "telugu_left_romanized": [
+            {
+              "src": "nuvvu ekkada unnav",
+              "ref": "నువ్వు ఎక్కడ ఉన్నావు?",
+              "hyp": "నువ్వు ఇప్పుడు college లో ఉన్నావా?",
+              "ref_tok": "ఉన్నావు?",
+              "hyp_tok": "college"
+            },
+            {
+              "src": "naku telugu chala istam",
+              "ref": "నాకు తెలుగు చాలా ఇష్టం",
+              "hyp": "నాకు ticket ఎక్కడ పెట్టావు?",
+              "ref_tok": "తెలుగు",
+              "hyp_tok": "ticket"
+            }
+          ],
+          "insertion": [
+            {
+              "src": "nuvvu ekkada unnav",
+              "ref": "నువ్వు ఎక్కడ ఉన్నావు?",
+              "hyp": "నువ్వు ఇప్పుడు college లో ఉన్నావా?",
+              "ref_tok": "",
+              "hyp_tok": "లో"
+            },
+            {
+              "src": "nuvvu ekkada unnav",
+              "ref": "నువ్వు ఎక్కడ ఉన్నావు?",
+              "hyp": "నువ్వు ఇప్పుడు college లో ఉన్నావా?",
+              "ref_tok": "",
+              "hyp_tok": "ఉన్నావా?"
+            },
+            {
+              "src": "class ki vastunnava?",
+              "ref": "class కి వస్తున్నావా?",
+              "hyp": "class నుంచి ఇప్పుడే వచ్చాను",
+              "ref_tok": "",
+              "hyp_tok": "వచ్చాను"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "rule_baseline": {
+    "test": {
+      "overall": {
+        "n": 280,
+        "cer": 0.03177966101694915,
+        "wer": 0.08890845070422536,
+        "em": 0.7142857142857143,
+        "ned": 0.036237075858389166,
+        "chrf": 92.85045840536706,
+        "bleu": 83.58701276472598,
+        "token_acc": 0.9110915492957746,
+        "english_token_acc": 0.9607843137254902,
+        "telugu_token_acc": 0.8905660377358491,
+        "english_tokens": 306,
+        "telugu_tokens": 795
+      },
+      "slices": {
+        "mix": {
+          "balanced": {
+            "n": 126,
+            "cer": 0.022101751459549623,
+            "wer": 0.0675990675990676,
+            "em": 0.7857142857142857,
+            "ned": 0.029704023085013926,
+            "chrf": 95.38912408097,
+            "bleu": 91.56245331348637,
+            "token_acc": 0.9324009324009324
+          },
+          "telugu_heavy": {
+            "n": 154,
+            "cer": 0.037988228999464954,
+            "wer": 0.10183875530410184,
+            "em": 0.6558441558441559,
+            "ned": 0.0415823008547871,
+            "chrf": 90.77336830714646,
+            "bleu": 80.67997399212497,
+            "token_acc": 0.8981612446958982
+          }
+        },
+        "src_script": {
+          "mixed_script": {
+            "n": 47,
+            "cer": 0.014652014652014652,
+            "wer": 0.06763285024154589,
+            "em": 0.7446808510638298,
+            "ned": 0.014553416338130785,
+            "chrf": 97.77532497259952,
+            "bleu": 86.81019689690666,
+            "token_acc": 0.9323671497584541
+          },
+          "romanized": {
+            "n": 233,
+            "cer": 0.03548770816812054,
+            "wer": 0.09364908503767493,
+            "em": 0.7081545064377682,
+            "ned": 0.04061103292899923,
+            "chrf": 91.85703038536737,
+            "bleu": 82.84119394923286,
+            "token_acc": 0.9063509149623251
+          }
+        },
+        "kind": {
+          "identity": {
+            "n": 8,
+            "cer": 0.00546448087431694,
+            "wer": 0.030303030303030304,
+            "em": 0.875,
+            "ned": 0.003787878787878788,
+            "chrf": 99.90229085844607,
+            "bleu": 94.35293327803478,
+            "token_acc": 0.9696969696969697
+          },
+          "noisy": {
+            "n": 272,
+            "cer": 0.03258861078447842,
+            "wer": 0.09066183136899365,
+            "em": 0.7095588235294118,
+            "ned": 0.03719146400752183,
+            "chrf": 92.6430515685118,
+            "bleu": 83.27391516869812,
+            "token_acc": 0.9093381686310064
+          }
+        },
+        "length": {
+          "medium": {
+            "n": 113,
+            "cer": 0.013769363166953529,
+            "wer": 0.0647985989492119,
+            "em": 0.7256637168141593,
+            "ned": 0.01237264302309116,
+            "chrf": 96.58154574546326,
+            "bleu": 84.6585801047993,
+            "token_acc": 0.9352014010507881
+          },
+          "short(<=4w)": {
+            "n": 167,
+            "cer": 0.047972763850201175,
+            "wer": 0.11327433628318584,
+            "em": 0.7065868263473054,
+            "ned": 0.0523848657409561,
+            "chrf": 90.32583044470316,
+            "bleu": 82.98413274860195,
+            "token_acc": 0.8867256637168142
+          }
+        }
+      },
+      "errors": {
+        "n_sentences": 280,
+        "n_error_sentences": 80,
+        "sentence_error_rate": 0.2857142857142857,
+        "categories": {
+          "punctuation_emoji": 44,
+          "telugu_char_error": 28,
+          "telugu_left_romanized": 15,
+          "english_other": 7,
+          "english_spelling": 6,
+          "deletion": 1
+        },
+        "category_share": {
+          "telugu_char_error": 0.277,
+          "punctuation_emoji": 0.436,
+          "english_spelling": 0.059,
+          "english_other": 0.069,
+          "deletion": 0.01,
+          "telugu_left_romanized": 0.149
+        },
+        "flags": {
+          "hallucinated": 6,
+          "unknown_word": 39
+        },
+        "examples": {
+          "telugu_char_error": [
+            {
+              "src": "nenu reepu ofcku velthaanu",
+              "ref": "నేను రేపు office కి వెళ్తాను",
+              "hyp": "నేను రేపు office కు వెళ్తాను",
+              "ref_tok": "కి",
+              "hyp_tok": "కు"
+            },
+            {
+              "src": "Nenu repu offceku weltanu",
+              "ref": "నేను రేపు office కి వెళ్తాను",
+              "hyp": "నేను రేపు office కు వెళ్తాను",
+              "ref_tok": "కి",
+              "hyp_tok": "కు"
+            },
+            {
+              "src": "nuwwu epudu hostel loo unnavaa?",
+              "ref": "నువ్వు ఇప్పుడు hostel లో ఉన్నావా?",
+              "hyp": "నువ్వు ఎప్పుడు hostel లో ఉన్నావా?",
+              "ref_tok": "ఇప్పుడు",
+              "hyp_tok": "ఎప్పుడు"
+            },
+            {
+              "src": "nuvvu eppudu HOSTEL lo unnaava",
+              "ref": "నువ్వు ఇప్పుడు hostel లో ఉన్నావా?",
+              "hyp": "నువ్వు ఎప్పుడు hostel లో ఉన్నావా",
+              "ref_tok": "ఇప్పుడు",
+              "hyp_tok": "ఎప్పుడు"
+            }
+          ],
+          "punctuation_emoji": [
+            {
+              "src": "nuuuvwu ippudu HOSTELlo unava",
+              "ref": "నువ్వు ఇప్పుడు hostel లో ఉన్నావా?",
+              "hyp": "నువ్వు ఇప్పుడు hostel లో ఉన్నావా",
+              "ref_tok": "ఉన్నావా?",
+              "hyp_tok": "ఉన్నావా"
+            },
+            {
+              "src": "nuvvu eppudu HOSTEL lo unnaava",
+              "ref": "నువ్వు ఇప్పుడు hostel లో ఉన్నావా?",
+              "hyp": "నువ్వు ఎప్పుడు hostel లో ఉన్నావా",
+              "ref_tok": "ఉన్నావా?",
+              "hyp_tok": "ఉన్నావా"
+            },
+            {
+              "src": "nuvvu eppuudu hostel lo unnavaa",
+              "ref": "నువ్వు ఇప్పుడు hostel లో ఉన్నావా?",
+              "hyp": "నువ్వు ఎప్పుడు hostel లో ఉన్నావా",
+              "ref_tok": "ఉన్నావా?",
+              "hyp_tok": "ఉన్నావా"
+            },
+            {
+              "src": "nuwwu epudu hostle lo unnavaa 🔥",
+              "ref": "నువ్వు ఇప్పుడు hostel లో ఉన్నావా? 🔥",
+              "hyp": "నువ్వు ఎప్పుడు hostel లో ఉన్నావా 🔥",
+              "ref_tok": "ఉన్నావా?",
+              "hyp_tok": "ఉన్నావా"
+            }
+          ],
+          "english_spelling": [
+            {
+              "src": "LA ekkada ఉంది",
+              "ref": "lab ఎక్కడ ఉంది?",
+              "hyp": "late ఎక్కడ ఉంది",
+              "ref_tok": "lab",
+              "hyp_tok": "late"
+            },
+            {
+              "src": "na notees ekkada pettavu?",
+              "ref": "నా notes ఎక్కడ పెట్టావు?",
+              "hyp": "నా notees ఎక్కడ పెట్టావు?",
+              "ref_tok": "notes",
+              "hyp_tok": "notees"
+            },
+            {
+              "src": "naku nores kaawaale",
+              "ref": "నాకు notes కావాలి",
+              "hyp": "నాకు nores కావాలి",
+              "ref_tok": "notes",
+              "hyp_tok": "nores"
+            },
+            {
+              "src": "Naku nottes kavaliii",
+              "ref": "నాకు notes కావాలి",
+              "hyp": "నాకు nottes కావాలి",
+              "ref_tok": "notes",
+              "hyp_tok": "nottes"
+            }
+          ],
+          "english_other": [
+            {
+              "src": "naa bieklo problm undhi",
+              "ref": "నా bike లో problem ఉంది",
+              "hyp": "నా bieklo problem ఉంది",
+              "ref_tok": "bike",
+              "hyp_tok": "bieklo"
+            },
+            {
+              "src": "chaala tnx",
+              "ref": "చాలా thanks",
+              "hyp": "చాలా tnx",
+              "ref_tok": "thanks",
+              "hyp_tok": "tnx"
+            },
+            {
+              "src": "caalaa thx",
+              "ref": "చాలా thanks",
+              "hyp": "చాలా thx",
+              "ref_tok": "thanks",
+              "hyp_tok": "thx"
+            },
+            {
+              "src": "caala tnx",
+              "ref": "చాలా thanks",
+              "hyp": "చాలా tnx",
+              "ref_tok": "thanks",
+              "hyp_tok": "tnx"
+            }
+          ],
+          "deletion": [
+            {
+              "src": "naa bieklo problm undhi",
+              "ref": "నా bike లో problem ఉంది",
+              "hyp": "నా bieklo problem ఉంది",
+              "ref_tok": "లో",
+              "hyp_tok": ""
+            }
+          ],
+          "telugu_left_romanized": [
+            {
+              "src": "naaku nidra wastondi",
+              "ref": "నాకు నిద్ర వస్తోంది",
+              "hyp": "నాకు nidra వస్తుంది",
+              "ref_tok": "నిద్ర",
+              "hyp_tok": "nidra"
+            },
+            {
+              "src": "naaku nedra wastondhi 🔥",
+              "ref": "నాకు నిద్ర వస్తోంది 🔥",
+              "hyp": "నాకు nedra వస్తుంది 🔥",
+              "ref_tok": "నిద్ర",
+              "hyp_tok": "nedra"
+            },
+            {
+              "src": "naaku nidhra vasthonde",
+              "ref": "నాకు నిద్ర వస్తోంది",
+              "hyp": "నాకు nidhra వస్తుంది",
+              "ref_tok": "నిద్ర",
+              "hyp_tok": "nidhra"
+            },
+            {
+              "src": "naaku nidra wasthondhi 🙏",
+              "ref": "నాకు నిద్ర వస్తోంది 🙏",
+              "hyp": "నాకు nidra wasthondhi 🙏",
+              "ref_tok": "నిద్ర",
+              "hyp_tok": "nidra"
+            }
+          ]
+        }
+      }
+    },
+    "test_hard": {
+      "overall": {
+        "n": 40,
+        "cer": 0.040748898678414094,
+        "wer": 0.10112359550561797,
+        "em": 0.575,
+        "ned": 0.05187550189019936,
+        "chrf": 89.42744888264008,
+        "bleu": 78.56839815760684,
+        "token_acc": 0.898876404494382,
+        "english_token_acc": 0.9318181818181818,
+        "telugu_token_acc": 0.868421052631579,
+        "english_tokens": 44,
+        "telugu_tokens": 114
+      },
+      "slices": {
+        "mix": {
+          "balanced": {
+            "n": 18,
+            "cer": 0.04748603351955307,
+            "wer": 0.10144927536231885,
+            "em": 0.6111111111111112,
+            "ned": 0.06547488459253165,
+            "chrf": 88.20250408024809,
+            "bleu": 80.4331103300598,
+            "token_acc": 0.8985507246376812
+          },
+          "telugu_heavy": {
+            "n": 22,
+            "cer": 0.03636363636363636,
+            "wer": 0.10091743119266056,
+            "em": 0.5454545454545454,
+            "ned": 0.040748734224654755,
+            "chrf": 90.42967644823351,
+            "bleu": 78.23795231379538,
+            "token_acc": 0.8990825688073395
+          }
+        },
+        "src_script": {
+          "mixed_script": {
+            "n": 14,
+            "cer": 0.04261363636363636,
+            "wer": 0.10606060606060606,
+            "em": 0.5,
+            "ned": 0.0526714286192946,
+            "chrf": 87.87528228554757,
+            "bleu": 76.2262579271653,
+            "token_acc": 0.8939393939393939
+          },
+          "romanized": {
+            "n": 26,
+            "cer": 0.039568345323741004,
+            "wer": 0.09821428571428571,
+            "em": 0.6153846153846154,
+            "ned": 0.05144692595914808,
+            "chrf": 90.2632308964591,
+            "bleu": 80.46886138463583,
+            "token_acc": 0.9017857142857143
+          }
+        },
+        "kind": {
+          "noisy": {
+            "n": 40,
+            "cer": 0.040748898678414094,
+            "wer": 0.10112359550561797,
+            "em": 0.575,
+            "ned": 0.05187550189019936,
+            "chrf": 89.42744888264008,
+            "bleu": 78.56839815760684,
+            "token_acc": 0.898876404494382
+          }
+        },
+        "length": {
+          "medium": {
+            "n": 21,
+            "cer": 0.012962962962962963,
+            "wer": 0.0625,
+            "em": 0.6666666666666666,
+            "ned": 0.01158639324788393,
+            "chrf": 95.98371039726608,
+            "bleu": 83.78546806097475,
+            "token_acc": 0.9375
+          },
+          "short(<=4w)": {
+            "n": 19,
+            "cer": 0.08152173913043478,
+            "wer": 0.16666666666666666,
+            "em": 0.47368421052631576,
+            "ned": 0.09640556933696905,
+            "chrf": 82.18105457700081,
+            "bleu": 66.93817570786118,
+            "token_acc": 0.8333333333333334
+          }
+        }
+      },
+      "errors": {
+        "n_sentences": 40,
+        "n_error_sentences": 17,
+        "sentence_error_rate": 0.425,
+        "categories": {
+          "punctuation_emoji": 8,
+          "telugu_char_error": 5,
+          "english_other": 3,
+          "telugu_left_romanized": 2
+        },
+        "category_share": {
+          "telugu_char_error": 0.278,
+          "punctuation_emoji": 0.444,
+          "english_other": 0.167,
+          "telugu_left_romanized": 0.111
+        },
+        "flags": {
+          "hallucinated": 2,
+          "unknown_word": 6
+        },
+        "examples": {
+          "telugu_char_error": [
+            {
+              "src": "nuwwu epudu hostlelo ఉన్నావా? 😅",
+              "ref": "నువ్వు ఇప్పుడు hostel లో ఉన్నావా? 😅",
+              "hyp": "నువ్వు ఎప్పుడు hostel లో ఉన్నావా? 😅",
+              "ref_tok": "ఇప్పుడు",
+              "hyp_tok": "ఎప్పుడు"
+            },
+            {
+              "src": "nuvwu eppudu hostlelo ఉన్నావా?",
+              "ref": "నువ్వు ఇప్పుడు hostel లో ఉన్నావా?",
+              "hyp": "నువ్వు ఎప్పుడు hostel లో ఉన్నావా?",
+              "ref_tok": "ఇప్పుడు",
+              "hyp_tok": "ఎప్పుడు"
+            },
+            {
+              "src": "meeru repu classku randi",
+              "ref": "మీరు రేపు class కి రండి",
+              "hyp": "మీరు రేపు class కు రండి",
+              "ref_tok": "కి",
+              "hyp_tok": "కు"
+            },
+            {
+              "src": "MIIRU repu clasku రండి 🙏",
+              "ref": "మీరు రేపు class కి రండి 🙏",
+              "hyp": "మీరు రేపు class కు రండి 🙏",
+              "ref_tok": "కి",
+              "hyp_tok": "కు"
+            }
+          ],
+          "punctuation_emoji": [
+            {
+              "src": "nuuvu ipudu hotello unavaa",
+              "ref": "నువ్వు ఇప్పుడు hotel లో ఉన్నావా?",
+              "hyp": "నువ్వు ఇప్పుడు hotel లో ఉన్నావా",
+              "ref_tok": "ఉన్నావా?",
+              "hyp_tok": "ఉన్నావా"
+            },
+            {
+              "src": "Nuvvu ippudu hotel lo ఉన్నావా",
+              "ref": "నువ్వు ఇప్పుడు hotel లో ఉన్నావా?",
+              "hyp": "నువ్వు ఇప్పుడు hotel లో ఉన్నావా",
+              "ref_tok": "ఉన్నావా?",
+              "hyp_tok": "ఉన్నావా"
+            },
+            {
+              "src": "Lib ekkada unde?? 😂",
+              "ref": "library ఎక్కడ ఉంది? 😂",
+              "hyp": "library ఎక్కడ ఉంది?? 😂",
+              "ref_tok": "ఉంది?",
+              "hyp_tok": "ఉంది??"
+            },
+            {
+              "src": "laab ekkada undhi 😅",
+              "ref": "lab ఎక్కడ ఉంది? 😅",
+              "hyp": "lab ఎక్కడ ఉంది 😅",
+              "ref_tok": "ఉంది?",
+              "hyp_tok": "ఉంది"
+            }
+          ],
+          "english_other": [
+            {
+              "src": "naaku NOTES కావాలి",
+              "ref": "నాకు notes కావాలి",
+              "hyp": "నాకు NOTES కావాలి",
+              "ref_tok": "notes",
+              "hyp_tok": "NOTES"
+            },
+            {
+              "src": "chalaaaa thx 😂",
+              "ref": "చాలా thanks 😂",
+              "hyp": "చాలా thx 😂",
+              "ref_tok": "thanks",
+              "hyp_tok": "thx"
+            },
+            {
+              "src": "chaalaa thx",
+              "ref": "చాలా thanks",
+              "hyp": "చాలా thx",
+              "ref_tok": "thanks",
+              "hyp_tok": "thx"
+            }
+          ],
+          "telugu_left_romanized": [
+            {
+              "src": "Naaku nidhra wastondhi",
+              "ref": "నాకు నిద్ర వస్తోంది",
+              "hyp": "నాకు nidhra వస్తుంది",
+              "ref_tok": "నిద్ర",
+              "hyp_tok": "nidhra"
+            },
+            {
+              "src": "Naaku ndra వస్తోంది",
+              "ref": "నాకు నిద్ర వస్తోంది",
+              "hyp": "నాకు ndra వస్తోంది",
+              "ref_tok": "నిద్ర",
+              "hyp_tok": "ndra"
+            }
+          ]
+        }
+      }
+    },
+    "test_unseen_words": {
+      "overall": {
+        "n": 322,
+        "cer": 0.10611643330876934,
+        "wer": 0.23148148148148148,
+        "em": 0.19875776397515527,
+        "ned": 0.10851972408624867,
+        "chrf": 77.77918674949517,
+        "bleu": 42.35295521522359,
+        "token_acc": 0.7685185185185185,
+        "english_token_acc": 0.2922077922077922,
+        "telugu_token_acc": 0.9456869009584664,
+        "english_tokens": 308,
+        "telugu_tokens": 939
+      },
+      "slices": {
+        "mix": {
+          "balanced": {
+            "n": 84,
+            "cer": 0.10462555066079295,
+            "wer": 0.3087719298245614,
+            "em": 0.11904761904761904,
+            "ned": 0.11450766465220888,
+            "chrf": 77.00342055777726,
+            "bleu": 27.65415515740714,
+            "token_acc": 0.6912280701754386
+          },
+          "telugu_heavy": {
+            "n": 238,
+            "cer": 0.10654441985456845,
+            "wer": 0.21179624664879357,
+            "em": 0.226890756302521,
+            "ned": 0.1064063332982627,
+            "chrf": 78.0529865818662,
+            "bleu": 44.33352054637254,
+            "token_acc": 0.7882037533512064
+          }
+        },
+        "src_script": {
+          "mixed_script": {
+            "n": 63,
+            "cer": 0.09651802076970067,
+            "wer": 0.1909722222222222,
+            "em": 0.25396825396825395,
+            "ned": 0.0998422646416444,
+            "chrf": 78.52847869107904,
+            "bleu": 49.8655430927952,
+            "token_acc": 0.8090277777777778
+          },
+          "romanized": {
+            "n": 259,
+            "cer": 0.10853189853958493,
+            "wer": 0.24193548387096775,
+            "em": 0.18532818532818532,
+            "ned": 0.11063045746466592,
+            "chrf": 77.59692654748828,
+            "bleu": 40.28479983140246,
+            "token_acc": 0.7580645161290323
+          }
+        },
+        "kind": {
+          "identity": {
+            "n": 10,
+            "cer": 0.03816793893129771,
+            "wer": 0.13636363636363635,
+            "em": 0.4,
+            "ned": 0.03860185623343518,
+            "chrf": 88.35047662016567,
+            "bleu": 62.721614859309625,
+            "token_acc": 0.8636363636363636
+          },
+          "noisy": {
+            "n": 312,
+            "cer": 0.1083756345177665,
+            "wer": 0.23455882352941176,
+            "em": 0.19230769230769232,
+            "ned": 0.11076068138922346,
+            "chrf": 77.44036335620444,
+            "bleu": 41.7033849769288,
+            "token_acc": 0.7654411764705882
+          }
+        },
+        "length": {
+          "medium": {
+            "n": 165,
+            "cer": 0.10306828003457216,
+            "wer": 0.19239904988123516,
+            "em": 0.24848484848484848,
+            "ned": 0.10353564971379907,
+            "chrf": 78.4862610761842,
+            "bleu": 46.389839861337286,
+            "token_acc": 0.8076009501187649
+          },
+          "short(<=4w)": {
+            "n": 157,
+            "cer": 0.11013090495162209,
+            "wer": 0.2900355871886121,
+            "em": 0.1464968152866242,
+            "ned": 0.11375776403181671,
+            "chrf": 77.03608315775192,
+            "bleu": 33.251497437760015,
+            "token_acc": 0.7099644128113879
+          }
+        }
+      },
+      "errors": {
+        "n_sentences": 322,
+        "n_error_sentences": 258,
+        "sentence_error_rate": 0.8012422360248447,
+        "categories": {
+          "english_spelling": 123,
+          "english_as_telugu": 99,
+          "punctuation_emoji": 36,
+          "deletion": 27,
+          "english_other": 23,
+          "telugu_char_error": 16,
+          "telugu_vocab": 1
+        },
+        "category_share": {
+          "english_other": 0.071,
+          "deletion": 0.083,
+          "english_spelling": 0.378,
+          "english_as_telugu": 0.305,
+          "telugu_char_error": 0.049,
+          "punctuation_emoji": 0.111,
+          "telugu_vocab": 0.003
+        },
+        "flags": {
+          "unknown_word": 245,
+          "hallucinated": 7
+        },
+        "examples": {
+          "english_other": [
+            {
+              "src": "nenu repu cantwenku velthanu",
+              "ref": "నేను రేపు canteen కి వెళ్తాను",
+              "hyp": "నేను రేపు cantwenku వెళ్తాను",
+              "ref_tok": "canteen",
+              "hyp_tok": "cantwenku"
+            },
+            {
+              "src": "nenu repu CANTEEN ki welthanu",
+              "ref": "నేను రేపు canteen కి వెళ్తాను",
+              "hyp": "నేను రేపు CANTEEN కి వెళ్తాను",
+              "ref_tok": "canteen",
+              "hyp_tok": "CANTEEN"
+            },
+            {
+              "src": "Nenu REPU CANTEENki వెళ్తాను",
+              "ref": "నేను రేపు canteen కి వెళ్తాను",
+              "hyp": "నేను రేపు CANTEENki వెళ్తాను",
+              "ref_tok": "canteen",
+              "hyp_tok": "CANTEENki"
+            },
+            {
+              "src": "manam sayantram cantenki veldaam",
+              "ref": "మనం సాయంత్రం canteen కి వెళ్దాం",
+              "hyp": "మనం సాయంత్రం cantenki వెళ్దాం",
+              "ref_tok": "canteen",
+              "hyp_tok": "cantenki"
+            }
+          ],
+          "deletion": [
+            {
+              "src": "nenu repu cantwenku velthanu",
+              "ref": "నేను రేపు canteen కి వెళ్తాను",
+              "hyp": "నేను రేపు cantwenku వెళ్తాను",
+              "ref_tok": "కి",
+              "hyp_tok": ""
+            },
+            {
+              "src": "నేను repu canteenku velthaaanu",
+              "ref": "నేను రేపు canteen కి వెళ్తాను",
+              "hyp": "నేను రేపు canteenku వెళ్తాను",
+              "ref_tok": "కి",
+              "hyp_tok": ""
+            },
+            {
+              "src": "Nenu REPU CANTEENki వెళ్తాను",
+              "ref": "నేను రేపు canteen కి వెళ్తాను",
+              "hyp": "నేను రేపు CANTEENki వెళ్తాను",
+              "ref_tok": "కి",
+              "hyp_tok": ""
+            },
+            {
+              "src": "nenu repu mlalki velthaanu",
+              "ref": "నేను రేపు mall కి వెళ్తాను",
+              "hyp": "నేను రేపు మళ్ళీ వెళ్తాను",
+              "ref_tok": "కి",
+              "hyp_tok": ""
+            }
+          ],
+          "english_spelling": [
+            {
+              "src": "naenu repu cantin ki weltaanu",
+              "ref": "నేను రేపు canteen కి వెళ్తాను",
+              "hyp": "నేను రేపు cantin కి వెళ్తాను",
+              "ref_tok": "canteen",
+              "hyp_tok": "cantin"
+            },
+            {
+              "src": "నేను repu canteenku velthaaanu",
+              "ref": "నేను రేపు canteen కి వెళ్తాను",
+              "hyp": "నేను రేపు canteenku వెళ్తాను",
+              "ref_tok": "canteen",
+              "hyp_tok": "canteenku"
+            },
+            {
+              "src": "నేను raepu mll ke velthaanu 🔥",
+              "ref": "నేను రేపు mall కి వెళ్తాను 🔥",
+              "hyp": "నేను రేపు mll కి వెళ్తాను 🔥",
+              "ref_tok": "mall",
+              "hyp_tok": "mll"
+            },
+            {
+              "src": "నేను repu msll ki velthanu",
+              "ref": "నేను రేపు mall కి వెళ్తాను",
+              "hyp": "నేను రేపు msll కి వెళ్తాను",
+              "ref_tok": "mall",
+              "hyp_tok": "msll"
+            }
+          ],
+          "english_as_telugu": [
+            {
+              "src": "nenu repu mall కి welthanu",
+              "ref": "నేను రేపు mall కి వెళ్తాను",
+              "hyp": "నేను రేపు మళ్ళీ కి వెళ్తాను",
+              "ref_tok": "mall",
+              "hyp_tok": "మళ్ళీ"
+            },
+            {
+              "src": "nenu raepu mall kii weltaanu",
+              "ref": "నేను రేపు mall కి వెళ్తాను",
+              "hyp": "నేను రేపు మళ్ళీ కి వెళ్తాను",
+              "ref_tok": "mall",
+              "hyp_tok": "మళ్ళీ"
+            },
+            {
+              "src": "nenu repu mallki veltaaanu 🙏",
+              "ref": "నేను రేపు mall కి వెళ్తాను 🙏",
+              "hyp": "నేను రేపు మళ్ళీ కి వెళ్తాను 🙏",
+              "ref_tok": "mall",
+              "hyp_tok": "మళ్ళీ"
+            },
+            {
+              "src": "Nenu reepu mallku velthanu",
+              "ref": "నేను రేపు mall కి వెళ్తాను",
+              "hyp": "నేను రేపు మళ్ళీ కు వెళ్తాను",
+              "ref_tok": "mall",
+              "hyp_tok": "మళ్ళీ"
+            }
+          ],
+          "telugu_char_error": [
+            {
+              "src": "Nenu reepu mallku velthanu",
+              "ref": "నేను రేపు mall కి వెళ్తాను",
+              "hyp": "నేను రేపు మళ్ళీ కు వెళ్తాను",
+              "ref_tok": "కి",
+              "hyp_tok": "కు"
+            },
+            {
+              "src": "nenu reepu mallku velthaanu",
+              "ref": "నేను రేపు mall కి వెళ్తాను",
+              "hyp": "నేను రేపు మళ్ళీ కు వెళ్తాను",
+              "ref_tok": "కి",
+              "hyp_tok": "కు"
+            },
+            {
+              "src": "Nuvu eppuduu canteen loo unaavaa",
+              "ref": "నువ్వు ఇప్పుడు canteen లో ఉన్నావా?",
+              "hyp": "నువ్వు ఎప్పుడు canteen లో ఉన్నావా",
+              "ref_tok": "ఇప్పుడు",
+              "hyp_tok": "ఎప్పుడు"
+            },
+            {
+              "src": "nuvvu epuduuu canteen loo unnaawaa",
+              "ref": "నువ్వు ఇప్పుడు canteen లో ఉన్నావా?",
+              "hyp": "నువ్వు ఎప్పుడు canteen లో ఉన్నావా",
+              "ref_tok": "ఇప్పుడు",
+              "hyp_tok": "ఎప్పుడు"
+            }
+          ],
+          "punctuation_emoji": [
+            {
+              "src": "Nuvu eppuduu canteen loo unaavaa",
+              "ref": "నువ్వు ఇప్పుడు canteen లో ఉన్నావా?",
+              "hyp": "నువ్వు ఎప్పుడు canteen లో ఉన్నావా",
+              "ref_tok": "ఉన్నావా?",
+              "hyp_tok": "ఉన్నావా"
+            },
+            {
+              "src": "Nuvvu ఇప్పుడు canteen lo unnaavaa",
+              "ref": "నువ్వు ఇప్పుడు canteen లో ఉన్నావా?",
+              "hyp": "నువ్వు ఇప్పుడు canteen లో ఉన్నావా",
+              "ref_tok": "ఉన్నావా?",
+              "hyp_tok": "ఉన్నావా"
+            },
+            {
+              "src": "nuvvu epuduuu canteen loo unnaawaa",
+              "ref": "నువ్వు ఇప్పుడు canteen లో ఉన్నావా?",
+              "hyp": "నువ్వు ఎప్పుడు canteen లో ఉన్నావా",
+              "ref_tok": "ఉన్నావా?",
+              "hyp_tok": "ఉన్నావా"
+            },
+            {
+              "src": "nuwu ఇప్పుడు canteen lo unaawaa???",
+              "ref": "నువ్వు ఇప్పుడు canteen లో ఉన్నావా?",
+              "hyp": "నువ్వు ఇప్పుడు canteen లో ఉన్నావా???",
+              "ref_tok": "ఉన్నావా?",
+              "hyp_tok": "ఉన్నావా???"
+            }
+          ],
+          "telugu_vocab": [
+            {
+              "src": "nuwwu ipudu canteenlo unnaawaa??",
+              "ref": "నువ్వు ఇప్పుడు canteen లో ఉన్నావా?",
+              "hyp": "నువ్వు ఇప్పుడు canteenlo ఉన్నావా??",
+              "ref_tok": "లో",
+              "hyp_tok": "ఉన్నావా??"
+            }
+          ]
+        }
+      }
+    },
+    "gold_demo": {
+      "overall": {
+        "n": 4,
+        "cer": 0.16129032258064516,
+        "wer": 0.26666666666666666,
+        "em": 0.25,
+        "ned": 0.17261904761904762,
+        "chrf": 72.477093196309,
+        "bleu": 63.28668854426896,
+        "token_acc": 0.7333333333333333,
+        "english_token_acc": 1.0,
+        "telugu_token_acc": 0.6923076923076923,
+        "english_tokens": 2,
+        "telugu_tokens": 13
+      },
+      "slices": {
+        "mix": {
+          "balanced": {
+            "n": 1,
+            "cer": 0.09523809523809523,
+            "wer": 0.3333333333333333,
+            "em": 0.0,
+            "ned": 0.09523809523809523,
+            "chrf": 82.4968978819598,
+            "bleu": 68.65890479690393,
+            "token_acc": 0.6666666666666666
+          },
+          "telugu_heavy": {
+            "n": 3,
+            "cer": 0.18055555555555555,
+            "wer": 0.25,
+            "em": 0.3333333333333333,
+            "ned": 0.1984126984126984,
+            "chrf": 69.13715830109207,
+            "bleu": 66.26877340247366,
+            "token_acc": 0.75
+          }
+        },
+        "src_script": {
+          "romanized": {
+            "n": 4,
+            "cer": 0.16129032258064516,
+            "wer": 0.26666666666666666,
+            "em": 0.25,
+            "ned": 0.17261904761904762,
+            "chrf": 72.477093196309,
+            "bleu": 63.28668854426896,
+            "token_acc": 0.7333333333333333
+          }
+        },
+        "kind": {
+          "gold": {
+            "n": 4,
+            "cer": 0.16129032258064516,
+            "wer": 0.26666666666666666,
+            "em": 0.25,
+            "ned": 0.17261904761904762,
+            "chrf": 72.477093196309,
+            "bleu": 63.28668854426896,
+            "token_acc": 0.7333333333333333
+          }
+        },
+        "length": {
+          "medium": {
+            "n": 1,
+            "cer": 0.0,
+            "wer": 0.0,
+            "em": 1.0,
+            "ned": 0.0,
+            "chrf": 100.0,
+            "bleu": 100.0,
+            "token_acc": 1.0
+          },
+          "short(<=4w)": {
+            "n": 3,
+            "cer": 0.234375,
+            "wer": 0.4,
+            "em": 0.0,
+            "ned": 0.23015873015873015,
+            "chrf": 63.30279092841201,
+            "bleu": 38.72983346207417,
+            "token_acc": 0.6
+          }
+        }
+      },
+      "errors": {
+        "n_sentences": 4,
+        "n_error_sentences": 3,
+        "sentence_error_rate": 0.75,
+        "categories": {
+          "telugu_char_error": 2,
+          "telugu_left_romanized": 2
+        },
+        "category_share": {
+          "telugu_char_error": 0.5,
+          "telugu_left_romanized": 0.5
+        },
+        "flags": {
+          "unknown_word": 4
+        },
+        "examples": {
+          "telugu_char_error": [
+            {
+              "src": "nuvvu ekkada unnav",
+              "ref": "నువ్వు ఎక్కడ ఉన్నావు?",
+              "hyp": "నువ్వు ఎక్కడ ఉన్నావా",
+              "ref_tok": "ఉన్నావు?",
+              "hyp_tok": "ఉన్నావా"
+            },
+            {
+              "src": "class ki vastunnava?",
+              "ref": "class కి వస్తున్నావా?",
+              "hyp": "class కి వస్తున్నారు?",
+              "ref_tok": "వస్తున్నావా?",
+              "hyp_tok": "వస్తున్నారు?"
+            }
+          ],
+          "telugu_left_romanized": [
+            {
+              "src": "naku telugu chala istam",
+              "ref": "నాకు తెలుగు చాలా ఇష్టం",
+              "hyp": "నాకు telugu చాలా istam",
+              "ref_tok": "తెలుగు",
+              "hyp_tok": "telugu"
+            },
+            {
+              "src": "naku telugu chala istam",
+              "ref": "నాకు తెలుగు చాలా ఇష్టం",
+              "hyp": "నాకు telugu చాలా istam",
+              "ref_tok": "ఇష్టం",
+              "hyp_tok": "istam"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

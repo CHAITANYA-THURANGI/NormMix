@@ -1,0 +1,50 @@
+datasets:
+  - name: "Seed Corpus (built-in)"
+    category: "synthetic"
+    language: "Telugu-English"
+    purpose: "training"
+    required: true
+    source: "src/datasets/seed_corpus.py"
+    license: "MIT (part of project)"
+    download_method: "built-in"
+    local_path: "data/processed/"
+
+  - name: "Dakshina"
+    category: "transliteration"
+    language: "Telugu (+ 11 other South Asian)"
+    purpose: "training, transliteration"
+    required: false
+    source: "https://github.com/google-research-datasets/dakshina"
+    license: "CC BY 4.0"
+    download_method: "git clone or scripts/download_datasets.py"
+    local_path: "data/external/dakshina/te/"
+
+  - name: "Aksharantar"
+    category: "transliteration"
+    language: "Telugu (+ 20 other Indic)"
+    purpose: "training, transliteration"
+    required: false
+    source: "https://huggingface.co/datasets/ai4bharat/Aksharantar"
+    license: "CC0"
+    download_method: "scripts/download_datasets.py"
+    local_path: "data/external/aksharantar/te/"
+
+  - name: "IndicCorp v2 (Telugu)"
+    category: "monolingual"
+    language: "Telugu"
+    purpose: "synthetic data generation, vocabulary"
+    required: false
+    source: "AI4Bharat HuggingFace"
+    license: "CC-0"
+    download_method: "manual"
+    local_path: "data/external/indiccorp/te/"
+
+  - name: "Samanantar (Telugu-English)"
+    category: "parallel_translation"
+    language: "Telugu-English"
+    purpose: "synthetic code-mixed generation"
+    required: false
+    source: "https://huggingface.co/datasets/ai4bharat/samanantar"
+    license: "CC-BY-NC-4.0"
+    download_method: "huggingface datasets"
+    local_path: "data/external/samanantar/te-en/"

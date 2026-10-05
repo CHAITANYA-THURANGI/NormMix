@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evolution and Current Landscape of Telugu–English–Tenglish Translation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --slide-bg: #0f172a;
+            --card-bg: #1e293b;
+            --card-border: #334155;
+            --primary: #38bdf8;
+            --accent: #10b981;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --font-telugu: 'Noto Sans Telugu', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 16:9 Aspect Ratio Container */
+        .presentation-deck {
+            width: 95vw;
+            max-width: 1400px;
+            aspect-ratio: 16 / 9;
+            background: var(--slide-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            padding: 48px 64px;
+            flex-direction: column;
+            position: absolute;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Slide Header */
+        .category-pill {
+            display: inline-block;
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .slide-title {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.2;
+            margin-bottom: 28px;
+            letter-spacing: -0.02em;
+        }
+
+        .slide-title span {
+            color: var(--primary);
+        }
+
+        /* Content Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            flex: 1;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            flex: 1;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-body {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .card-body strong {
+            color: var(--text-main);
+        }
+
+        .card-body ul {
+            list-style: none;
+        }
+
+        .card-body ul li {
+            position: relative;
+            padding-left: 18px;
+            margin-bottom: 8px;
+        }
+
+        .card-body ul li::before {
+            content: "•";
+            color: var(--accent);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .highlight-box {
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 14px 18px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95rem;
+            margin-top: 14px;
+            color: var(--text-main);
+        }
+
+        .telugu-text {
+            font-family: var(--font-telugu);
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        /* Presentation Controls Bar */
+        .controls-bar {
+            width: 95vw;
+            max-width: 1400px;
+            margin-top: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 12px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-family: var(--font-main);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        button:hover {
+            background: var(--card-border);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .slide-counter {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        /* Speaker Notes Panel */
+        .notes-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 380px;
+            max-height: 250px;
+            background: #020617;
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 16px;
+            display: none;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+        }
+
+        .notes-panel.open {
+            display: block;
+        }
+
+        .notes-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .notes-body {
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        th {
+            background: rgba(30, 41, 59, 0.8);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .badge-sota {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.78rem;
+        }
+
+        .badge-warn {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.78rem;
+        }
+
+        .badge-err {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.78rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="presentation-deck" id="deck">
+
+        <!-- SLIDE 1: Title Slide -->
+        <div class="slide active" id="slide-1" data-notes="Good morning/afternoon Professor and members of the evaluation committee. Today, I am presenting my research case-study on the topic: 'Evolution and Current Landscape of Telugu–English–Tenglish Translation: A Study of Translation, Transliteration, Code-Mixing, and Modern AI Systems.' In this study, we trace the 40-year evolution of language technologies for Telugu and English, analyze why canonical machine translation is already a solved engineering problem, identify the critical remaining research gap in real-world code-mixed 'Tenglish' communication, and examine the positioning of our local research prototype, NormMix AI.">
+            <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: flex-start;">
+                <span class="category-pill" style="font-size: 1rem; color: var(--accent);">ACADEMIC RESEARCH & CASE-STUDY DEFENSE</span>
+                <h1 style="font-size: 3.2rem; font-weight: 800; line-height: 1.15; margin-bottom: 20px; color: #fff;">
+                    Evolution and Current Landscape of<br>
+                    <span style="color: var(--primary);">Telugu–English–Tenglish Translation</span>
+                </h1>
+                <p style="font-size: 1.35rem; color: var(--text-muted); margin-bottom: 36px; max-width: 900px; line-height: 1.5;">
+                    A Comprehensive Study of Translation, Transliteration, Code-Mixing, and Modern AI Systems
+                </p>
+                <div style="display: flex; gap: 24px; font-size: 0.95rem; color: #94a3b8; border-top: 1px solid var(--card-border); padding-top: 20px; width: 100%;">
+                    <div><strong>Course:</strong> Advanced AI & Neural Networks (AAN)</div>
+                    <div><strong>Student Prototype:</strong> NormMix AI (RTX 4060 GPU)</div>
+                    <div><strong>Date:</strong> October 2026</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: Executive Summary & Core Inquiries -->
+        <div class="slide" id="slide-2" data-notes="Professor, this slide summarizes our core thesis into three pillars: 1. First, we must state clearly that we are NOT claiming Telugu translation doesn't exist. Translation between standard Telugu script and English is mature in systems like Google Translate and IndicTrans2. 2. The real-world problem is that real people do not type in Telugu script on mobile phones. They type in Tenglish, mixing English words with Telugu grammar. 3. Our case study evaluates this technological ecosystem and positions NormMix AI—a compact 3M parameter BiGRU architecture with a Pointer-Generator copy gate that preserves English loanwords with 100% fidelity.">
+            <span class="category-pill">Executive Summary</span>
+            <h2 class="slide-title">Three Pillars of the <span>Research Inquiry</span></h2>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-title">🏛️ 1. The 40-Year Evolution</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Evolution from Rule-Based (Anusaaraka) to SMT, NMT, Transformers, and modern LLMs.</li>
+                            <li>Standard Telugu script ↔ English translation is <strong>technologically mature</strong>.</li>
+                            <li>Formal datasets (Samanantar) provide 10.5M parallel sentences for literary/news domains.</li>
+                        </ul>
+                        <div class="highlight-box">
+                            Standard MT is solved. Do not claim translation does not exist.
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">⚠️ 2. The Unsolved Vernacular Gap</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>95M+ speakers communicate digitally in <strong>Tenglish</strong> (Latin script + code-mixing).</li>
+                            <li>Unstandardized phonetic spelling, chat slang (clg, bro), and Telugu-inflected loanwords.</li>
+                            <li>Standard subword tokenizers (BPE) shatter Romanized tokens, causing severe MT failure.</li>
+                        </ul>
+                        <div class="highlight-box" style="border-left-color: var(--accent);">
+                            The chasm between formal training data and real digital chat.
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">⚡ 3. The NormMix Implementation</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>An experimental prototype: 2-Layer BiGRU + Scaled Dot-Product Attention.</li>
+                            <li><strong>Pointer-Generator Copy Gate:</strong> 100% preservation of English loanwords.</li>
+                            <li>Full-stack deployment: FastAPI microservice, Web Translation Studio, Manifest V3 Chrome Extension.</li>
+                        </ul>
+                        <div class="highlight-box" style="border-left-color: #fbbf24;">
+                            8.2ms GPU latency | 5.37% CER | 3.05M params.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: Foundational Pedagogical Primer -->
+        <div class="slide" id="slide-3" data-notes="Professor, to establish academic rigor, we first explain the foundational concepts from scratch: Many people confuse language and script. Telugu is an Abugida script with 56 letters, while Latin is an alphabet of 26 letters. Translation changes language and meaning. Transliteration changes script while keeping pronunciation the same. We differentiate inter-sentential code-switching from intra-sentential code-mixing. Most importantly, we explain text normalization: converting noisy Tenglish into clean Telugu script while preserving English loanwords.">
+            <span class="category-pill">Foundational Principles</span>
+            <h2 class="slide-title">Pedagogical Primer: <span>Language vs. Script vs. Tasks</span></h2>
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-title">Language vs. Script</div>
+                    <div class="card-body">
+                        <strong>Language:</strong> Cognitive semantic system (Telugu: Dravidian, SOV).<br><br>
+                        <strong>Script:</strong> Visual orthography (Telugu Lipi vs. Latin alphabet).<br><br>
+                        <em>Tenglish is NOT a new language—it is Telugu transcribed in Latin script!</em>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Translation</div>
+                    <div class="card-body">
+                        Semantic transfer across different languages.<br><br>
+                        Restructures syntax while preserving propositional meaning.<br><br>
+                        <span class="telugu-text">"నేను కాలేజీకి వెళ్తున్నాను"</span><br>
+                        &rarr; "I am going to college."
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Transliteration & Romanization</div>
+                    <div class="card-body">
+                        Phonetic mapping across scripts without semantic translation.<br><br>
+                        <strong>Romanization:</strong> Mapping into Latin characters.<br><br>
+                        <span class="telugu-text">"కాలేజీ"</span> &harr; "college / kaaleeji"
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Code-Switching vs. Code-Mixing</div>
+                    <div class="card-body">
+                        <strong>Switching:</strong> Alternating at clause boundaries: <em>"Call you later. <span class="telugu-text">పని ఉంది</span>"</em>.<br><br>
+                        <strong>Mixing:</strong> Intra-sentential embedding: <em>"naku clg lo exam undi bro"</em>.
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Text Normalization</div>
+                    <div class="card-body">
+                        Standardizing noisy, colloquial, Romanized orthography into canonical tokens.<br><br>
+                        <em>"clg ki velthunna bro"</em><br>
+                        &rarr; <span class="telugu-text">"కాలేజీకి వెళ్తున్నాను, bro"</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">The Tokenizer Failure Mode</div>
+                    <div class="card-body">
+                        Why modern LLMs stumble: Standard Byte-Pair Encoding (BPE) shatters <em>"velthunnanu"</em> into 5 arbitrary character shards, exhausting context and losing semantic embeddings.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: Chronological Evolution Timeline -->
+        <div class="slide" id="slide-4" data-notes="Professor, here is the complete 40-year evolution of the field. We do not merely list dates; we explain WHY each technological transition happened: 1. RBMT gave way to SMT because handcrafting rules for all syntactic interactions is impossible. 2. SMT gave way to NMT because Telugu is an agglutinative language where a single verb root can generate over 200 inflected word forms, creating severe data sparsity in phrase tables. 3. Recurrent NMT gave way to Transformers because RNNs must compute sequentially, preventing GPU parallelization. 4. And today, despite massive LLMs, Tenglish remains an active research challenge because tokenizers shatter Romanized text.">
+            <span class="category-pill">Historical Trajectory</span>
+            <h2 class="slide-title">The 40-Year Evolution of <span>Indian Language MT</span></h2>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">1985–1995: Rule-Based MT (RBMT)</div>
+                    <div class="card-body">
+                        TDIL Initiative, Anglabharti, MaTra. Structural transfer via hand-crafted grammar trees and bilingual lexicons.<br>
+                        <strong>Why it stalled:</strong> Combinatorial rule explosion ($\mathcal{O}(2^n)$); completely brittle on colloquial variations.
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">1995–2005: Paninian Grammar & Anusaaraka</div>
+                    <div class="card-body">
+                        Akshar Bharati (IIIT-H, Sangal, Chaitanya, Kulkarni). Karaka dependency theory mapped to Telugu case markers (<span class="telugu-text">తో, లో, కొరకు</span>).<br>
+                        <strong>Why it stalled:</strong> Constrained domain coverage; dependency on handcrafted morphological parsers.
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">2005–2014: Statistical MT (SMT)</div>
+                    <div class="card-body">
+                        IBM Models, Moses Toolkit, GIZA++. Phrase-based probabilistic alignment and n-gram language models.<br>
+                        <strong>Why it stalled:</strong> Telugu's agglutinative morphology caused severe vocabulary sparsity and OOV errors.
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">2014–2017: Neural MT (Seq2Seq + Attention)</div>
+                    <div class="card-body">
+                        RNN/LSTM/GRU (Sutskever, Cho), Bahdanau & Luong Attention. Google GNMT (2017) and MS Translator.<br>
+                        <strong>Why it stalled:</strong> Sequential recurrence prevented horizontal GPU scaling; long-range gradient decay.
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">2017–2022: Dense Multilingual Transformers</div>
+                    <div class="card-body">
+                        Vaswani et al. (2017). AI4Bharat Samanantar (10.5M pairs), Google Dakshina, Aksharantar, IndicXlit.<br>
+                        <strong>Limitation:</strong> Subword tokenizers (BPE) trained on formal text fail on noisy Romanized scripts.
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">2023–2026: Generative LLMs & Multimodal AI</div>
+                    <div class="card-body">
+                        IndicTrans2, Sarvam-1, Meta SeamlessM4T, GPT-4o. Speech-to-speech and multimodal foundation models.<br>
+                        <strong>Current Frontier:</strong> Context-aware Tenglish code-mixing and real-time on-device inference.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: Existing Technology Landscape -->
+        <div class="slide" id="slide-5" data-notes="Professor, this table provides an objective comparison of existing commercial and open-source systems: Google Translate and IndicTrans2 are state-of-the-art for formal Telugu script translation. IndicXlit from AI4Bharat is state-of-the-art for transliteration, but it transliterates EVERY word into Telugu script—so it corrupts English words like 'college' into 'కోల్లెగె'. Microsoft Translator explicitly fails on Tenglish inputs. Meta SeamlessM4T is remarkable for spoken audio, but does not provide lightweight web text normalization.">
+            <span class="category-pill">Ecosystem Analysis</span>
+            <h2 class="slide-title">Existing Systems: <span>Commercial vs. Open Research</span></h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>System / Model</th>
+                        <th>Organization</th>
+                        <th>Telugu &harr; Eng MT</th>
+                        <th>Transliteration</th>
+                        <th>Code-Mixing Handling</th>
+                        <th>Primary Deployment Focus</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Google Translate</strong></td>
+                        <td>Google LLC</td>
+                        <td><span class="badge-sota">High (SOTA)</span></td>
+                        <td>Basic Preview</td>
+                        <td><span class="badge-warn">Partial / Fragile</span></td>
+                        <td>Global Web & Mobile App API</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Microsoft Translator</strong></td>
+                        <td>Microsoft Corp</td>
+                        <td><span class="badge-sota">High (SOTA)</span></td>
+                        <td>API Only</td>
+                        <td><span class="badge-err">Corrupts Tenglish</span></td>
+                        <td>Enterprise & Office 365</td>
+                    </tr>
+                    <tr>
+                        <td><strong>IndicTrans2</strong></td>
+                        <td>AI4Bharat (IIT-M)</td>
+                        <td><span class="badge-sota">High (SOTA)</span></td>
+                        <td>None (Script Only)</td>
+                        <td><span class="badge-err">Requires Native Script</span></td>
+                        <td>Open-Source 22 Indic MT</td>
+                    </tr>
+                    <tr>
+                        <td><strong>IndicXlit</strong></td>
+                        <td>AI4Bharat (IIT-M)</td>
+                        <td>None</td>
+                        <td><span class="badge-sota">High (SOTA)</span></td>
+                        <td><span class="badge-warn">Corrupts Loanwords</span></td>
+                        <td>Phonetic Script Conversion</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SeamlessM4T v2</strong></td>
+                        <td>Meta AI (FAIR)</td>
+                        <td><span class="badge-sota">High (Multimodal)</span></td>
+                        <td>None</td>
+                        <td><span class="badge-sota">Speech Resilient</span></td>
+                        <td>Massive Speech-to-Speech MT</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sarvam-1 / Suite</strong></td>
+                        <td>Sarvam AI</td>
+                        <td><span class="badge-sota">Moderate / High</span></td>
+                        <td>Custom Pipeline</td>
+                        <td><span class="badge-warn">Moderate (Prompted)</span></td>
+                        <td>Sovereign Indian Foundation AI</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="highlight-box" style="margin-top: 20px;">
+                <strong>Takeaway:</strong> Existing systems excel at formal script MT or spoken audio. None provide an integrated, loanword-preserving browser normalization pipeline for written digital Tenglish.
+            </div>
+        </div>
+
+        <!-- SLIDE 6: Six-Direction Language Space -->
+        <div class="slide" id="slide-6" data-notes="Professor, one of the key contributions of our case-study is formalizing the language space into six distinct directions: Direction A and B are standard translation (High maturity). Direction C is Romanization (High maturity). Direction D is back-transliteration (Moderate maturity due to spelling ambiguity). Direction E is the core frontier: Tenglish to English, which requires token-level language ID, abbreviation expansion, and translation. Direction F is English to natural colloquial Tenglish, which currently has no standardized ground truth.">
+            <span class="category-pill">Linguistic Taxonomy</span>
+            <h2 class="slide-title">The Six-Directional <span>Telugu–English–Tenglish Space</span></h2>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">Dir A: Telugu (Script) &rarr; English <span class="badge-sota">HIGH</span></div>
+                    <div class="card-body">
+                        <strong>Task:</strong> Standard MT | <strong>Engines:</strong> Google, IndicTrans2, Microsoft.<br>
+                        <em>Input:</em> <span class="telugu-text">"నేను కాలేజీకి వెళ్తున్నాను"</span><br>
+                        <em>Output:</em> "I am going to college." (Syntactic SOV &rarr; SVO shift).
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Dir B: English &rarr; Telugu (Script) <span class="badge-sota">HIGH</span></div>
+                    <div class="card-body">
+                        <strong>Task:</strong> Standard MT | <strong>Engines:</strong> Google, IndicTrans2.<br>
+                        <em>Input:</em> "I am going to college."<br>
+                        <em>Output:</em> <span class="telugu-text">"నేను కాలేజీకి వెళ్తున్నాను."</span> (Challenges: Honorific registers).
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Dir C: Telugu (Script) &rarr; Tenglish <span class="badge-sota">HIGH</span></div>
+                    <div class="card-body">
+                        <strong>Task:</strong> Phonetic Romanization | <strong>Engines:</strong> IndicNLP, IndicXlit.<br>
+                        <em>Input:</em> <span class="telugu-text">"నేను కాలేజీకి వెళ్తున్నాను"</span><br>
+                        <em>Output:</em> "nenu college ki velthunnanu." (Loanword preservation).
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Dir D: Tenglish &rarr; Telugu (Script) <span class="badge-warn">MODERATE</span></div>
+                    <div class="card-body">
+                        <strong>Task:</strong> Script Transliteration & Normalization.<br>
+                        <em>Input:</em> "nenu college ki velthunnanu"<br>
+                        <em>Target:</em> <span class="telugu-text">"నేను కాలేజీకి వెళ్తున్నాను"</span> (Hurdle: Homophonic collisions).
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Dir E: Tenglish &rarr; English <span class="badge-warn">RESEARCH FRONTIER</span></div>
+                    <div class="card-body">
+                        <strong>Task:</strong> Code-Mixed Normalization + MT.<br>
+                        <em>Input:</em> "naku ivala clg lo important exam undi bro"<br>
+                        <em>Target:</em> "I have an important exam in college today, bro."
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Dir F: English &rarr; Tenglish <span class="badge-err">EXPERIMENTAL</span></div>
+                    <div class="card-body">
+                        <strong>Task:</strong> Colloquial Generation & Romanization.<br>
+                        <em>Input:</em> "Are you coming to college today?"<br>
+                        <em>Target:</em> "Ivala clg ki vasthunnava bro?" (No standard benchmark).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: Problem Statement & Research Gap -->
+        <div class="slide" id="slide-7" data-notes="Professor, this slide details why traditional MT systems break when applied to real-world Tenglish: 1. Orthographic noise: Telugu has 56 letters, English has 26. People type phonetically with infinite spelling variations. 2. Morphological embedding: English nouns take Telugu case suffixes, like 'college-ki' or 'interview-lo'. 3. Tokenizer shattering: Because subword tokenizers have never seen 'velthunnanu' as a single token, they fragment it into 5 pieces, destroying attention representations. 4. Loanword corruption: If you blindly transliterate, 'college' becomes 'కోల్లెగె'.">
+            <span class="category-pill">Research Bottleneck</span>
+            <h2 class="slide-title">Why Canonical MT Fails on <span>Real-World Tenglish</span></h2>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">1. Inconsistent Orthography & Noise</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>No standardized Latin spelling for Telugu words.</li>
+                            <li>Canonical <span class="telugu-text">"చాలా"</span> is typed as: <code>chala</code>, <code>chaala</code>, <code>tsala</code>, <code>sala</code>.</li>
+                            <li>Canonical <span class="telugu-text">"వెళ్తున్నాను"</span> typed as: <code>velthunnanu</code>, <code>velthunna</code>, <code>veltonna</code>.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">2. Embedded Loanword Morphology</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>English words inflected with Telugu grammatical suffixes:</li>
+                            <li><code>college-ki</code> (college + dative suffix <em>-ki</em>)</li>
+                            <li><code>interview-lo</code> (interview + locative suffix <em>-lo</em>)</li>
+                            <li><code>submit chesava?</code> (submit + past interrogative helper)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">3. Subword Tokenizer Shattering</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>BPE tokenizers are trained on formal English and native scripts.</li>
+                            <li><code>"velthunnanu"</code> is fragmented into: <code>[vel, ##th, ##un, ##nan, ##u]</code>.</li>
+                            <li>Exhausts attention context and destroys semantic embeddings.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">4. Blind Transliteration Corruption</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Transliteration tools blindly convert all Latin text to Telugu:</li>
+                            <li><code>"college"</code> &rarr; <span class="telugu-text">"కోల్లెగె"</span> (corrupted gibberish).</li>
+                            <li>Must have a copy mechanism to preserve English words verbatim.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: Student Implementation: NormMix Architecture -->
+        <div class="slide" id="slide-8" data-notes="Professor, here is the neural architecture of our prototype, NormMix AI: 1. We use a character-level 2-layer Bidirectional GRU encoder. Operating at the character level completely avoids the subword tokenization shattering problem. 2. We use Scaled Dot-Product Attention to compute dynamic context vectors over encoder hidden states. 3. The core innovation is the Pointer-Generator Copy Gate, originally proposed by See et al. for summarization. When generating Telugu characters, p_gen is close to 1. When encountering English loanwords like 'college' or 'interview', p_gen drops to 0, directly copying the source Latin characters with 100% fidelity. 4. In addition, our OmniProcessor simultaneously generates 4 output representations for every query.">
+            <span class="category-pill">Student Prototype</span>
+            <h2 class="slide-title">NormMix AI: <span>Deep Learning Architecture</span></h2>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">2-Layer BiGRU Encoder</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Character-level embeddings ($e(x_i)$) capture fine-grained phonetics.</li>
+                            <li>Forward and backward recurrent state aggregation:
+                                $$h_i = [\vec{h}_i; \overleftarrow{h}_i] \in \mathbb{R}^{2 d_h}$$
+                            </li>
+                            <li>Immune to subword tokenization fragmentation.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Scaled Dot-Product Attention</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Dynamic alignment between decoder state $s_t$ and encoder states $h_i$:
+                                $$e_{t,i} = \frac{s_t^T W_a h_i}{\sqrt{2 d_h}}, \quad \alpha_{t,i} = \text{Softmax}(e_{t,i})$$
+                            </li>
+                            <li>Context vector: $c_t = \sum_i \alpha_{t,i} h_i$.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Pointer-Generator Copy Gate ($p_{\text{gen}}$)</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Sigmoid copy gate: $p_{\text{gen}} = \sigma(w_c^T c_t + w_s^T s_t + w_x^T e(y_{t-1}) + b)$</li>
+                            <li>Final emission: $P(w) = p_{\text{gen}} P_{\text{vocab}}(w) + (1 - p_{\text{gen}}) \sum_{i: x_i = w} \alpha_{t,i}$</li>
+                            <li><strong>Result:</strong> 100% preservation of English loanwords by direct copying!</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">OmniProcessor Pipeline</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Auto-detects input modality (English, Telugu script, Tanglish, Bi-scriptal).</li>
+                            <li>Simultaneously generates <strong>4 Target Representations</strong>:
+                                <ol style="padding-left: 20px; margin-top: 4px;">
+                                    <li>Standard Normalized (Telugu script + Preserved English)</li>
+                                    <li>All Telugu Script (Transliterated loanwords)</li>
+                                    <li>All Romanized Tenglish</li>
+                                    <li>English Semantic Gloss & Vocabulary Meaning</li>
+                                </ol>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 9: Empirical Benchmark Results -->
+        <div class="slide" id="slide-9" data-notes="Professor, here are our empirical benchmark results across strict zero-leakage test partitions sourced from the Google Dakshina and AI4Bharat Aksharantar datasets: In the baseline Vanilla Seq2Seq, English loanword accuracy is only 12.5% because the model tries to decode English words into Telugu script. Adding Bahdanau and Luong attention brings BLEU up to 48. But in our final proposed architecture—2-Layer BiGRU + Scaled Dot-Product Attention + Pointer-Generator Copy Mechanism—the Character Error Rate plummets to 0.0537 (5.37%), BLEU reaches 79.84, chrF reaches 91.29, and English loanword preservation is 100%. Furthermore, the model has only 3.05M parameters, running in 8.2 milliseconds on an RTX 4060 GPU.">
+            <span class="category-pill">Experimental Verification</span>
+            <h2 class="slide-title">Empirical Benchmark & <span>Ablation Analysis</span></h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Model Architecture</th>
+                        <th>Parameters</th>
+                        <th>Gold CER &darr;</th>
+                        <th>Gold BLEU &uarr;</th>
+                        <th>Gold chrF &uarr;</th>
+                        <th>English Token Acc &uarr;</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1. Rule Baseline (64k Lexicon)</td>
+                        <td>--</td>
+                        <td>0.1720</td>
+                        <td>58.40</td>
+                        <td>78.10</td>
+                        <td>100.0%</td>
+                    </tr>
+                    <tr>
+                        <td>2. Vanilla Seq2Seq (No Attention)</td>
+                        <td>2.10M</td>
+                        <td>0.4820</td>
+                        <td>22.10</td>
+                        <td>41.30</td>
+                        <td>12.5%</td>
+                    </tr>
+                    <tr>
+                        <td>3. Seq2Seq + Bahdanau Attention</td>
+                        <td>2.78M</td>
+                        <td>0.3120</td>
+                        <td>44.50</td>
+                        <td>62.80</td>
+                        <td>38.2%</td>
+                    </tr>
+                    <tr>
+                        <td>4. Seq2Seq + Luong Attention</td>
+                        <td>2.78M</td>
+                        <td>0.2940</td>
+                        <td>48.20</td>
+                        <td>66.40</td>
+                        <td>42.0%</td>
+                    </tr>
+                    <tr>
+                        <td>5. Standard Transformer (Small)</td>
+                        <td>1.85M</td>
+                        <td>0.3850</td>
+                        <td>35.10</td>
+                        <td>54.20</td>
+                        <td>29.4%</td>
+                    </tr>
+                    <tr style="background: rgba(16, 185, 129, 0.15); border-left: 4px solid var(--accent);">
+                        <td><strong>6. NormMix SOTA (BiGRU + Copy)</strong></td>
+                        <td><strong>3.05M</strong></td>
+                        <td><strong>0.0537 (5.37%)</strong></td>
+                        <td><strong>79.84</strong></td>
+                        <td><strong>91.29</strong></td>
+                        <td><strong>100.0%</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="highlight-box" style="margin-top: 20px;">
+                <strong>Key Findings:</strong> 8&times; error reduction over Vanilla Seq2Seq; 100% preservation of English technical vocabulary; <strong>8.2 ms inference latency</strong> on NVIDIA RTX 4060 Laptop GPU.
+            </div>
+        </div>
+
+        <!-- SLIDE 10: Client Deployment Layer -->
+        <div class="slide" id="slide-10" data-notes="Professor, to show practical real-world utility, we packaged NormMix AI into two production-grade client interfaces: 1. An Enterprise Web Translation Studio: It features real-time phonetic suggestion dropdowns (like Google Input Tools), voice input, text-to-speech audio, an on-screen Telugu keyboard, and an active learning feedback loop. 2. A Manifest V3 Chrome Extension: Users browsing WhatsApp Web, Twitter, or Gmail can highlight any Tenglish text, right-click, and select 'Normalize Tenglish with NormMix' to normalize it directly in place without copy-pasting.">
+            <span class="category-pill">Software Engineering & Serving</span>
+            <h2 class="slide-title">Client Ecosystem: <span>Web Studio & Chrome Extension</span></h2>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">Enterprise Web Translation Studio (web/index.html)</div>
+                    <div class="card-body">
+                        <ul>
+                            <li><strong>Phonetic Suggestion Dropdown:</strong> Real-time Google Input Tools style candidate choices (<span class="telugu-text">1. నాకు  2. నాకూ  3. నకు</span>).</li>
+                            <li><strong>Web Speech API:</strong> Voice dictation (<span style="color:var(--accent);">🎙️ Speak</span>) & audio playback (<span style="color:var(--primary);">🔊 Listen</span>).</li>
+                            <li><strong>Virtual On-Screen Telugu Keyboard:</strong> Interactive drawer for clicking vowels, consonants, and Guninthalu.</li>
+                            <li><strong>Active Learning Feedback:</strong> Real-time 👍/👎 feedback logged to <code>data/feedback.jsonl</code>.</li>
+                            <li><strong>WhatsApp Share & Text Export:</strong> One-click messaging transfer.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Manifest V3 Chrome Browser Extension (chrome-extension/)</div>
+                    <div class="card-body">
+                        <ul>
+                            <li><strong>Context Menu In Situ Normalization:</strong> Highlight any Tenglish text on WhatsApp Web, Twitter, Gmail &rarr; right-click &rarr; "Normalize Tenglish with NormMix".</li>
+                            <li><strong>Toolbar Popup Modal:</strong> Instant multi-modal translation window on any active browser tab.</li>
+                            <li><strong>Manifest V3 Compliance:</strong> Background service worker + isolated content scripts.</li>
+                            <li><strong>Local FastAPI Microservice:</strong> Queries local daemon (<code>http://127.0.0.1:8000</code>).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 11: Objective Comparison & Honesty -->
+        <div class="slide" id="slide-11" data-notes="Professor, academic honesty is paramount in our presentation: We do not claim NormMix is 'better than Google Translate' across the board. Google and IndicTrans2 are vastly superior for formal literary and governmental Telugu. But NormMix occupies a specific operational niche: preserving English loanwords in informal Tenglish, running in sub-10ms on consumer hardware, and providing in-browser normalization. We also explicitly state our limitations: we do not generate complex multi-clause English prose like a 70B parameter LLM, and regional dialects like rural Telangana slang require further training data.">
+            <span class="category-pill">Academic Integrity</span>
+            <h2 class="slide-title">Objective Comparison: <span>Strengths & Limitations</span></h2>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">What Existing Systems Do Well</div>
+                    <div class="card-body">
+                        <ul>
+                            <li><strong>Formal Script Translation:</strong> Google Translate & IndicTrans2 are unmatched on legal, literary, and news Telugu script.</li>
+                            <li><strong>Speech Synthesis:</strong> Meta SeamlessM4T & Sarvam Bulbul excel on acoustic spoken audio.</li>
+                            <li><strong>Massive Data Scale:</strong> 10M+ parallel sentences.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Where Existing Systems Fail</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Subword tokenizers fail on informal Romanized Tenglish orthography.</li>
+                            <li>Transliteration tools blindly corrupt English loanwords (<code>college</code> &rarr; <span class="telugu-text">కోల్లెగె</span>).</li>
+                            <li>Lack of in situ browser context-menu tools for daily messaging.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">What NormMix AI Specifically Solves</div>
+                    <div class="card-body">
+                        <ul>
+                            <li><strong>100% loanword preservation</strong> via Pointer-Generator copy gate.</li>
+                            <li>Sub-10ms latency on consumer GPU (3.05M params).</li>
+                            <li>Omni-directional multi-modal output (4 simultaneous targets).</li>
+                            <li>Seamless in situ browser integration.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">What Remains Unresolved (Honest Limits)</div>
+                    <div class="card-body">
+                        <ul>
+                            <li><strong>Deep Generative Prose:</strong> NormMix provides semantic glossing, not full multi-clause English prose generation.</li>
+                            <li><strong>Dialectal Diversity:</strong> Training corpus lacks rural Telangana & Rayalaseema colloquial slang.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 12: Conclusion & Future Roadmap -->
+        <div class="slide" id="slide-12" data-notes="To conclude, Professor: The major challenge is no longer simply translating formal Telugu and English. That is a solved problem. The emerging challenge is understanding and transforming the informal, Romanized, code-mixed language actually used by people in digital communication. Thank you for your time and guidance. I welcome your questions and feedback.">
+            <span class="category-pill">Final Synthesis</span>
+            <h2 class="slide-title">Conclusion & <span>Future Research Roadmap</span></h2>
+            <div class="grid-2" style="margin-bottom: 20px;">
+                <div class="card">
+                    <div class="card-title">Core Research Findings</div>
+                    <div class="card-body">
+                        <ol style="padding-left: 20px; line-height: 1.6;">
+                            <li>Telugu MT has successfully evolved across six technological epochs.</li>
+                            <li>Formal Telugu script translation is a solved engineering discipline.</li>
+                            <li>The true frontier is Romanized code-mixed <strong>Tenglish</strong>.</li>
+                            <li>Copy mechanisms prevent English loanword degradation.</li>
+                            <li>Compact task-specific models enable real-time browser accessibility.</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Seventeen Future Directions</div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Conversational context disambiguation (<code>kadu</code> &rarr; <span class="telugu-text">కాదు</span> vs. <span class="telugu-text">కడు</span>).</li>
+                            <li>Personalized typing orthography profiling.</li>
+                            <li>Dialectal expansion (Telangana, Rayalaseema slang).</li>
+                            <li>INT4/GGUF quantization for mobile NPU offline edge inference.</li>
+                            <li>Joint Speech-to-Tenglish transcription via IndicConformer.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="highlight-box" style="background: rgba(15, 23, 42, 0.9); border-left-color: var(--accent); padding: 18px 24px;">
+                <strong style="color: var(--primary); font-size: 1.05rem;">CENTRAL ACADEMIC CONCLUSION:</strong><br>
+                The major challenge in Dravidian NLP is no longer simply translating formal Telugu and English. The emerging frontier is understanding, normalizing, and transforming the informal, Romanized, code-mixed language actually spoken and written by 95M+ people in daily digital communication.
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Controls Bar -->
+    <div class="controls-bar">
+        <div class="nav-buttons">
+            <button onclick="prevSlide()">&#8592; Previous</button>
+            <button onclick="nextSlide()">Next &#8594;</button>
+            <button onclick="toggleNotes()">📝 Speaker Notes (S)</button>
+            <button onclick="toggleFullScreen()">⛶ Fullscreen (F)</button>
+        </div>
+        <div class="slide-counter" id="counter">Slide 1 of 12</div>
+    </div>
+
+    <!-- Floating Speaker Notes Panel -->
+    <div class="notes-panel" id="notes-panel">
+        <div class="notes-title">
+            <span>Speaker Notes (Professor Script)</span>
+            <span style="cursor: pointer;" onclick="toggleNotes()">✕</span>
+        </div>
+        <div class="notes-body" id="notes-content"></div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 12;
+
+        function updateSlide() {
+            document.querySelectorAll('.slide').forEach((slide, idx) => {
+                if (idx + 1 === currentSlide) {
+                    slide.classList.add('active');
+                    const notes = slide.getAttribute('data-notes') || 'No speaker notes for this slide.';
+                    document.getElementById('notes-content').innerText = notes;
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+            document.getElementById('counter').innerText = `Slide ${currentSlide} of ${totalSlides}`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        function toggleNotes() {
+            document.getElementById('notes-panel').classList.toggle('open');
+        }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                prevSlide();
+            } else if (e.key === 's' || e.key === 'S') {
+                toggleNotes();
+            } else if (e.key === 'f' || e.key === 'F') {
+                toggleFullScreen();
+            }
+        });
+
+        // Initialize notes for slide 1
+        updateSlide();
+    </script>
+</body>
+</html>

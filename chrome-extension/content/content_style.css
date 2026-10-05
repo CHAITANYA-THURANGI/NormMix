@@ -1,0 +1,8 @@
+#tecm-popover {
+  position: fixed; z-index: 2147483647; max-width: 320px; background: #171a21; color: #e8eaed;
+  border: 1px solid #2b2f3a; border-radius: 10px; padding: 10px 12px; font: 13px/1.4 -apple-system, "Segoe UI", Roboto, sans-serif;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+}
+#tecm-popover .tecm-close { float: right; cursor: pointer; color: #9aa1ac; margin-left: 8px; }
+#tecm-popover .tecm-hyp { margin-top: 6px; padding: 6px 8px; background: #1d2029; border-radius: 6px; }
+#tecm-popover .tecm-status { color: #9aa1ac; font-size: 11.5px; }

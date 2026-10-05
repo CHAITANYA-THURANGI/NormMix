@@ -1,0 +1,2 @@
+model: {type: rnn, attention: scaled_dot, rnn_type: gru}
+train: {run_name: attn_scaled_dot}

@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.env
+.venv
+.venv-gpu
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+archive*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Model checkpoints
+*.pt
+*.pth
+!experiments/checkpoints/
+
+# Data files
+data/raw/*
+data/external/*
+data/processed/*.jsonl
+!data/processed/gold_demo.jsonl
+
+# SentencePiece models
+*.model
+*.vocab
+
+# Jupyter
+.ipynb_checkpoints
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+
+# Logs
+wandb/
+runs/
+tensorboard/

@@ -1,0 +1,1887 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NormMix AI &mdash; Universal Telugu-English Translation & Normalization Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #090c15;
+    --surface-1: #111625;
+    --surface-2: #182035;
+    --surface-3: #222c48;
+    --border: #263352;
+    --border-focus: #38bdf8;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --accent: #f59e0b;
+    --accent-glow: rgba(245, 158, 11, 0.25);
+    --cyan: #38bdf8;
+    --cyan-glow: rgba(56, 189, 248, 0.25);
+    --emerald: #10b981;
+    --rose: #f43f5e;
+    --purple: #a855f7;
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-telugu: 'Noto Sans Telugu', 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  [data-theme="light"] {
+    --bg: #f8fafc;
+    --surface-1: #ffffff;
+    --surface-2: #f1f5f9;
+    --surface-3: #e2e8f0;
+    --border: #cbd5e1;
+    --border-focus: #0284c7;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --accent: #d97706;
+    --accent-glow: rgba(217, 119, 6, 0.2);
+    --cyan: #0284c7;
+    --cyan-glow: rgba(2, 132, 199, 0.2);
+    --emerald: #059669;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: radial-gradient(1400px 900px at 20% -10%, #1e293b 0%, var(--bg) 65%);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.3s, color 0.3s;
+  }
+  [data-theme="light"] body {
+    background: radial-gradient(1200px 800px at 20% -10%, #e2e8f0 0%, var(--bg) 65%);
+  }
+
+  /* TOP NAVBAR */
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    background: rgba(17, 22, 37, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  [data-theme="light"] nav {
+    background: rgba(255, 255, 255, 0.9);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+  }
+  .brand-logo {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #f59e0b, #38bdf8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 19px;
+    color: #0b0f19;
+    box-shadow: 0 4px 16px var(--accent-glow);
+  }
+  .brand-text h1 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .brand-text p {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+  .badge-sota {
+    font-size: 10px;
+    font-weight: 700;
+    background: rgba(56, 189, 248, 0.15);
+    color: var(--cyan);
+    border: 1px solid rgba(56, 189, 248, 0.4);
+    padding: 2px 7px;
+    border-radius: 999px;
+    text-transform: uppercase;
+  }
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: 1px solid var(--border);
+    background: var(--surface-1);
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .nav-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--cyan);
+    background: var(--surface-2);
+  }
+  .nav-btn.primary {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #090c15;
+    border: none;
+    box-shadow: 0 4px 14px var(--accent-glow);
+  }
+  .nav-btn.primary:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+
+  /* MAIN CONTAINER */
+  main {
+    max-width: 1340px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 22px 20px 60px;
+    flex: 1;
+  }
+
+  /* TABS */
+  .tabs-bar {
+    display: flex;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover {
+    color: var(--text-primary);
+    background: var(--surface-1);
+  }
+  .tab-btn.active {
+    color: var(--text-primary);
+    background: var(--surface-2);
+    box-shadow: inset 0 -2px 0 var(--cyan);
+  }
+  .tab-btn.active.omni {
+    box-shadow: inset 0 -2px 0 var(--accent);
+  }
+
+  /* WORKBENCH PANEL GRID */
+  .workbench {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: stretch;
+  }
+  @media (max-width: 980px) {
+    .workbench { grid-template-columns: 1fr; }
+  }
+
+  .pane {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    min-height: 440px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    overflow: hidden;
+    position: relative;
+  }
+  .pane-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(24, 32, 53, 0.4);
+  }
+  [data-theme="light"] .pane-header { background: #f8fafc; }
+  .pane-title {
+    font-size: 12.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pane-title .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  .pane-title .dot.src { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+  .pane-title .dot.tgt { background: var(--emerald); box-shadow: 0 0 8px var(--emerald); }
+
+  .pane-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .icon-tool-btn {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    border-radius: 6px;
+    padding: 5px 9px;
+    cursor: pointer;
+    font-size: 12px;
+    font-family: var(--font-sans);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.15s;
+  }
+  .icon-tool-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--cyan);
+    background: var(--surface-3);
+  }
+  .icon-tool-btn.active {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: var(--cyan);
+    color: var(--cyan);
+  }
+  .icon-tool-btn.recording {
+    background: rgba(244, 63, 94, 0.2);
+    border-color: var(--rose);
+    color: var(--rose);
+    animation: pulseMic 1.2s infinite ease-in-out;
+  }
+  @keyframes pulseMic {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(244, 63, 94, 0); }
+  }
+
+  /* PHONETIC SUGGESTIONS BAR (GOOGLE INPUT TOOLS STYLE) */
+  .suggestions-bar {
+    display: none;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    padding: 6px 14px;
+    gap: 8px;
+    align-items: center;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .suggestion-candidate {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 13px;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--font-telugu);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .suggestion-candidate:hover, .suggestion-candidate.selected {
+    background: var(--surface-3);
+    border-color: var(--cyan);
+    color: var(--cyan);
+  }
+  .suggestion-candidate .idx {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .pane-body {
+    flex: 1;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+  }
+  textarea.editor {
+    width: 100%;
+    flex: 1;
+    min-height: 190px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 17px;
+    line-height: 1.6;
+    resize: none;
+  }
+  textarea.editor::placeholder {
+    color: var(--text-muted);
+  }
+
+  /* VIRTUAL TELUGU KEYBOARD DRAWER */
+  .keyboard-drawer {
+    display: none;
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
+    padding: 12px 14px;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  .kbd-row-title {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 6px 0 4px;
+  }
+  .kbd-keys {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .kbd-key {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    border-radius: 6px;
+    padding: 4px 9px;
+    font-size: 14px;
+    font-family: var(--font-telugu);
+    cursor: pointer;
+    transition: all 0.12s;
+    min-width: 32px;
+    text-align: center;
+  }
+  .kbd-key:hover {
+    background: var(--surface-3);
+    border-color: var(--cyan);
+    color: var(--cyan);
+    transform: translateY(-1px);
+  }
+
+  /* DETECTED MODALITY BANNER */
+  .detect-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    border-radius: 8px;
+    padding: 7px 12px;
+    margin-bottom: 12px;
+    font-size: 12px;
+  }
+  .detect-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: var(--cyan);
+  }
+  .detect-sparkle { color: var(--accent); font-size: 13px; }
+  .detect-stats {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* OUTPUT VIEW SELECTOR PILLS */
+  .view-pills {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding-bottom: 10px;
+  }
+  .view-pill {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    border-radius: 6px;
+    padding: 4px 9px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .view-pill:hover {
+    color: var(--text-primary);
+    border-color: var(--cyan);
+  }
+  .view-pill.active {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: var(--cyan);
+    color: var(--cyan);
+  }
+
+  .output-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .output-display {
+    font-size: 19px;
+    line-height: 1.65;
+    font-weight: 500;
+    color: #ffffff;
+    min-height: 110px;
+    word-break: break-word;
+    font-family: var(--font-telugu);
+  }
+  [data-theme="light"] .output-display { color: #0f172a; }
+  .output-placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 15px;
+    font-family: var(--font-sans);
+  }
+
+  /* SWAP BUTTON */
+  .swap-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .swap-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  .swap-btn:hover {
+    color: var(--cyan);
+    border-color: var(--cyan);
+    transform: rotate(180deg) scale(1.05);
+    background: var(--surface-3);
+  }
+
+  /* TOKEN BREAKDOWN */
+  .token-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .token-badge {
+    font-size: 12px;
+    font-family: var(--font-mono);
+    padding: 3px 8px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .token-badge.telugu {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+  }
+  .token-badge.english {
+    background: rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    border: 1px solid rgba(56, 189, 248, 0.35);
+  }
+  .token-badge.punct {
+    background: rgba(255,255,255,0.05);
+    color: var(--text-muted);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .token-badge .lbl {
+    font-size: 9px;
+    font-weight: 700;
+    opacity: 0.7;
+    text-transform: uppercase;
+  }
+
+  /* TOKEN DIAGNOSTIC TABLE VIEW */
+  .diagnostic-table-wrap {
+    display: none;
+    margin-top: 10px;
+    max-height: 220px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .diagnostic-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .diagnostic-table th, .diagnostic-table td {
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .diagnostic-table th {
+    background: var(--surface-2);
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+  }
+  .diagnostic-table td { font-family: var(--font-mono); }
+
+  /* PANE FOOTERS */
+  .pane-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px;
+    background: rgba(24, 32, 53, 0.25);
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+  .export-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* CONTROL TOOLBAR */
+  .toolbar {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 18px;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .tool-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .tool-label {
+    color: var(--text-secondary);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  select.select-ctrl {
+    background: var(--surface-2);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    cursor: pointer;
+  }
+  select.select-ctrl:hover { border-color: var(--cyan); }
+  .toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    color: var(--text-secondary);
+    font-size: 13px;
+  }
+  .toggle-label input { accent-color: var(--accent); }
+  .spacer { flex: 1; }
+
+  /* SAMPLES SECTION */
+  .samples-section {
+    margin-top: 20px;
+  }
+  .samples-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .samples-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-muted);
+  }
+  .sample-cats {
+    display: flex;
+    gap: 6px;
+  }
+  .sample-cat-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .sample-cat-btn.active {
+    background: var(--surface-2);
+    color: var(--cyan);
+  }
+  .chips-wrap {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .sample-chip {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .sample-chip:hover {
+    color: var(--text-primary);
+    border-color: var(--cyan);
+    background: var(--surface-2);
+    transform: translateY(-1px);
+  }
+
+  /* LEXICON DICTIONARY EXPLORER */
+  .dictionary-section {
+    display: none;
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+  .search-input-wrap {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .search-input-wrap input {
+    flex: 1;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 15px;
+    color: var(--text-primary);
+    font-family: inherit;
+    outline: none;
+  }
+  .search-input-wrap input:focus { border-color: var(--cyan); }
+  .dict-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .dict-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .dict-src {
+    font-size: 14px;
+    color: var(--cyan);
+    font-family: var(--font-mono);
+  }
+  .dict-tgt {
+    font-size: 16px;
+    color: #ffffff;
+    font-weight: 600;
+    font-family: var(--font-telugu);
+  }
+  [data-theme="light"] .dict-tgt { color: #0f172a; }
+  .dict-tag {
+    font-size: 10px;
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--accent);
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+
+  /* TELEMETRY / STATS BAR */
+  .telemetry-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin-top: 24px;
+  }
+  .stat-card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .stat-card .val {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+  }
+  .stat-card .lbl {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
+
+  /* FEEDBACK MODAL */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 480px;
+    width: 90%;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  }
+  .modal-title {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .modal-input {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    font-family: inherit;
+    outline: none;
+  }
+  .modal-input:focus { border-color: var(--cyan); }
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 28px;
+    background: var(--surface-1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  footer a { color: var(--cyan); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface-3);
+    border: 1px solid var(--cyan);
+    color: var(--text-primary);
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.25s ease;
+    pointer-events: none;
+    z-index: 9999;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP NAVIGATION -->
+<nav>
+  <a href="/" class="brand">
+    <div class="brand-logo">&#2344;</div>
+    <div class="brand-text">
+      <h1>NormMix AI <span class="badge-sota">Universal SOTA</span></h1>
+      <p>Omni-Directional Telugu &middot; English &middot; Code-Mixed Translation & Normalization Studio</p>
+    </div>
+  </a>
+  <div class="nav-actions">
+    <button class="nav-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+      <span id="themeIcon">&#9728;</span> Theme
+    </button>
+    <button class="nav-btn" onclick="openExtensionModal()" style="border-color: #f59e0b; color: #f59e0b;" title="Install Chrome Extension">
+      <span>&#129513;</span> Chrome Extension
+    </button>
+    <a href="/report.pdf" target="_blank" class="nav-btn primary">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      Project Report PDF
+    </a>
+    <a href="/docs" target="_blank" class="nav-btn">Swagger API Docs</a>
+    <a href="/health" target="_blank" class="nav-btn">System Health</a>
+  </div>
+</nav>
+
+<!-- MAIN STUDIO -->
+<main>
+  <!-- TAB SWITCHER -->
+  <div class="tabs-bar">
+    <button class="tab-btn active omni" id="tabAuto" onclick="setMode('auto')">
+      <span>&#9889;</span> Universal Auto-Detect (English, Telugu & Code-Mixed)
+    </button>
+    <button class="tab-btn" id="tabNormalize" onclick="setMode('normalize')">
+      <span>&#128260;</span> Code-Mixed Normalizer (Tanglish &rarr; Telugu+EN)
+    </button>
+    <button class="tab-btn" id="tabRomanize" onclick="setMode('romanize')">
+      <span>&#128292;</span> Telugu Romanizer (Telugu Script &rarr; Tanglish)
+    </button>
+    <button class="tab-btn" id="tabDict" onclick="setMode('dictionary')">
+      <span>&#128214;</span> 64k Lexicon Explorer
+    </button>
+  </div>
+
+  <!-- TRANSLATION / NORMALIZATION WORKBENCH -->
+  <div id="workbenchContainer">
+    <div class="workbench">
+      <!-- SOURCE INPUT PANE -->
+      <div class="pane">
+        <div class="pane-header">
+          <div class="pane-title">
+            <span class="dot src"></span>
+            <span id="srcTitle">Source Text (Any Modality)</span>
+          </div>
+          <div class="pane-header-actions">
+            <button class="icon-tool-btn" id="micBtn" onclick="toggleVoiceInput()" title="Voice Input (Speech-to-Text)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+              <span id="micLabel">Speak</span>
+            </button>
+            <button class="icon-tool-btn" id="kbdToggleBtn" onclick="toggleKeyboardDrawer()" title="Virtual Telugu Keyboard">
+              <span>&#9000;</span> Telugu Keyboard
+            </button>
+            <button class="icon-tool-btn" onclick="clearInput()" title="Clear text">Clear</button>
+          </div>
+        </div>
+
+        <!-- GOOGLE INPUT TOOLS STYLE SUGGESTIONS BAR -->
+        <div class="suggestions-bar" id="suggestionsBar">
+          <span style="font-size:11px; color:var(--text-muted); font-family:var(--font-mono);">Suggestions:</span>
+          <div id="suggestionsList" style="display:inline-flex; gap:6px;"></div>
+        </div>
+
+        <div class="pane-body">
+          <textarea id="srcInput" class="editor" placeholder="Type or paste ANY text (English, Telugu script, Tanglish, or any mix)..." maxlength="2000"></textarea>
+        </div>
+
+        <!-- VIRTUAL TELUGU KEYBOARD DRAWER -->
+        <div class="keyboard-drawer" id="keyboardDrawer">
+          <div class="kbd-row-title">అచ్చులు (Vowels):</div>
+          <div class="kbd-keys" id="vowelKeys"></div>
+          <div class="kbd-row-title">హల్లులు (Consonants):</div>
+          <div class="kbd-keys" id="consonantKeys"></div>
+          <div class="kbd-row-title">గుణింతాలు & ఒత్తులు (Diacritics & Signs):</div>
+          <div class="kbd-keys" id="matraKeys"></div>
+        </div>
+
+        <div class="pane-footer">
+          <span id="charCount">0 characters &middot; 0 words</span>
+          <span id="langHint">Auto-Detecting...</span>
+        </div>
+      </div>
+
+      <!-- CENTER SWAP CONTROLLER -->
+      <div class="swap-col">
+        <button class="swap-btn" title="Swap Translation Direction" onclick="toggleDirection()">
+          &#8646;
+        </button>
+      </div>
+
+      <!-- TARGET OUTPUT PANE -->
+      <div class="pane">
+        <div class="pane-header">
+          <div class="pane-title">
+            <span class="dot tgt"></span>
+            <span id="tgtTitle">Target Normalization / Translation</span>
+          </div>
+          <div class="pane-header-actions">
+            <button class="icon-tool-btn" id="ttsBtn" onclick="speakOutputText()" title="Listen to text (Text-to-Speech)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+              Listen
+            </button>
+            <button class="icon-tool-btn" onclick="shareWhatsApp()" title="Share to WhatsApp">
+              <span>&#128172;</span> WhatsApp
+            </button>
+            <button class="icon-tool-btn" onclick="downloadTxt()" title="Download as text file">
+              <span>&#128190;</span> Download
+            </button>
+            <button class="icon-tool-btn" onclick="copyCurrentOutput()" title="Copy to clipboard">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              Copy
+            </button>
+          </div>
+        </div>
+
+        <div class="pane-body">
+          <!-- AUTO-DETECT HEADER BANNER -->
+          <div id="detectBanner" class="detect-banner" style="display: none;">
+            <div class="detect-main">
+              <span class="detect-sparkle">&#10024;</span>
+              <span id="detectLabel">Auto-Detected: Romanized Tanglish</span>
+            </div>
+            <div class="detect-stats" id="detectStats">
+              100% Latin &middot; 96% conf
+            </div>
+          </div>
+
+          <!-- TARGET VIEW OPTION SELECTOR PILLS -->
+          <div class="view-pills" id="viewPills">
+            <button class="view-pill active" id="pill_norm" onclick="switchTargetView('normalized_code_mixed')">
+              <span>&#11088;</span> Standard Normalized
+            </button>
+            <button class="view-pill" id="pill_en" onclick="switchTargetView('english_translation')">
+              <span>&#127468;&#127463;</span> English Translation
+            </button>
+            <button class="view-pill" id="pill_pure_te" onclick="switchTargetView('pure_telugu')">
+              <span>&#127802;</span> Pure Telugu (అచ్చ తెలుగు)
+            </button>
+            <button class="view-pill" id="pill_te" onclick="switchTargetView('all_telugu_script')">
+              <span>&#128292;</span> All Telugu Script
+            </button>
+            <button class="view-pill" id="pill_rom" onclick="switchTargetView('all_romanized_tanglish')">
+              <span>&#128290;</span> All Tanglish
+            </button>
+            <button class="view-pill" id="pill_gloss" onclick="switchTargetView('english_gloss')">
+              <span>&#127760;</span> English Meaning
+            </button>
+            <button class="view-pill" id="pill_diag" onclick="switchTargetView('diagnostic')">
+              <span>&#128300;</span> Token Diagnostics
+            </button>
+          </div>
+
+          <!-- OUTPUT CONTAINER -->
+          <div class="output-container">
+            <div id="textOutputArea">
+              <div id="outputDisplay" class="output-display">
+                <span class="output-placeholder">Type or pick any sample to see auto-detected output options...</span>
+              </div>
+              <div id="tokenBadges" class="token-badges" style="display: none;"></div>
+
+              <!-- PRESCRIBED MEANING CARD -->
+              <div id="webPrescribedMeaningCard" class="meaning-box" style="display: none; margin-top: 14px; background: rgba(16, 185, 129, 0.08); border-left: 3px solid #10b981; border-radius: 6px; padding: 10px 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <span style="font-size: 11px; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.5px;">📖 Prescribed Meaning (English)</span>
+                  <button type="button" class="mini-copy-btn" onclick="copyWebMeaning()" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #94a3b8; border-radius: 4px; padding: 2px 7px; font-size: 10.5px; cursor: pointer;">Copy Meaning</button>
+                </div>
+                <div id="webPrescribedMeaningText" style="font-size: 14px; font-style: italic; color: #e2e8f0; line-height: 1.5;"></div>
+              </div>
+            </div>
+
+            <!-- DIAGNOSTIC TABLE VIEW (WHEN SELECTED) -->
+            <div id="diagnosticTableWrap" class="diagnostic-table-wrap">
+              <table class="diagnostic-table">
+                <thead>
+                  <tr>
+                    <th>Token</th>
+                    <th>Normalized</th>
+                    <th>Telugu</th>
+                    <th>Romanized</th>
+                    <th>Tag</th>
+                    <th>Meaning</th>
+                  </tr>
+                </thead>
+                <tbody id="diagnosticTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="pane-footer">
+          <div class="export-actions">
+            <span id="metaInfo">Ready</span>
+            <span id="confidenceBadge" style="color:var(--emerald); font-weight:600; margin-left:8px;"></span>
+          </div>
+          <!-- FEEDBACK LOOP -->
+          <div class="export-actions" id="feedbackGroup" style="display: flex;">
+            <span style="font-size:11px; margin-right:4px;">Rate output:</span>
+            <button class="icon-tool-btn" onclick="submitRating('positive')" title="Good output">&#128077;</button>
+            <button class="icon-tool-btn" onclick="openFeedbackModal()" title="Report issue or suggest correction">&#128078;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLBAR & ENGINE CONTROLS -->
+    <div class="toolbar">
+      <div class="tool-group">
+        <span class="tool-label">Model:</span>
+        <select id="modelSelect" class="select-ctrl">
+          <option value="">Auto (Production SOTA - 3.05M BiGRU)</option>
+        </select>
+      </div>
+      <div class="tool-group" id="engineGroup">
+        <span class="tool-label">Engine:</span>
+        <select id="engineSelect" class="select-ctrl">
+          <option value="auto">Auto (Neural + Copy Gate + Fallback)</option>
+          <option value="neural">Neural Seq2Seq Only</option>
+          <option value="rule">Rule Baseline Lexicon Only</option>
+        </select>
+      </div>
+      <div class="tool-group" id="beamGroup">
+        <span class="tool-label">Beam:</span>
+        <select id="beamSelect" class="select-ctrl">
+          <option value="1">Greedy (Fastest)</option>
+          <option value="2">Beam-2</option>
+          <option value="4" selected>Beam-4 (Highest Accuracy)</option>
+        </select>
+      </div>
+      <label class="toggle-label">
+        <input type="checkbox" id="liveTypingToggle" checked />
+        Live Typing (280ms debounce)
+      </label>
+      <div class="spacer"></div>
+      <button class="nav-btn primary" id="executeBtn" onclick="runExecution()">
+        Process &rarr;
+      </button>
+    </div>
+
+    <!-- CURATED SAMPLES -->
+    <div class="samples-section">
+      <div class="samples-header-bar">
+        <div class="samples-title" id="samplesHeader">Try Curated Input Scenarios:</div>
+        <div class="sample-cats">
+          <button class="sample-cat-btn active" id="cat_all" onclick="filterSamples('all')">All Scenarios</button>
+          <button class="sample-cat-btn" id="cat_tanglish" onclick="filterSamples('tanglish')">Tanglish Mix</button>
+          <button class="sample-cat-btn" id="cat_telugu" onclick="filterSamples('telugu')">Native Telugu</button>
+          <button class="sample-cat-btn" id="cat_biscript" onclick="filterSamples('biscript')">Bi-scriptal</button>
+          <button class="sample-cat-btn" id="cat_english" onclick="filterSamples('english')">Pure English</button>
+        </div>
+      </div>
+      <div class="chips-wrap" id="samplesChips"></div>
+    </div>
+  </div>
+
+  <!-- LEXICON EXPLORER (TAB 4) -->
+  <div id="dictionarySection" class="dictionary-section">
+    <div class="search-input-wrap">
+      <input type="text" id="dictQuery" placeholder="Type an English or Telugu word to explore lexicon (e.g. college, train, vellali, repu, bagundi)..." oninput="searchLexicon()" />
+      <button class="nav-btn primary" onclick="searchLexicon()">Search Lexicon</button>
+    </div>
+    <div id="dictStatus" style="font-size:13px; color:var(--text-muted); margin-bottom:14px; font-family:var(--font-mono);">
+      Total verified lexicon: 64,421 entries (Dakshina + Aksharantar)
+    </div>
+    <div class="dict-grid" id="dictGrid"></div>
+  </div>
+
+  <!-- SYSTEM TELEMETRY -->
+  <div class="telemetry-bar">
+    <div class="stat-card">
+      <div class="val" id="deviceVal">GPU (RTX 4060)</div>
+      <div class="lbl">Inference Accelerator</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">3.05M params</div>
+      <div class="lbl">Pointer-Generator SOTA</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">64,421 words</div>
+      <div class="lbl">Lexical Knowledge Base</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" id="latencyVal">~8 ms</div>
+      <div class="lbl">Average Latency</div>
+    </div>
+    <div class="stat-card">
+      <div class="val" style="color:var(--emerald);">100.0%</div>
+      <div class="lbl">English Token Preservation</div>
+    </div>
+  </div>
+</main>
+
+<!-- USER FEEDBACK MODAL -->
+<div class="modal-backdrop" id="feedbackModal">
+  <div class="modal-card">
+    <div class="modal-title">
+      <span>&#128078;</span> Report Issue / Suggest Correction
+    </div>
+    <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">
+      Help improve NormMix AI model training. What should the correct output be?
+    </p>
+    <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:4px;">Suggested Correction:</label>
+    <input type="text" class="modal-input" id="feedbackCorrection" placeholder="Type corrected Telugu or English text..." />
+    <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:4px;">Comments / Error Category (Optional):</label>
+    <input type="text" class="modal-input" id="feedbackComments" placeholder="e.g. Aspiration error, loanword misspelling, wrong suffix..." />
+    <div class="modal-actions">
+      <button class="nav-btn" onclick="closeFeedbackModal()">Cancel</button>
+      <button class="nav-btn primary" onclick="submitCorrectionFeedback()">Submit Feedback</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHROME EXTENSION INSTALLATION MODAL -->
+<div class="modal-backdrop" id="extensionModal">
+  <div class="modal-card" style="max-width: 580px;">
+    <div class="modal-title" style="color: #f59e0b;">
+      <span>&#129513;</span> NormMix Chrome Extension
+    </div>
+    <p style="font-size:13.5px; color:var(--text-secondary); margin-bottom:14px; line-height:1.5;">
+      Translate and normalize Telugu-English code-mixed text anywhere on the web (WhatsApp Web, Twitter/X, YouTube comments, Gmail) directly from your browser toolbar!
+    </p>
+
+    <div style="background:var(--surface-2); border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:16px;">
+      <div style="font-weight:700; font-size:13px; margin-bottom:10px; color:var(--cyan); display:flex; align-items:center; gap:6px;">
+        <span>&#128640;</span> Quick 1-Minute Free Installation:
+      </div>
+      <ol style="font-size:12.5px; color:var(--text-primary); padding-left:20px; line-height:1.6;">
+        <li>Download and extract the ZIP package below.</li>
+        <li>Open Chrome and navigate to <code style="background:var(--surface-3); padding:2px 6px; border-radius:4px; font-family:var(--font-mono);">chrome://extensions/</code></li>
+        <li>Turn ON <strong>Developer mode</strong> (toggle switch in the top-right corner).</li>
+        <li>Click <strong>Load unpacked</strong> and select the extracted <code style="background:var(--surface-3); padding:2px 6px; border-radius:4px; font-family:var(--font-mono);">chrome-extension</code> folder.</li>
+      </ol>
+    </div>
+
+    <div class="modal-actions" style="justify-content:space-between; align-items:center;">
+      <a href="normmix-chrome-extension-v0.5.0.zip" download class="nav-btn primary" style="background:#f59e0b; color:#0b0f19; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        Download Extension (.zip)
+      </a>
+      <button class="nav-btn" onclick="closeExtensionModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <strong>NormMix AI Studio</strong> &mdash; Advanced Artificial Intelligence & Neural Networks Mini-Project
+  </div>
+  <div>
+    Auto-Detect Universal Pipeline &middot; PyTorch 2.11 CUDA &middot; <a href="/docs">FastAPI OpenAPI</a> &middot; <a href="/report.pdf">PDF Report</a>
+  </div>
+</footer>
+
+<div id="toast" class="toast">Copied to clipboard!</div>
+
+<script>
+const API_BASE = (localStorage.getItem("tecm_api_base") || (window.location.origin.startsWith("http") ? window.location.origin : "http://127.0.0.1:8000")).replace(/\/$/, "");
+
+let currentMode = "auto";
+let currentTargetView = "normalized_code_mixed";
+let debounceTimer = null;
+let lastOmniResponse = null;
+let isRecordingVoice = false;
+let recognition = null;
+
+const ALL_SAMPLES = [
+  { text: "college lo project report ready ayindi", cat: "tanglish" },
+  { text: "hello ella vunnavuu", cat: "tanglish" },
+  { text: "naku ivala college lo important interview undi", cat: "tanglish" },
+  { text: "nuvvu ekkada unnav, class ki vastunnava?", cat: "tanglish" },
+  { text: "train ticket confirm ainda leda message chey", cat: "tanglish" },
+  { text: "కాలేజీలో ప్రాజెక్ట్ రిపోర్ట్ రెడీ అయింది", cat: "telugu" },
+  { text: "నాకు ఇవాళ ముఖ్యమైన పని ఉంది, సాయంత్రం కలుద్దాం", cat: "telugu" },
+  { text: "మీరు రేపు ఉదయం ఆఫీస్ కి వస్తారా?", cat: "telugu" },
+  { text: "ఈ ప్రాజెక్ట్ ప్రెజెంటేషన్ చాలా బాగుంది", cat: "telugu" },
+  { text: "నాకు ivala college లో interview ఉంది", cat: "biscript" },
+  { text: "office lo wifi router pani cheyatledu, meeting cancel chesaru", cat: "biscript" },
+  { text: "repu morning presentation submit cheyali", cat: "biscript" },
+  { text: "Where are you going today?", cat: "english" },
+  { text: "Please send me the project report tomorrow morning", cat: "english" },
+  { text: "I have an important interview today at university campus", cat: "english" }
+];
+
+const TELUGU_VOWELS = ["అ", "ఆ", "ఇ", "ఈ", "ఉ", "ఊ", "ఋ", "ఎ", "ఏ", "ఐ", "ఒ", "ఓ", "ఔ", "అం", "అః"];
+const TELUGU_CONSONANTS = [
+  "క", "ఖ", "గ", "ఘ", "ఙ", "చ", "ఛ", "జ", "ఝ", "ఞ",
+  "ట", "ఠ", "డ", "ఢ", "ణ", "త", "థ", "ద", "ధ", "న",
+  "ప", "ఫ", "బ", "భ", "మ", "య", "ర", "ల", "వ", "శ", "ష", "స", "హ", "ళ", "క్ష", "ఱ"
+];
+const TELUGU_MATRAS = ["ా", "ి", "ీ", "ు", "ూ", "ృ", "ె", "ే", "ై", "ొ", "ో", "ౌ", "్", "౦", "౧", "౨", "౩", "౪", "౫", "౬", "౭", "౮", "౯"];
+
+function $(id) { return document.getElementById(id); }
+
+// THEME TOGGLE
+function toggleTheme() {
+  const current = document.documentElement.getAttribute("data-theme") || "dark";
+  const next = current === "dark" ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("tecm_theme", next);
+  $("themeIcon").innerHTML = next === "dark" ? "&#9728;" : "&#9790;";
+}
+if (localStorage.getItem("tecm_theme") === "light") {
+  document.documentElement.setAttribute("data-theme", "light");
+  $("themeIcon").innerHTML = "&#9790;";
+}
+
+// SETUP VIRTUAL KEYBOARD
+function initVirtualKeyboard() {
+  const buildKeys = (containerId, chars) => {
+    const wrap = $(containerId);
+    wrap.innerHTML = "";
+    chars.forEach(ch => {
+      const btn = document.createElement("button");
+      btn.className = "kbd-key";
+      btn.textContent = ch;
+      btn.type = "button";
+      btn.onclick = () => insertAtCursor(ch);
+      wrap.appendChild(btn);
+    });
+  };
+  buildKeys("vowelKeys", TELUGU_VOWELS);
+  buildKeys("consonantKeys", TELUGU_CONSONANTS);
+  buildKeys("matraKeys", TELUGU_MATRAS);
+}
+initVirtualKeyboard();
+
+function toggleKeyboardDrawer() {
+  const drawer = $("keyboardDrawer");
+  const btn = $("kbdToggleBtn");
+  const isOpen = drawer.style.display === "block";
+  drawer.style.display = isOpen ? "none" : "block";
+  btn.className = "icon-tool-btn" + (isOpen ? "" : " active");
+}
+
+function insertAtCursor(text) {
+  const textarea = $("srcInput");
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const val = textarea.value;
+  textarea.value = val.substring(0, start) + text + val.substring(end);
+  textarea.selectionStart = textarea.selectionEnd = start + text.length;
+  textarea.focus();
+  updateCharCount();
+  if ($("liveTypingToggle").checked) {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(runExecution, 280);
+  }
+}
+
+// MODE SWITCHER
+function setMode(mode) {
+  currentMode = mode;
+  $("tabAuto").className = "tab-btn" + (mode === "auto" ? " active omni" : "");
+  $("tabNormalize").className = "tab-btn" + (mode === "normalize" ? " active" : "");
+  $("tabRomanize").className = "tab-btn" + (mode === "romanize" ? " active" : "");
+  $("tabDict").className = "tab-btn" + (mode === "dictionary" ? " active" : "");
+
+  if (mode === "dictionary") {
+    $("workbenchContainer").style.display = "none";
+    $("dictionarySection").style.display = "block";
+    searchLexicon();
+  } else {
+    $("workbenchContainer").style.display = "block";
+    $("dictionarySection").style.display = "none";
+
+    if (mode === "auto") {
+      $("srcTitle").textContent = "Source Text (Any Modality)";
+      $("tgtTitle").textContent = "Auto-Detected Target & All Options";
+      $("srcInput").placeholder = "Type or paste ANY text (English, Telugu script, Tanglish, or any mix)...";
+      $("langHint").textContent = "Auto-Detecting...";
+      $("viewPills").style.display = "flex";
+      filterSamples("all");
+    } else if (mode === "normalize") {
+      $("srcTitle").textContent = "Romanized Code-Mixed Input";
+      $("tgtTitle").textContent = "Normalized Output (Telugu + Preserved English)";
+      $("srcInput").placeholder = "Type Romanized Telugu-English (e.g., naku ivala college lo important interview undi)...";
+      $("langHint").textContent = "Tanglish (Romanized)";
+      $("viewPills").style.display = "none";
+      filterSamples("tanglish");
+    } else {
+      $("srcTitle").textContent = "Telugu Script Input";
+      $("tgtTitle").textContent = "Romanized Phonetic Tanglish Output";
+      $("srcInput").placeholder = "తెలుగు వాక్యం టైప్ చేయండి (e.g. నాకు ఇవాళ కాలేజీ లో ఇంటర్వ్యూ ఉంది)...";
+      $("langHint").textContent = "Telugu Script";
+      $("viewPills").style.display = "none";
+      filterSamples("telugu");
+    }
+    if ($("srcInput").value.trim()) runExecution();
+  }
+}
+
+function filterSamples(cat) {
+  ["cat_all", "cat_tanglish", "cat_telugu", "cat_biscript", "cat_english"].forEach(id => {
+    $(id).className = "sample-cat-btn" + (id === `cat_${cat}` ? " active" : "");
+  });
+  const filtered = cat === "all" ? ALL_SAMPLES : ALL_SAMPLES.filter(s => s.cat === cat);
+  renderSamples(filtered);
+}
+
+function renderSamples(samples) {
+  const wrap = $("samplesChips");
+  wrap.innerHTML = "";
+  samples.forEach(s => {
+    const chip = document.createElement("div");
+    chip.className = "sample-chip";
+    chip.textContent = s.text;
+    chip.onclick = () => {
+      $("srcInput").value = s.text;
+      updateCharCount();
+      runExecution();
+    };
+    wrap.appendChild(chip);
+  });
+}
+
+function updateCharCount() {
+  const val = $("srcInput").value;
+  const chars = val.length;
+  const words = val.trim() ? val.trim().split(/\s+/).length : 0;
+  $("charCount").textContent = `${chars} characters \u00b7 ${words} words`;
+}
+
+// LIVE TYPING & PHONETIC SUGGESTIONS
+$("srcInput").addEventListener("input", () => {
+  updateCharCount();
+  checkPhoneticSuggestions();
+  if (!$("liveTypingToggle").checked) return;
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    if ($("srcInput").value.trim().length >= 2) runExecution();
+  }, 280);
+});
+
+async function checkPhoneticSuggestions() {
+  const val = $("srcInput").value;
+  const pos = $("srcInput").selectionStart;
+  const beforeCursor = val.slice(0, pos);
+  const match = beforeCursor.match(/([a-zA-Z]+)$/);
+  if (!match || match[1].length < 2) {
+    $("suggestionsBar").style.display = "none";
+    return;
+  }
+  const currentWord = match[1].toLowerCase();
+  try {
+    const res = await fetch(`${API_BASE}/dictionary/lookup?q=${encodeURIComponent(currentWord)}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.matches || data.matches.length === 0) {
+      $("suggestionsBar").style.display = "none";
+      return;
+    }
+    const list = $("suggestionsList");
+    list.innerHTML = "";
+    data.matches.slice(0, 4).forEach((m, idx) => {
+      const chip = document.createElement("span");
+      chip.className = "suggestion-candidate" + (idx === 0 ? " selected" : "");
+      chip.innerHTML = `<span class="idx">${idx + 1}.</span> ${escapeHtml(m.tgt)}`;
+      chip.onclick = () => replaceCurrentWord(match[1], m.tgt);
+      list.appendChild(chip);
+    });
+    $("suggestionsBar").style.display = "flex";
+  } catch(e) {}
+}
+
+function replaceCurrentWord(oldWord, newWord) {
+  const val = $("srcInput").value;
+  const pos = $("srcInput").selectionStart;
+  const before = val.slice(0, pos - oldWord.length);
+  const after = val.slice(pos);
+  $("srcInput").value = before + newWord + (after.startsWith(" ") ? "" : " ") + after;
+  $("srcInput").selectionStart = $("srcInput").selectionEnd = before.length + newWord.length + 1;
+  $("suggestionsBar").style.display = "none";
+  $("srcInput").focus();
+  updateCharCount();
+  if ($("liveTypingToggle").checked) runExecution();
+}
+
+// VOICE INPUT (SPEECH-TO-TEXT)
+function toggleVoiceInput() {
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRec) {
+    showToast("Voice recognition is not supported in this browser.");
+    return;
+  }
+  if (isRecordingVoice) {
+    if (recognition) recognition.stop();
+    isRecordingVoice = false;
+    $("micBtn").className = "icon-tool-btn";
+    $("micLabel").textContent = "Speak";
+    return;
+  }
+  recognition = new SpeechRec();
+  recognition.lang = "te-IN"; // Telugu / English bilingual dictation
+  recognition.continuous = false;
+  recognition.interimResults = false;
+
+  recognition.onstart = () => {
+    isRecordingVoice = true;
+    $("micBtn").className = "icon-tool-btn recording";
+    $("micLabel").textContent = "Listening...";
+    showToast("Listening... Speak in Telugu or English.");
+  };
+  recognition.onresult = (e) => {
+    const text = e.results[0][0].transcript;
+    if (text) {
+      const val = $("srcInput").value;
+      $("srcInput").value = val ? `${val.trim()} ${text}` : text;
+      updateCharCount();
+      runExecution();
+    }
+  };
+  recognition.onerror = () => {
+    isRecordingVoice = false;
+    $("micBtn").className = "icon-tool-btn";
+    $("micLabel").textContent = "Speak";
+  };
+  recognition.onend = () => {
+    isRecordingVoice = false;
+    $("micBtn").className = "icon-tool-btn";
+    $("micLabel").textContent = "Speak";
+  };
+  recognition.start();
+}
+
+// TEXT-TO-SPEECH (TTS)
+function speakOutputText() {
+  const text = $("outputDisplay").textContent;
+  if (!text || text.includes("Type or pick any sample")) return;
+  if (!('speechSynthesis' in window)) {
+    showToast("Text-to-speech is not supported in this browser.");
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  const voices = window.speechSynthesis.getVoices();
+  if (currentTargetView === "english_translation") {
+    const enVoice = voices.find(v => v.lang.includes("en"));
+    if (enVoice) utter.voice = enVoice;
+  } else {
+    const teVoice = voices.find(v => v.lang.includes("te") || v.lang.includes("TE"));
+    if (teVoice) utter.voice = teVoice;
+  }
+  utter.rate = 0.95;
+  window.speechSynthesis.speak(utter);
+  showToast("Playing audio...");
+}
+
+// SHARE & EXPORT ACTIONS
+function shareWhatsApp() {
+  const text = $("outputDisplay").textContent;
+  if (!text || text.includes("Type or pick any sample")) return;
+  const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+  window.open(url, "_blank");
+}
+
+function downloadTxt() {
+  const text = $("outputDisplay").textContent;
+  if (!text || text.includes("Type or pick any sample")) return;
+  const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "normalized_telugu_english.txt";
+  a.click();
+  showToast("Downloaded text file.");
+}
+
+function clearInput() {
+  $("srcInput").value = "";
+  $("outputDisplay").innerHTML = '<span class="output-placeholder">Type or pick any sample to see auto-detected output options...</span>';
+  $("tokenBadges").style.display = "none";
+  $("detectBanner").style.display = "none";
+  $("suggestionsBar").style.display = "none";
+  $("diagnosticTableWrap").style.display = "none";
+  $("textOutputArea").style.display = "block";
+  $("metaInfo").textContent = "Ready";
+  $("confidenceBadge").textContent = "";
+  lastOmniResponse = null;
+  updateCharCount();
+}
+
+function showToast(msg) {
+  const toast = $("toast");
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2200);
+}
+
+function copyCurrentOutput() {
+  let textToCopy = "";
+  if (currentMode === "auto" && lastOmniResponse) {
+    if (currentTargetView === "diagnostic") {
+      textToCopy = JSON.stringify(lastOmniResponse.tokens, null, 2);
+    } else {
+      textToCopy = lastOmniResponse.options[currentTargetView] || $("outputDisplay").textContent;
+    }
+  } else {
+    textToCopy = $("outputDisplay").textContent;
+  }
+  if (!textToCopy) return;
+  navigator.clipboard.writeText(textToCopy).then(() => {
+    showToast("Copied to clipboard!");
+  }).catch(() => {});
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+function tagTokens(text) {
+  return text.split(/\s+/).map(tok => {
+    if (!tok) return "";
+    const isTe = /[\u0C00-\u0C7F]/.test(tok);
+    const isEn = /[a-zA-Z]/.test(tok);
+    const cls = isTe ? "telugu" : (isEn ? "english" : "punct");
+    const label = isTe ? "TE" : (isEn ? "EN" : "SYM");
+    return `<span class="token-badge ${cls}"><span class="lbl">${label}</span>${escapeHtml(tok)}</span>`;
+  }).join(" ");
+}
+
+function switchTargetView(viewName) {
+  currentTargetView = viewName;
+  ["pill_norm", "pill_en", "pill_pure_te", "pill_te", "pill_rom", "pill_gloss", "pill_diag"].forEach(id => {
+    const el = $(id);
+    if (el) el.classList.remove("active");
+  });
+
+  if (viewName === "normalized_code_mixed") $("pill_norm")?.classList.add("active");
+  else if (viewName === "english_translation") $("pill_en")?.classList.add("active");
+  else if (viewName === "pure_telugu") $("pill_pure_te")?.classList.add("active");
+  else if (viewName === "all_telugu_script") $("pill_te")?.classList.add("active");
+  else if (viewName === "all_romanized_tanglish") $("pill_rom")?.classList.add("active");
+  else if (viewName === "english_gloss") $("pill_gloss")?.classList.add("active");
+  else if (viewName === "diagnostic") $("pill_diag")?.classList.add("active");
+
+  if (!lastOmniResponse) return;
+
+  if (viewName === "diagnostic") {
+    $("textOutputArea").style.display = "none";
+    $("diagnosticTableWrap").style.display = "block";
+    renderDiagnosticTable(lastOmniResponse.tokens);
+  } else {
+    $("textOutputArea").style.display = "block";
+    $("diagnosticTableWrap").style.display = "none";
+    const text = lastOmniResponse.options[viewName] || "";
+    $("outputDisplay").innerHTML = escapeHtml(text);
+    const badges = $("tokenBadges");
+    badges.innerHTML = tagTokens(text);
+    badges.style.display = "flex";
+
+    const meaning = lastOmniResponse.options.prescribed_meaning || lastOmniResponse.options.english_translation || "";
+    const mCard = $("webPrescribedMeaningCard");
+    const mText = $("webPrescribedMeaningText");
+    if (mCard && mText) {
+      if (meaning && viewName !== "english_translation") {
+        mCard.style.display = "block";
+        mText.textContent = meaning;
+      } else {
+        mCard.style.display = "none";
+      }
+    }
+  }
+}
+
+function copyWebMeaning() {
+  const el = $("webPrescribedMeaningText");
+  if (!el || !el.textContent) return;
+  navigator.clipboard.writeText(el.textContent);
+  showToast("Prescribed meaning copied!");
+}
+
+function renderDiagnosticTable(tokens) {
+  const tbody = $("diagnosticTableBody");
+  tbody.innerHTML = "";
+  tokens.forEach(t => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td><strong>${escapeHtml(t.source)}</strong></td>
+      <td>${escapeHtml(t.normalized)}</td>
+      <td>${escapeHtml(t.telugu_script)}</td>
+      <td>${escapeHtml(t.romanized)}</td>
+      <td><span class="token-badge ${t.tag === 'TE' ? 'telugu' : (t.tag === 'EN' ? 'english' : 'punct')}">${t.tag}</span></td>
+      <td style="color:var(--text-secondary);">${escapeHtml(t.gloss || "-")}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function toggleDirection() {
+  const currentText = $("srcInput").value.trim();
+  let targetText = "";
+  if (lastOmniResponse) {
+    if (currentTargetView === "all_romanized_tanglish") {
+      targetText = lastOmniResponse.options.all_romanized_tanglish;
+    } else if (currentTargetView === "english_translation") {
+      targetText = lastOmniResponse.options.english_translation;
+    } else if (currentTargetView === "pure_telugu") {
+      targetText = lastOmniResponse.options.pure_telugu;
+    } else {
+      targetText = lastOmniResponse.options.normalized_code_mixed;
+    }
+  } else {
+    targetText = $("outputDisplay").textContent;
+  }
+  if (targetText && !targetText.includes("Type or pick any sample")) {
+    $("srcInput").value = targetText;
+    updateCharCount();
+    runExecution();
+  }
+}
+
+async function runExecution() {
+  const text = $("srcInput").value.trim();
+  if (!text) return;
+
+  $("metaInfo").textContent = "Processing auto-detection & neural inference...";
+  $("confidenceBadge").textContent = "";
+
+  try {
+    const t0 = performance.now();
+
+    if (currentMode === "auto") {
+      const payload = {
+        text: text,
+        engine: $("engineSelect").value,
+        beam_size: parseInt($("beamSelect").value) || 4,
+        n_best: 1
+      };
+      const res = await fetch(`${API_BASE}/omni/process`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      lastOmniResponse = data;
+      const rtt = Math.round(performance.now() - t0);
+
+      const banner = $("detectBanner");
+      banner.style.display = "flex";
+      $("detectLabel").textContent = `Auto-Detected: ${data.detected.label}`;
+      $("detectStats").textContent = `${data.detected.telugu_char_pct}% Telugu, ${data.detected.latin_char_pct}% Latin \u00b7 ${(data.detected.confidence * 100).toFixed(0)}% conf`;
+      $("langHint").textContent = data.detected.label;
+
+      switchTargetView(currentTargetView);
+
+      $("metaInfo").textContent = `detected: ${data.detected.modality} \u00b7 backend: ${data.latency_ms}ms (RTT ${rtt}ms)`;
+      $("confidenceBadge").textContent = `${(data.recommended.confidence * 100).toFixed(1)}% model conf`;
+      $("latencyVal").textContent = `${data.latency_ms} ms`;
+
+    } else if (currentMode === "normalize") {
+      const payload = {
+        text: text,
+        engine: $("engineSelect").value,
+        beam_size: parseInt($("beamSelect").value) || 4,
+        n_best: 1
+      };
+      if ($("modelSelect").value) payload.model = $("modelSelect").value;
+      const res = await fetch(`${API_BASE}/normalize`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const rtt = Math.round(performance.now() - t0);
+      const topHyp = data.hypotheses[0];
+
+      $("outputDisplay").innerHTML = escapeHtml(topHyp.text);
+      const badges = $("tokenBadges");
+      badges.innerHTML = tagTokens(topHyp.text);
+      badges.style.display = "flex";
+      $("metaInfo").textContent = `engine: ${data.engine_used} \u00b7 backend: ${data.latency_ms}ms (RTT ${rtt}ms)`;
+      $("confidenceBadge").textContent = `${(topHyp.confidence * 100).toFixed(1)}% confidence`;
+      $("latencyVal").textContent = `${data.latency_ms} ms`;
+
+    } else {
+      const res = await fetch(`${API_BASE}/romanize`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text })
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const rtt = Math.round(performance.now() - t0);
+
+      $("outputDisplay").innerHTML = escapeHtml(data.romanized);
+      const badges = $("tokenBadges");
+      badges.innerHTML = tagTokens(data.romanized);
+      badges.style.display = "flex";
+      $("metaInfo").textContent = `mode: phonetic romanization \u00b7 backend: ${data.latency_ms}ms (RTT ${rtt}ms)`;
+      $("confidenceBadge").textContent = `Rule SOTA`;
+      $("latencyVal").textContent = `${data.latency_ms} ms`;
+    }
+  } catch (err) {
+    $("outputDisplay").innerHTML = `<span style="color:var(--rose)">Inference error: ${escapeHtml(err.message)}</span>`;
+    $("metaInfo").textContent = "Error communicating with API backend";
+  }
+}
+
+// EXTENSION MODAL
+function openExtensionModal() {
+  $("extensionModal").style.display = "flex";
+}
+function closeExtensionModal() {
+  $("extensionModal").style.display = "none";
+}
+
+// FEEDBACK MODAL
+function openFeedbackModal() {
+  $("feedbackCorrection").value = "";
+  $("feedbackComments").value = "";
+  $("feedbackModal").style.display = "flex";
+}
+function closeFeedbackModal() {
+  $("feedbackModal").style.display = "none";
+}
+async function submitRating(rating) {
+  const input_text = $("srcInput").value.trim();
+  const output_text = $("outputDisplay").textContent.trim();
+  if (!input_text || !output_text) return;
+  try {
+    const res = await fetch(`${API_BASE}/feedback`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ input_text, output_text, rating, mode: currentMode })
+    });
+    if (res.ok) showToast("Thank you for your rating!");
+  } catch(e) {}
+}
+async function submitCorrectionFeedback() {
+  const input_text = $("srcInput").value.trim();
+  const output_text = $("outputDisplay").textContent.trim();
+  const correction = $("feedbackCorrection").value.trim();
+  const comments = $("feedbackComments").value.trim();
+  if (!correction && !comments) {
+    showToast("Please provide a correction or comment.");
+    return;
+  }
+  try {
+    const res = await fetch(`${API_BASE}/feedback`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ input_text, output_text, rating: "negative", mode: currentMode, correction, comments })
+    });
+    if (res.ok) {
+      showToast("Thank you! Feedback recorded for model reinforcement.");
+      closeFeedbackModal();
+    }
+  } catch(e) {}
+}
+
+async function searchLexicon() {
+  const q = ($("dictQuery").value.trim() || "college");
+  try {
+    const res = await fetch(`${API_BASE}/dictionary/lookup?q=${encodeURIComponent(q)}`);
+    if (!res.ok) return;
+    const data = await res.json();
+    $("dictStatus").textContent = `Found ${data.count} lexicon matches for "${escapeHtml(data.query)}" (from 64,421 total corpus)`;
+    const grid = $("dictGrid");
+    grid.innerHTML = "";
+    if (data.matches.length === 0) {
+      grid.innerHTML = `<div style="grid-column: 1/-1; color:var(--text-muted); padding:20px; text-align:center;">No direct matches found. Try queries like "college", "train", "office", "vellali", "repu".</div>`;
+      return;
+    }
+    data.matches.forEach(m => {
+      const card = document.createElement("div");
+      card.className = "dict-card";
+      card.innerHTML = `
+        <div>
+          <div class="dict-src">${escapeHtml(m.src)}</div>
+          <div class="dict-tgt">${escapeHtml(m.tgt)}</div>
+        </div>
+        <span class="dict-tag">${escapeHtml(m.match)}</span>
+      `;
+      grid.appendChild(card);
+    });
+  } catch(e) {}
+}
+
+async function loadSystemHealth() {
+  try {
+    const res = await fetch(`${API_BASE}/health`);
+    if (res.ok) {
+      const h = await res.json();
+      $("deviceVal").textContent = h.device.toUpperCase();
+    }
+    const mres = await fetch(`${API_BASE}/models`);
+    if (mres.ok) {
+      const models = await mres.json();
+      $("modelSelect").innerHTML = "";
+      models.forEach(m => {
+        const opt = document.createElement("option");
+        opt.value = m.name === "rule_baseline" ? "" : m.name;
+        opt.textContent = `${m.name}${m.is_default ? " (Production SOTA)" : ""}`;
+        if (m.is_default) opt.selected = true;
+        $("modelSelect").appendChild(opt);
+      });
+    }
+  } catch (e) {}
+}
+
+filterSamples("all");
+loadSystemHealth();
+</script>
+</body>
+</html>

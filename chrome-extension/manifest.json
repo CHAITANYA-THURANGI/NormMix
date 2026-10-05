@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "NormMix AI - Universal Telugu-English Normalizer",
+  "version": "0.5.0",
+  "description": "Normalize and translate English, Telugu, and Romanized Tanglish code-mixed text using SOTA Attention Seq2Seq with Pointer-Generator Copy Mechanism.",
+  "permissions": ["storage", "contextMenus", "activeTab", "scripting"],
+  "host_permissions": ["http://127.0.0.1:8000/*", "http://localhost:8000/*", "https://*/*"],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "NormMix AI Universal Normalizer"
+  },
+  "background": {
+    "service_worker": "background/service_worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content/content_script.js"],
+      "css": ["content/content_style.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "assets/icon16.png",
+    "48": "assets/icon48.png",
+    "128": "assets/icon128.png"
+  }
+}

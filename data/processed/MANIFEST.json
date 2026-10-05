@@ -1,0 +1,77 @@
+{
+  "splits": {
+    "gold_demo": {
+      "rows": 4,
+      "sha256_16": "6a2fccf80b573a6f",
+      "bytes": 1029
+    },
+    "test": {
+      "rows": 280,
+      "sha256_16": "003f083593508130",
+      "bytes": 81968
+    },
+    "test_hard": {
+      "rows": 40,
+      "sha256_16": "dff310478537ac6d",
+      "bytes": 12143
+    },
+    "test_unseen_words": {
+      "rows": 322,
+      "sha256_16": "7128d0f5a3637e9c",
+      "bytes": 99117
+    },
+    "train": {
+      "rows": 1862,
+      "sha256_16": "bb9cb349a403a00b",
+      "bytes": 563945
+    },
+    "valid": {
+      "rows": 238,
+      "sha256_16": "5946f10d970ce921",
+      "bytes": 72629
+    }
+  },
+  "build_stats": {
+    "n_pairs": {
+      "train": 1862,
+      "valid": 238,
+      "test": 280,
+      "test_unseen_words": 322,
+      "test_hard": 40,
+      "gold_demo": 4
+    },
+    "n_clean_targets": 197,
+    "filtered_out": 0,
+    "dedupe": {
+      "removed_duplicates": 0,
+      "conflicting_sources": 0,
+      "conflict_examples": {}
+    },
+    "leakage": {
+      "valid": {
+        "shared_groups_with_train": 0,
+        "shared_sources_with_train": 0
+      },
+      "test": {
+        "shared_groups_with_train": 0,
+        "shared_sources_with_train": 0
+      },
+      "test_unseen_words": {
+        "shared_groups_with_train": 0,
+        "shared_sources_with_train": 0
+      },
+      "test_hard": {
+        "shared_groups_with_train": 0,
+        "shared_sources_with_train": 0
+      },
+      "ok": true
+    },
+    "mix_distribution_train": {
+      "telugu_heavy": 1148,
+      "balanced": 658,
+      "english_heavy": 56
+    },
+    "external_used": false,
+    "warning": "Seed data is a template-driven toy corpus; see docs/dataset.md before reporting results."
+  }
+}

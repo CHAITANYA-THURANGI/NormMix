@@ -1,0 +1,3 @@
+# Baseline 2: plain Seq2Seq (no attention) -- shows the information bottleneck attention fixes.
+model: {type: rnn, attention: none, rnn_type: gru}
+train: {run_name: plain_seq2seq}

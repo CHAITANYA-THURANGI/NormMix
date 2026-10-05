@@ -1,0 +1,2 @@
+model: {type: rnn, attention: luong_general, rnn_type: gru}
+train: {run_name: attn_luong_general}

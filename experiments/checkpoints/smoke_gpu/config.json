@@ -1,0 +1,98 @@
+{
+  "seed": 42,
+  "deterministic": false,
+  "data": {
+    "processed_dir": "data/processed",
+    "external_dir": "data/external",
+    "variants_per_sentence": 14,
+    "valid_frac": 0.1,
+    "test_frac": 0.1,
+    "heldout_words": [
+      "canteen",
+      "charger",
+      "interview",
+      "mall"
+    ],
+    "p_identity": 0.04,
+    "clamp_repeats": 3,
+    "max_chars": 300,
+    "conflict_policy": "majority",
+    "noise": {},
+    "train_sources": [
+      {
+        "path": "data/processed/train_comprehensive.jsonl",
+        "weight": 1.0
+      }
+    ],
+    "valid_path": "data/processed/valid_comprehensive.jsonl",
+    "max_src_len": 160,
+    "max_tgt_len": 160
+  },
+  "tokenizer": {
+    "type": "char",
+    "min_freq": 1,
+    "vocab_size": 500
+  },
+  "model": {
+    "type": "rnn",
+    "rnn_type": "gru",
+    "attention": "scaled_dot",
+    "emb_dim": 128,
+    "hid_dim": 256,
+    "enc_layers": 2,
+    "dec_layers": 1,
+    "dropout": 0.2,
+    "attn_dim": 128,
+    "d_model": 128,
+    "nhead": 4,
+    "ff_dim": 384,
+    "tf_enc_layers": 3,
+    "tf_dec_layers": 3,
+    "use_copy": true
+  },
+  "train": {
+    "run_name": "smoke_gpu",
+    "out_dir": "experiments/checkpoints",
+    "log_dir": "experiments/logs",
+    "epochs": 1,
+    "batch_size": 64,
+    "optimizer": "adamw",
+    "lr": 0.0015,
+    "weight_decay": 0.0,
+    "scheduler": "plateau",
+    "warmup_steps": 400,
+    "label_smoothing": 0.05,
+    "grad_clip": 1.0,
+    "tf_ratio_start": 1.0,
+    "tf_ratio_end": 0.8,
+    "patience": 4,
+    "monitor": "valid_cer",
+    "eval_every": 1,
+    "eval_samples": 300,
+    "mixed_precision": true,
+    "num_workers": 0,
+    "tensorboard": false,
+    "wandb": false
+  },
+  "decode": {
+    "beam_size": 1,
+    "max_len": 160,
+    "length_penalty": 1.0
+  },
+  "inference": {
+    "checkpoint": "experiments/checkpoints/attn_bahdanau/best.pt",
+    "lexicon": "data/processed/rule_baseline.json",
+    "beam_size": 4,
+    "n_best": 3,
+    "max_chars": 2000
+  },
+  "api": {
+    "host": "127.0.0.1",
+    "port": 8000,
+    "max_batch": 32,
+    "rate_limit_per_min": 120,
+    "cors_origins": [
+      "*"
+    ]
+  }
+}

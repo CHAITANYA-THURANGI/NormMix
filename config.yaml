@@ -1,0 +1,86 @@
+# Default configuration. Experiment configs in experiments/configs/*.yaml override any key here.
+# CLI overrides: python scripts/train.py --config experiments/configs/attn_bahdanau.yaml train.epochs=5
+seed: 42
+deterministic: false
+
+data:
+  processed_dir: data/processed
+  external_dir: data/external          # where downloaded datasets live (see data/DATASETS.md)
+  variants_per_sentence: 14            # noisy sources generated per clean target
+  valid_frac: 0.10
+  test_frac: 0.10
+  heldout_words: [canteen, charger, interview, mall]   # English words only seen in test_unseen_words
+  p_identity: 0.04                     # share of already-clean (Telugu-script) inputs
+  clamp_repeats: 3
+  max_chars: 300
+  conflict_policy: majority            # majority | drop
+  noise: {}                            # any NoiseConfig field, e.g. {strength: 1.5}
+  train_sources:                       # weighted mixture; add real data files here
+    - {path: data/processed/train.jsonl, weight: 1.0}
+  valid_path: data/processed/valid.jsonl
+  max_src_len: 128
+  max_tgt_len: 128
+
+tokenizer:
+  type: char                           # char | unigram | bpe
+  min_freq: 1
+  vocab_size: 500                      # spm only
+
+model:
+  type: rnn                            # rnn | transformer
+  rnn_type: gru                        # gru | lstm
+  attention: bahdanau                  # none | bahdanau | luong_dot | luong_general | luong_concat | scaled_dot
+  emb_dim: 96
+  hid_dim: 192
+  enc_layers: 1
+  dec_layers: 1
+  dropout: 0.2
+  attn_dim: 96
+  d_model: 128                         # transformer only
+  nhead: 4
+  ff_dim: 384
+  tf_enc_layers: 3
+  tf_dec_layers: 3
+
+train:
+  run_name: attn_bahdanau
+  out_dir: experiments/checkpoints
+  log_dir: experiments/logs
+  epochs: 40
+  batch_size: 32
+  optimizer: adamw
+  lr: 0.002
+  weight_decay: 0.0
+  scheduler: plateau                   # plateau | warmup_inv_sqrt | none
+  warmup_steps: 400
+  label_smoothing: 0.05
+  grad_clip: 1.0
+  tf_ratio_start: 1.0                  # <1.0 enables scheduled sampling (RNN models)
+  tf_ratio_end: 1.0
+  patience: 8
+  monitor: valid_cer                   # valid_cer | valid_loss | valid_em
+  eval_every: 1
+  eval_samples: 300
+  mixed_precision: true                # used only on CUDA
+  num_workers: 0
+  tensorboard: false
+  wandb: false
+
+decode:
+  beam_size: 1
+  max_len: 160
+  length_penalty: 1.0
+
+inference:
+  checkpoint: experiments/checkpoints/attn_bahdanau/best.pt
+  lexicon: data/processed/rule_baseline.json
+  beam_size: 4
+  n_best: 3
+  max_chars: 2000
+
+api:
+  host: 127.0.0.1
+  port: 8000
+  max_batch: 32
+  rate_limit_per_min: 120
+  cors_origins: ["*"]                  # tighten for production; chrome-extension:// origins are allowed

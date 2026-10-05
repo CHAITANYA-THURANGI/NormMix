@@ -1,0 +1,3 @@
+# Primary model: Bahdanau (additive) attention -- the focus of this project.
+model: {type: rnn, attention: bahdanau, rnn_type: gru}
+train: {run_name: attn_bahdanau}

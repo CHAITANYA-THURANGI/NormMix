@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>NormMix AI &mdash; Universal Telugu-English Normalizer</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="header">
+    <div class="brand">
+      <span class="logo">&#2344;</span>
+      <span class="title">NormMix AI</span>
+    </div>
+    <span class="badge">Universal</span>
+  </div>
+
+  <textarea id="input" placeholder="Type or paste English, Telugu, or Tanglish..." maxlength="2000"></textarea>
+
+  <div class="samples-bar">
+    <span class="samples-label">Quick:</span>
+    <button class="chip" type="button" data-sample="Hi Ella, vunnavu. Are you coming to college?">Hi Ella (Mixed)</button>
+    <button class="chip" type="button" data-sample="college lo project report ready ayindi">Project Report</button>
+    <button class="chip" type="button" data-sample="office ki important interview undi">Interview</button>
+  </div>
+
+  <div class="row">
+    <select id="engine">
+      <option value="auto">Auto (SOTA)</option>
+      <option value="neural">Neural BiGRU</option>
+      <option value="rule">Rule Baseline</option>
+    </select>
+    <button id="run">Process &rarr;</button>
+  </div>
+
+  <div id="status" class="status"></div>
+
+  <div id="detectBadge" class="detect-badge" style="display:none;"></div>
+
+  <div class="view-tabs" id="viewTabs" style="display:none;">
+    <button class="v-tab active" id="tabNorm" type="button">Normalized</button>
+    <button class="v-tab" id="tabEn" type="button">English</button>
+    <button class="v-tab" id="tabPureTe" type="button">Pure Telugu</button>
+    <button class="v-tab" id="tabTe" type="button">Telugu Script</button>
+    <button class="v-tab" id="tabRom" type="button">Tanglish</button>
+    <button class="v-tab" id="tabGloss" type="button">Word Meaning</button>
+  </div>
+
+  <div id="output" class="output-card" style="display:none;">
+    <div class="output-header-bar">
+      <span class="output-type-badge" id="outputTypeBadge">Normalized Output</span>
+      <button class="copy-btn" id="copyBtn" type="button">Copy</button>
+    </div>
+    <div id="outputText" class="output-text"></div>
+    <div class="output-footer">
+      <span id="metaLabel"></span>
+    </div>
+  </div>
+
+  <div id="meaningCard" class="meaning-card" style="display:none;">
+    <div class="meaning-header-bar">
+      <span class="meaning-badge">📖 Prescribed Meaning (English)</span>
+      <button class="mini-copy-btn" id="copyMeaningBtn" type="button">Copy Meaning</button>
+    </div>
+    <div id="meaningText" class="meaning-text"></div>
+  </div>
+
+  <details>
+    <summary>Settings</summary>
+    <label>API Base URL<br/><input id="apiBase" type="text" placeholder="http://127.0.0.1:8000" /></label>
+    <button id="save" type="button" style="margin-top:6px;">Save API URL</button>
+  </details>
+  <script src="popup.js"></script>
+</body>
+</html>

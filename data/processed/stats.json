@@ -1,0 +1,64 @@
+{
+  "n_pairs": {
+    "train": 25803,
+    "valid": 3419,
+    "test": 3168,
+    "test_unseen_words": 336,
+    "test_hard": 172,
+    "gold_demo": 4
+  },
+  "n_clean_targets": 962,
+  "filtered_out": 575,
+  "dedupe": {
+    "removed_duplicates": 60,
+    "conflicting_sources": 23,
+    "conflict_examples": {
+      "mahanadi": [
+        "మహానంది",
+        "మహానది"
+      ],
+      "pali": [
+        "పాలి",
+        "పాళీ"
+      ],
+      "rallu": [
+        "రాళ్లు",
+        "రాళ్ళూ"
+      ],
+      "chera": [
+        "చెర",
+        "చేర"
+      ],
+      "mahadeva": [
+        "మహదేవ",
+        "మహాదేవ"
+      ]
+    }
+  },
+  "leakage": {
+    "valid": {
+      "shared_groups_with_train": 0,
+      "shared_sources_with_train": 0
+    },
+    "test": {
+      "shared_groups_with_train": 0,
+      "shared_sources_with_train": 0
+    },
+    "test_unseen_words": {
+      "shared_groups_with_train": 0,
+      "shared_sources_with_train": 0
+    },
+    "test_hard": {
+      "shared_groups_with_train": 0,
+      "shared_sources_with_train": 0
+    },
+    "ok": true
+  },
+  "mix_distribution_train": {
+    "telugu_heavy": 24722,
+    "balanced": 994,
+    "english_heavy": 87
+  },
+  "external_used": true,
+  "warning": "Seed data is a template-driven toy corpus; see docs/dataset.md before reporting results."
+}

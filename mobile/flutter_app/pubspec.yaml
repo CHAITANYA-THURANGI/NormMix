@@ -1,0 +1,20 @@
+name: telugu_english_normalizer
+description: Mobile client for the Telugu-English code-mixed text normalization API.
+publish_to: "none"
+version: 0.4.0
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.2.0
+  shared_preferences: ^2.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true

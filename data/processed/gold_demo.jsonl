@@ -1,0 +1,4 @@
+{"src": "naku ivala college ki vellali", "tgt": "నాకు ఇవాళ college కి వెళ్ళాలి", "source": "gold_demo", "group": "bc4e33c52ec7120e", "kind": "gold", "comp": {"n_te": 4, "n_en": 1, "en_ratio": 0.2, "switches": 2, "mix": "telugu_heavy"}}
+{"src": "nuvvu ekkada unnav", "tgt": "నువ్వు ఎక్కడ ఉన్నావు?", "source": "gold_demo", "group": "964b092f369e380b", "kind": "gold", "comp": {"n_te": 3, "n_en": 0, "en_ratio": 0.0, "switches": 0, "mix": "telugu_heavy"}}
+{"src": "class ki vastunnava?", "tgt": "class కి వస్తున్నావా?", "source": "gold_demo", "group": "169102ea17d24de5", "kind": "gold", "comp": {"n_te": 2, "n_en": 1, "en_ratio": 0.333, "switches": 1, "mix": "balanced"}}
+{"src": "naku telugu chala istam", "tgt": "నాకు తెలుగు చాలా ఇష్టం", "source": "gold_demo", "group": "ff863f1fe80013c4", "kind": "gold", "comp": {"n_te": 4, "n_en": 0, "en_ratio": 0.0, "switches": 0, "mix": "telugu_heavy"}}

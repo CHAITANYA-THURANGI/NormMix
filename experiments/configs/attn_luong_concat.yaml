@@ -1,0 +1,2 @@
+model: {type: rnn, attention: luong_concat, rnn_type: lstm}
+train: {run_name: attn_luong_concat}
