@@ -110,11 +110,28 @@ class RecommendedOutput(BaseModel):
 class OmniOptions(BaseModel):
     normalized_code_mixed: str
     english_translation: str = ""
+    pure_english: str = ""
     pure_telugu: str = ""
     all_telugu_script: str
     all_romanized_tanglish: str
     english_gloss: str
     prescribed_meaning: str = ""
+
+
+class TranslateRequest(BaseModel):
+    text: str = Field(..., min_length=1, max_length=MAX_TEXT_CHARS)
+    target: Literal["english", "pure_english", "pure_telugu"] = "english"
+    engine: Literal["neural", "rule", "auto"] = "auto"
+
+
+class TranslateResponse(BaseModel):
+    input: str
+    target: str
+    translation: str
+    english_translation: str = ""
+    pure_english: str = ""
+    latency_ms: float
+
 
 
 class OmniProcessRequest(BaseModel):

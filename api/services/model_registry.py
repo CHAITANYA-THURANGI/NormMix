@@ -60,3 +60,16 @@ class ModelRegistry:
         model, src_tok, tgt_tok, _ = self.get(name)
         hyps = translate_texts(model, src_tok, tgt_tok, texts, self.device, beam_size=beam_size, n_best=n_best)
         return [[{"text": h["text"], "confidence": h["confidence"]} for h in hs] for hs in hyps], "neural", name
+
+    def translate(self, texts: list[str], model_name: str | None = "translation_sota", beam_size: int = 4, n_best: int = 1) -> list[str] | None:
+        """Translates Telugu/Tanglish texts to English using neural translation model on GPU."""
+        name = model_name or "translation_sota"
+        if name in self.available_models():
+            try:
+                model, src_tok, tgt_tok, _ = self.get(name)
+                hyps = translate_texts(model, src_tok, tgt_tok, texts, self.device, beam_size=beam_size, n_best=n_best)
+                return [hs[0]["text"] if hs else "" for hs in hyps]
+            except Exception:
+                return None
+        return None
+

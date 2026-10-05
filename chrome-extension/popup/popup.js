@@ -16,6 +16,7 @@ let currentView = "normalized_code_mixed";
 const VIEW_LABELS = {
   "normalized_code_mixed": "Normalized Code-Mixed",
   "english_translation": "English Translation",
+  "pure_english": "Pure English (శుద్ధ ఆంగ్లం)",
   "pure_telugu": "Pure Telugu (అచ్చ తెలుగు)",
   "all_telugu_script": "Telugu Script (తెలుగు లిపి)",
   "all_romanized_tanglish": "Tanglish (రోమనైజ్డ్)",
@@ -34,12 +35,13 @@ async function init() {
 
 function switchView(viewName) {
   currentView = viewName;
-  ["tabNorm", "tabEn", "tabPureTe", "tabTe", "tabRom", "tabGloss"].forEach(id => {
+  ["tabNorm", "tabEn", "tabPureEn", "tabPureTe", "tabTe", "tabRom", "tabGloss"].forEach(id => {
     const el = $(id);
     if (el) el.classList.remove("active");
   });
   if (viewName === "normalized_code_mixed") $("tabNorm")?.classList.add("active");
   else if (viewName === "english_translation") $("tabEn")?.classList.add("active");
+  else if (viewName === "pure_english") $("tabPureEn")?.classList.add("active");
   else if (viewName === "pure_telugu") $("tabPureTe")?.classList.add("active");
   else if (viewName === "all_telugu_script") $("tabTe")?.classList.add("active");
   else if (viewName === "all_romanized_tanglish") $("tabRom")?.classList.add("active");
@@ -119,6 +121,7 @@ async function run() {
 // Attach event listeners cleanly
 $("tabNorm").addEventListener("click", () => switchView("normalized_code_mixed"));
 $("tabEn").addEventListener("click", () => switchView("english_translation"));
+$("tabPureEn").addEventListener("click", () => switchView("pure_english"));
 $("tabPureTe").addEventListener("click", () => switchView("pure_telugu"));
 $("tabTe").addEventListener("click", () => switchView("all_telugu_script"));
 $("tabRom").addEventListener("click", () => switchView("all_romanized_tanglish"));

@@ -1,0 +1,36 @@
+# SOTA Neural Translation Model Configuration (Telugu / Tanglish -> English & Pure English)
+# High-capacity Bidirectional Encoder + Multi-Head Scaled Dot-Product Attention
+# Hardware accelerated for NVIDIA GeForce RTX 4060 GPU with CUDA FP16 AMP
+
+data:
+  train_sources:
+    - {path: data/processed/train_translation.jsonl, weight: 1.0}
+  valid_path: data/processed/valid_translation.jsonl
+  max_src_len: 160
+  max_tgt_len: 160
+
+model:
+  type: rnn
+  rnn_type: gru
+  attention: scaled_dot
+  emb_dim: 128
+  hid_dim: 256
+  enc_layers: 2
+  dec_layers: 1
+  dropout: 0.2
+  attn_dim: 128
+  use_copy: false
+
+train:
+  run_name: translation_sota
+  batch_size: 32
+  lr: 0.002
+  epochs: 15
+  patience: 6
+  eval_every: 1
+  eval_samples: 133
+  mixed_precision: true
+  label_smoothing: 0.05
+  grad_clip: 1.0
+  tf_ratio_start: 1.0
+  tf_ratio_end: 0.8

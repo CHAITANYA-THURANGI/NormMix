@@ -26,7 +26,8 @@ import uuid
 
 from api.schemas import (BatchNormalizeRequest, BatchNormalizeResponse, HealthResponse, ModelInfo,
                          NormalizeRequest, NormalizeResponse, RomanizeResponse, Hypothesis,
-                         OmniProcessRequest, OmniProcessResponse, FeedbackRequest, FeedbackResponse)
+                         OmniProcessRequest, OmniProcessResponse, FeedbackRequest, FeedbackResponse,
+                         TranslateRequest, TranslateResponse)
 
 from api.services.model_registry import ModelRegistry
 from api.services.rate_limit import RateLimiter
@@ -124,6 +125,31 @@ def romanize_endpoint(req: NormalizeRequest):
 @app.post("/omni/process", response_model=OmniProcessResponse)
 def omni_process_endpoint(req: OmniProcessRequest):
     return omni.process(req.text, engine=req.engine, beam_size=req.beam_size, n_best=req.n_best)
+
+
+@app.post("/translate", response_model=TranslateResponse)
+def translate_endpoint(req: TranslateRequest):
+    t0 = time.perf_counter()
+    res = omni.process(req.text, engine=req.engine)
+    opts = res.get("options", {})
+    en = opts.get("english_translation", "")
+    pure_en = opts.get("pure_english", "")
+    if req.target == "pure_english":
+        chosen = pure_en
+    elif req.target == "pure_telugu":
+        chosen = opts.get("pure_telugu", "")
+    else:
+        chosen = en
+    latency = round((time.perf_counter() - t0) * 1000, 2)
+    return TranslateResponse(
+        input=req.text,
+        target=req.target,
+        translation=chosen,
+        english_translation=en,
+        pure_english=pure_en,
+        latency_ms=latency
+    )
+
 
 
 @app.post("/feedback", response_model=FeedbackResponse)

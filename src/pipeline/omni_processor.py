@@ -196,8 +196,48 @@ def fold_phonetics(s: str) -> str:
     return " ".join(folded)
 
 
+
+TELUGU_SCRIPT_TO_ENGLISH_WORDS: dict[str, str] = {
+    "కన్వర్ట్": "convert", "కన్వర్షన్": "conversion",
+    "ట్రాన్స్లేట్": "translate", "ట్రాన్స్‌లేట్": "translate", "ట్రాన్స్లేషన్": "translation",
+    "దిస్": "this", "దట్": "that", "దీస్": "these", "దోస్": "those",
+    "ఆన్": "an", "ఎ": "a",
+    "సెంట్న్స్": "sentence", "సెంటెన్స్": "sentence", "సెంట్న్సెస్": "sentences", "సెంటెన్సెస్": "sentences",
+    "వర్డ్": "word", "వర్డ్స్": "words",
+    "ఇన్ టు": "into", "ఇంటు": "into", "ఇన్": "in", "టు": "to",
+    "ఇంగ్లీష్": "English", "ఇంగ్లిష్": "English", "ఆంగ్లం": "English", "తెలుగు": "Telugu",
+    "మీనింగ్": "meaning", "టెక్స్ట్": "text", "లైన్": "line", "పారాగ్రాఫ్": "paragraph",
+    "చేంజ్": "change", "టైప్": "type", "రైట్": "write", "రీడ్": "read", "స్పీక్": "speak", "లిజన్": "listen",
+    "సెండ్": "send", "పోస్ట్": "post", "షేర్": "share", "కాపీ": "copy", "పేస్ట్": "paste",
+    "సెలెక్ట్": "select", "చెక్": "check", "టెస్ట్": "test", "క్లిక్": "click", "ఓపెన్": "open", "క్లోజ్": "close",
+    "స్టార్ట్": "start", "స్టాప్": "stop", "కాల్": "call", "మెసేజ్": "message",
+    "ప్లీజ్": "please", "థాంక్స్": "thanks", "సారీ": "sorry", "ఓకే": "ok",
+    "కాలేజీ": "college", "స్కూల్": "school", "యూనివర్సిటీ": "university", "క్లాస్": "class",
+    "స్టూడెంట్": "student", "టీచర్": "teacher", "ఎగ్జామ్": "exam", "నోట్స్": "notes",
+    "ప్రాజెక్ట్": "project", "రిపోర్ట్": "report", "అసైన్‌మెంట్": "assignment",
+    "ఆఫీస్": "office", "ఆఫీసు": "office", "మీటింగ్": "meeting", "మేనేజర్": "manager",
+    "టీమ్": "team", "వర్క్": "work", "జాబ్": "job", "టాస్క్": "task", "ఇంటర్వ్యూ": "interview",
+    "ఫోన్": "phone", "మొబైల్": "mobile", "ల్యాప్‌టాప్": "laptop", "కంప్యూటర్": "computer",
+    "వైఫై": "wifi", "ఇంటర్నెట్": "internet", "నెట్‌వర్క్": "network", "పాస్‌వర్డ్": "password",
+    "యాప్": "app", "లింక్": "link", "ఫైల్": "file", "స్క్రీన్": "screen", "బ్యాటరీ": "battery",
+    "చార్జర్": "charger", "ఛార్జర్": "charger", "డౌన్‌లోడ్": "download", "అప్‌డేట్": "update",
+    "బస్సు": "bus", "ట్రైన్": "train", "కారు": "car", "బైక్": "bike", "టికెట్": "ticket", "స్టేషన్": "station",
+    "హాస్పిటల్": "hospital", "డాక్టర్": "doctor", "హోటల్": "hotel", "రెస్టారెంట్": "restaurant",
+    "కాఫీ": "coffee", "టీ": "tea", "ఫుడ్": "food", "వాటర్": "water", "మనీ": "money", "టైమ్": "time",
+    "ప్రాబ్లెమ్": "problem", "హెల్ప్": "help", "ఐడియా": "idea", "ప్లాన్": "plan"
+}
+
+
+def detransliterate_telugu_loanwords(text: str) -> str:
+    """Replaces English loanwords written in Telugu script with their Latin English equivalents."""
+    t = text
+    for k in sorted(TELUGU_SCRIPT_TO_ENGLISH_WORDS.keys(), key=len, reverse=True):
+        t = re.sub(rf'(?<![^\s.,?!;:]){re.escape(k)}(?![^\s.,?!;:])', TELUGU_SCRIPT_TO_ENGLISH_WORDS[k], t)
+    return t
+
+
 CONVERSATIONAL_PATTERNS: list[tuple[str, Any]] = [
-    # Hello / How are you
+    # Hello / How are you / Praise
     (r"^(helo|hello|hi|namaskaram)\s+(ela|yela|ella)\s+(unav|unnav|unaru|unnaru|vunnav|vunnavu)[\?\.]*$", "Hello, how are you?"),
     (r"^(ela|yela|ella)\s+(unav|unnav|unaru|unnaru|vunnav|vunnavu)[\?\.]*$", "How are you?"),
     (r"^(nuv|nuvu|nuvvu)\s+(ela|yela|ella)\s+(unav|unnav|vunnav|vunnavu)[\?\.]*$", "How are you?"),
@@ -206,6 +246,13 @@ CONVERSATIONAL_PATTERNS: list[tuple[str, Any]] = [
     (r"^(bagunava|bagunnava|bagunara|bagunnara)[\?\.]*$", "Are you doing well? / How are you?"),
     (r"^(nenu|nen)\s+(bagunanu|bagunnanu|baga\s+unanu|baga\s+unnanu)[\.]*$", "I am doing well."),
     (r"^(bagunanu|bagunnanu)[\.]*$", "I am doing well."),
+    (r"^(mer|meru|meeru)\s+(chala|chaala)\s+(bagunaru|bagunnaru|bagunaaru|bagunnaaru)[\.]*$", "You look very good."),
+    (r"^(nuv|nuvu|nuvvu)\s+(chala|chaala)\s+(bagunav|bagunnav|bagunaav|bagunnaavu)[\.]*$", "You look great."),
+    (r"^(nenu|nen)\s+(chala|chaala)\s+(bagunanu|bagunnanu)[\.]*$", "I am doing very well."),
+
+    # Conversion & Translation Requests
+    (r"^(convert|kanvart|translate|traslet)\s+(this|dis)\s+(an\s+|a\s+|aan\s+)?(sentence|sentns)\s+(in\s*to|into|in\s+to|to|in\s+tu)\s+(english|ingles|englis)[\.]*$", "Convert this sentence into English."),
+    (r"^(convert|kanvart|translate|traslet)\s+(this|dis)\s+(an\s+|a\s+|aan\s+)?(sentence|sentns)[\.]*$", "Convert this sentence."),
 
     # Multi-sentence greeting + question
     (r"^(hi|hello|hey)\s+(ela|yela|ella),?\s+(unav|unnav|vunav|vunnav|vunnavu)\.?\s+are\s+you\s+coming\s+to\s+([a-z]+)[?\.]*$",
@@ -253,6 +300,46 @@ CONVERSATIONAL_PATTERNS: list[tuple[str, Any]] = [
     (r"^i\s+(need|want)\s+help[\.]*$", "I need help."),
 ]
 
+# Dedicated Pure English (Formal & Elegant Standard English) Conversational Patterns
+CONVERSATIONAL_PURE_ENGLISH_PATTERNS: list[tuple[str, Any]] = [
+    # Greetings & Health Status
+    (r"^(helo|hello|hi|namaskaram)\s+(ela|yela|ella)\s+(unav|unnav|unaru|unnaru|vunnav|vunnavu)[\?\.]*$", "Greetings. How do you do? I trust you are well."),
+    (r"^(ela|yela|ella)\s+(unav|unnav|unaru|unnaru|vunnav|vunnavu)[\?\.]*$", "How do you do? I trust you are well."),
+    (r"^(nuv|nuvu|nuvvu)\s+(ela|yela|ella)\s+(unav|unnav|vunnav|vunnavu)[\?\.]*$", "How do you do? I hope you are doing well."),
+    (r"^(mer|meru|meeru)\s+(ela|yela|ella)\s+(unaru|unnaru|vunnaru|vunnavu)[\?\.]*$", "How do you do? I trust you are well."),
+    (r"^(helo|hello|hi)\s+(bagunava|bagunnava|bagunara|bagunnara)[\?\.]*$", "Greetings. Are you in sound health and spirits?"),
+    (r"^(bagunava|bagunnava|bagunara|bagunnara)[\?\.]*$", "Are you in sound health and good spirits?"),
+    (r"^(nenu|nen)\s+(bagunanu|bagunnanu|baga\s+unanu|baga\s+unnanu)[\.]*$", "I am in sound health and very good spirits."),
+    (r"^(bagunanu|bagunnanu)[\.]*$", "I am doing exceptionally well."),
+    (r"^(mer|meru|meeru)\s+(chala|chaala)\s+(bagunaru|bagunnaru|bagunaaru|bagunnaaru)[\.]*$", "You are doing exceptionally well."),
+    (r"^(nuv|nuvu|nuvvu)\s+(chala|chaala)\s+(bagunav|bagunnav|bagunaav|bagunnaavu)[\.]*$", "You are in excellent spirits."),
+    (r"^(nenu|nen)\s+(chala|chaala)\s+(bagunanu|bagunnanu)[\.]*$", "I am in very good health and spirits."),
+
+    # Commands & Linguistic Requests
+    (r"^(convert|kanvart|translate|traslet)\s+(this|dis)\s+(an\s+|a\s+|aan\s+)?(sentence|sentns)\s+(in\s*to|into|in\s+to|to|in\s+tu)\s+(english|ingles|englis)[\.]*$", "Please translate this sentence into English."),
+    (r"^(convert|kanvart|translate|traslet)\s+(this|dis)\s+(an\s+|a\s+|aan\s+)?(sentence|sentns)[\.]*$", "Please translate this sentence."),
+
+    # Daily Expressions
+    (r"^(chala|chaala)\s+(thanks|dhanyavadalu)[\.]*$", "I express my sincere and heartfelt gratitude."),
+    (r"^(dhanyavadalu|dhanyavadaalu)[\.]*$", "Thank you very much. I appreciate your kind assistance."),
+    (r"^(namaskaram)[\.]*$", "Greetings. It is an honor to speak with you."),
+    (r"^(subhodayam|shubhodayam)[\.]*$", "A very pleasant morning to you."),
+    (r"^(subharatri|shubharatri)[\.]*$", "Wishing you a peaceful and restful night."),
+    (r"^(bhojanam)\s+(chesava|chesara)[\?\.]*$", "Have you partaken of your meal?"),
+    (r"^(naku|naaku)\s+(ardam|ardham|artham)\s+(kaledu)[\.]*$", "I have not comprehended that."),
+    (r"^(malli|malli\s+oka\s+sari)\s+(chepu|cheppu)[\.]*$", "Kindly repeat your statement."),
+    (r"^(naku|naaku)\s+(nidra)\s+(vastondi|vastundi)[\.]*$", "I am feeling drowsy."),
+    (r"^(naku|naaku)\s+(akali|akaliga)\s+(undi|vundi)[\.]*$", "I am experiencing hunger."),
+    (r"^(naku|naaku)\s+(telugu\s+)?(chala\s+)?(istam|istham)[\.]*$", "I possess a deep appreciation for the Telugu language."),
+    (r"^(repu|repu\s+morning)\s+(kaludam|kaluddam|kalusukundam)[\.]*$", "We look forward to convening tomorrow."),
+    (r"^(sare|okay|ok)\s+repu\s+(matladadam|matladam)[\.]*$", "Very well, we shall converse tomorrow."),
+    (r"^sorry\s+nenu\s+late\s+ga\s+(vastanu|vasta)[\.]*$", "Please accept my apologies; my arrival will be slightly delayed."),
+    (r"^(naku|naaku)\s+(urgent\s+ga\s+)?(help|sahayam)\s+(kavali)[\.]*$", "I require immediate assistance."),
+    (r"^(naku|naaku)\s+koncham\s+(help|sahayam)\s+(kavali)[\.]*$", "I would be grateful for your assistance."),
+    (r"^(ippudu|ipudu)\s+(naku|naaku)\s+call\s+(cheyi|chey|cheyandi)[\.]*$", "Kindly contact me by telephone at this moment."),
+]
+
+
 
 def _translate_single_clause_to_english(raw: str, normalized: str = "") -> str:
     """Translates a single Telugu, Tanglish, or Code-Mixed clause into fluent English."""
@@ -282,18 +369,42 @@ def _translate_single_clause_to_english(raw: str, normalized: str = "") -> str:
         return res
 
     # 1. Phonetic folding & exact conversational pattern match
-    folded = fold_phonetics(raw_clean)
+    detrans = detransliterate_telugu_loanwords(raw_clean)
+    folded = fold_phonetics(detrans)
     for pat, eng in CONVERSATIONAL_PATTERNS:
         m = re.search(pat, folded)
         if m:
             return eng(m) if callable(eng) else eng
 
+    if detrans != raw_clean:
+        orig_folded = fold_phonetics(raw_clean)
+        for pat, eng in CONVERSATIONAL_PATTERNS:
+            m = re.search(pat, orig_folded)
+            if m:
+                return eng(m) if callable(eng) else eng
+
     if normalized:
-        norm_folded = fold_phonetics(normalized)
+        norm_detrans = detransliterate_telugu_loanwords(normalized)
+        norm_folded = fold_phonetics(norm_detrans)
         for pat, eng in CONVERSATIONAL_PATTERNS:
             m = re.search(pat, norm_folded)
             if m:
                 return eng(m) if callable(eng) else eng
+
+    # Check if this clause contains subclauses separated by comma or semicolon
+    if "," in raw_clean or ";" in raw_clean:
+        subclauses = [c.strip() for c in re.split(r'[,;]\s*', raw_clean) if c.strip()]
+        if len(subclauses) > 1:
+            parts = []
+            for i, c in enumerate(subclauses):
+                res = _translate_single_clause_to_english(c)
+                if res:
+                    clean_res = res.rstrip(".!?")
+                    if i > 0 and clean_res and not clean_res.startswith("I "):
+                        clean_res = clean_res[0].lower() + clean_res[1:]
+                    parts.append(clean_res)
+            if parts:
+                return ", ".join(parts) + "."
 
     # 2. Template matching for common syntactic patterns
     m = re.search(r"^(.+?)\s+(ready|charge|miss)\s+ayindi[\.]*$", folded)
@@ -542,6 +653,128 @@ def _translate_single_clause_to_english(raw: str, normalized: str = "") -> str:
     return assembled
 
 
+def elevate_to_pure_english(text: str) -> str:
+    """Elevates conversational English text to pristine, formal Pure English."""
+    if not text:
+        return ""
+    t = text.strip()
+
+    elevations = [
+        (r"\bcan't\b", "cannot"),
+        (r"\bdon't\b", "do not"),
+        (r"\bdidn't\b", "did not"),
+        (r"\bwon't\b", "will not"),
+        (r"\bi'm\b", "I am"),
+        (r"\byou're\b", "you are"),
+        (r"\bit's\b", "it is"),
+        (r"\bthere's\b", "there is"),
+        (r"\bthanks a lot\b", "I express my sincere gratitude"),
+        (r"\bthanks\b", "thank you"),
+        (r"\bsorry\b", "please accept my apologies"),
+        (r"\bhelp\b", "assistance"),
+        (r"\ba lot of\b", "a substantial amount of"),
+        (r"\bwant\b", "require"),
+        (r"\bwill go\b", "shall proceed"),
+        (r"\bcall me now\b", "please contact me by telephone at once"),
+        (r"\bhow are you\b", "how do you do"),
+        (r"\bi am doing well\b", "I am in sound health and good spirits"),
+        (r"\byou look very good\b", "you are doing exceptionally well"),
+        (r"\bconvert this sentence into english\b", "please translate this sentence into English"),
+    ]
+    for pat, rep in elevations:
+        t = re.sub(pat, rep, t, flags=re.IGNORECASE)
+
+    if t:
+        t = t[0].upper() + t[1:]
+        if not t.endswith((".", "!", "?")):
+            t += "."
+    return t
+
+
+def _translate_single_clause_to_pure_english(raw: str, normalized: str = "") -> str:
+    """Translates a single Telugu, Tanglish, or Code-Mixed clause into formal, elegant Pure English."""
+    raw_clean = raw.strip()
+    if not raw_clean:
+        return ""
+
+    detrans = detransliterate_telugu_loanwords(raw_clean)
+    folded = fold_phonetics(detrans)
+
+    for pat, eng in CONVERSATIONAL_PURE_ENGLISH_PATTERNS:
+        m = re.search(pat, folded)
+        if m:
+            return eng(m) if callable(eng) else eng
+
+    if detrans != raw_clean:
+        orig_folded = fold_phonetics(raw_clean)
+        for pat, eng in CONVERSATIONAL_PURE_ENGLISH_PATTERNS:
+            m = re.search(pat, orig_folded)
+            if m:
+                return eng(m) if callable(eng) else eng
+
+    if normalized:
+        norm_detrans = detransliterate_telugu_loanwords(normalized)
+        norm_folded = fold_phonetics(norm_detrans)
+        for pat, eng in CONVERSATIONAL_PURE_ENGLISH_PATTERNS:
+            m = re.search(pat, norm_folded)
+            if m:
+                return eng(m) if callable(eng) else eng
+
+    # Check if this clause contains subclauses separated by comma or semicolon
+    if "," in raw_clean or ";" in raw_clean:
+        subclauses = [c.strip() for c in re.split(r'[,;]\s*', raw_clean) if c.strip()]
+        if len(subclauses) > 1:
+            parts = []
+            for i, c in enumerate(subclauses):
+                res = _translate_single_clause_to_pure_english(c)
+                if res:
+                    clean_res = res.rstrip(".!?")
+                    if i > 0 and clean_res and not clean_res.startswith("I "):
+                        clean_res = clean_res[0].lower() + clean_res[1:]
+                    parts.append(clean_res)
+            if parts:
+                return "; ".join(parts) + "."
+
+    m = re.search(r"^(.+?)\s+(ready|charge|miss)\s+ayindi[\.]*$", folded)
+    if m:
+        item = m.group(1).strip()
+        action = m.group(2)
+        if action == "ready":
+            return f"The {item} has been prepared and is ready for use."
+        elif action == "charge":
+            return f"The {item} has been fully recharged."
+        elif action == "miss":
+            return f"The scheduled {item} was unfortunately missed."
+
+    m = re.search(r"^(.+?)\s+send\s+(cheyi|chey|cheyandi)[\.]*$", folded)
+    if m:
+        item = m.group(1).strip()
+        return f"Please transmit the {item} at your earliest convenience."
+
+    m = re.search(r"^(nenu\s+)?(.+?)\s+submit\s+chesanu[\.]*$", folded)
+    if m:
+        item = m.group(2).strip()
+        return f"I have successfully submitted the {item}."
+
+    m = re.search(r"^(nuvvu\s+|nuv\s+)?(.+?)\s+complete\s+chesava[\?\.]*$", folded)
+    if m:
+        item = m.group(2).strip()
+        return f"Have you finalized the {item}?"
+
+    m = re.search(r"^(.+?)\s+(ki|ku)\s+vastunava[\?\.]*$", folded)
+    if m:
+        item = m.group(1).strip()
+        return f"Will you be arriving at {item}?"
+
+    m = re.search(r"^(nenu\s+)?repu\s+(.+?)\s+(ki|ku)\s+(veltanu|velthanu)[\.]*$", folded)
+    if m:
+        item = m.group(2).strip()
+        return f"I shall proceed to {item} tomorrow."
+
+    base_en = _translate_single_clause_to_english(raw_clean, normalized)
+    return elevate_to_pure_english(base_en)
+
+
 def translate_to_english(raw: str, normalized: str = "") -> str:
     """Translates Telugu, Tanglish, or Code-Mixed text into natural, fluent English with multi-sentence support."""
     raw_clean = raw.strip()
@@ -565,6 +798,31 @@ def translate_to_english(raw: str, normalized: str = "") -> str:
             return " ".join(parts)
 
     return _translate_single_clause_to_english(raw_clean, normalized)
+
+
+def translate_to_pure_english(raw: str, normalized: str = "") -> str:
+    """Translates Telugu, Tanglish, or Code-Mixed text into formal, pristine Standard English (శుద్ధ ఆంగ్లం)."""
+    raw_clean = raw.strip()
+    if not raw_clean:
+        return ""
+
+    # Multi-sentence split
+    sentences = re.split(r'(?<=[.!?])\s+', raw_clean)
+    norm_sentences = re.split(r'(?<=[.!?])\s+', normalized.strip()) if normalized else []
+    if len(sentences) > 1:
+        parts = []
+        for i, s in enumerate(sentences):
+            s_clean = s.strip()
+            if not s_clean:
+                continue
+            norm_s = norm_sentences[i].strip() if i < len(norm_sentences) else ""
+            res = _translate_single_clause_to_pure_english(s_clean, norm_s)
+            if res:
+                parts.append(res)
+        if parts:
+            return " ".join(parts)
+
+    return _translate_single_clause_to_pure_english(raw_clean, normalized)
 
 
 # Destination, Subject, and Time mappings for natural Pure Telugu syntax generation
@@ -1521,8 +1779,19 @@ class OmniProcessor:
             normalized_text = raw
 
 
-        # 3. Step 3: Compute English Translation & Prescribed Meaning
+        # 3. Step 3: Compute English Translation, Pure English & Prescribed Meaning
         english_translation_text = translate_to_english(raw, normalized=normalized_text)
+        pure_english_text = translate_to_pure_english(raw, normalized=normalized_text)
+
+        # If neural GPU translation is available and requested:
+        if engine == "neural" and self.registry:
+            neural_preds = self.registry.translate([raw], model_name="translation_sota")
+            if neural_preds and neural_preds[0] and len(neural_preds[0].strip()) > 2:
+                neural_en = neural_preds[0].strip()
+                if not any(c in neural_en for c in ["<unk>", "<pad>"]):
+                    english_translation_text = neural_en
+                    pure_english_text = elevate_to_pure_english(neural_en)
+
         prescribed_meaning = english_translation_text
 
         # 4. Step 4: Compute Authentic Pure Telugu Translation (అచ్చ తెలుగు)
@@ -1586,6 +1855,7 @@ class OmniProcessor:
             "options": {
                 "normalized_code_mixed": normalized_text,
                 "english_translation": english_translation_text,
+                "pure_english": pure_english_text,
                 "pure_telugu": pure_telugu_text,
                 "all_telugu_script": all_telugu_text,
                 "all_romanized_tanglish": all_roman_text,

@@ -1016,10 +1016,13 @@
               <span>&#11088;</span> Standard Normalized
             </button>
             <button class="view-pill" id="pill_en" onclick="switchTargetView('english_translation')">
-              <span>&#127468;&#127463;</span> English Translation
+              <span>🇬🇧</span> English Translation
+            </button>
+            <button class="view-pill" id="pill_pure_en" onclick="switchTargetView('pure_english')">
+              <span>💎</span> Pure English (శుద్ధ ఆంగ్లం)
             </button>
             <button class="view-pill" id="pill_pure_te" onclick="switchTargetView('pure_telugu')">
-              <span>&#127802;</span> Pure Telugu (అచ్చ తెలుగు)
+              <span>🌸</span> Pure Telugu (అచ్చ తెలుగు)
             </button>
             <button class="view-pill" id="pill_te" onclick="switchTargetView('all_telugu_script')">
               <span>&#128292;</span> All Telugu Script
@@ -1300,7 +1303,9 @@ const ALL_SAMPLES = [
   { text: "repu morning presentation submit cheyali", cat: "biscript" },
   { text: "Where are you going today?", cat: "english" },
   { text: "Please send me the project report tomorrow morning", cat: "english" },
-  { text: "I have an important interview today at university campus", cat: "english" }
+  { text: "I have an important interview today at university campus", cat: "english" },
+  { text: "మీరు చాలా బాగున్నారు, కన్వర్ట్ దిస్ ఆన్ సెంట్న్స్ ఇన్ టు ఇంగ్లీష్", cat: "telugu" },
+  { text: "మీరు చాలా బాగున్నారు, convert this sentence into english", cat: "biscript" }
 ];
 
 const TELUGU_VOWELS = ["అ", "ఆ", "ఇ", "ఈ", "ఉ", "ఊ", "ఋ", "ఎ", "ఏ", "ఐ", "ఒ", "ఓ", "ఔ", "అం", "అః"];
@@ -1625,6 +1630,331 @@ const CLIENT_TE_WORDS = {
   "sayantram": "సాయంత్రం", "udayam": "ఉదయం", "matladadam": "మాట్లాడదాం", "kaluddam": "కలుద్దాం", "kaludam": "కలుద్దాం"
 };
 
+const CLIENT_TELUGU_SCRIPT_TO_ENGLISH = {
+  "కన్వర్ట్": "convert", "ట్రాన్స్లేట్": "translate", "ట్రాన్స్‌లేట్": "translate",
+  "దిస్": "this", "సెంటెన్స్": "sentence", "సెంట్న్స్": "sentence", "సెంటెన్సు": "sentence",
+  "ఇన్ టు": "into", "ఇంటు": "into", "ఇంగ్లీష్": "english", "ఇంగ్లిష్": "english",
+  "ఆన్": "an", "ఎ": "a", "ది": "the", "ద": "the",
+  "కాలేజీ": "college", "కాలేజ్": "college", "ప్రాజెక్ట్": "project", "ప్రాజెక్టు": "project",
+  "రిపోర్ట్": "report", "రిపోర్టు": "report", "ఇంటర్వ్యూ": "interview",
+  "ఇంపార్టెంట్": "important", "ఆఫీస్": "office", "ఆఫీసు": "office",
+  "మీటింగ్": "meeting", "ప్రెజెంటేషన్": "presentation",
+  "ల్యాప్‌టాప్": "laptop", "మొబైల్": "mobile", "ఫోన్": "phone",
+  "కంప్యూటర్": "computer", "ఇంటర్నెట్": "internet",
+  "మెసేజ్": "message", "కాల్": "call", "కోడ్": "code",
+  "స్క్రీన్": "screen", "నెట్‌వర్క్": "network",
+  "ట్రైన్": "train", "టికెట్": "ticket", "బస్సు": "bus",
+  "కారు": "car", "ఫ్లైట్": "flight", "స్టేషన్": "station",
+  "ప్లీజ్": "please", "థాంక్స్": "thanks", "సారీ": "sorry",
+  "కన్ఫర్మ్": "confirm", "క్యాన్సల్": "cancel",
+  "హెల్ప్": "help", "ప్రాబ్లెమ్": "problem", "ఐడియా": "idea"
+};
+
+function clientDetransliterateTeluguLoanwords(text) {
+  let res = text;
+  res = res.replace(/ఇన్\s+టు/g, "into");
+  for (const [teWord, enWord] of Object.entries(CLIENT_TELUGU_SCRIPT_TO_ENGLISH)) {
+    if (teWord.includes(" ")) continue;
+    const re = new RegExp(teWord, "g");
+    res = res.replace(re, enWord);
+  }
+  return res;
+}
+
+function clientFoldPhonetics(s) {
+  let t = s.toLowerCase();
+  t = t.replace(/aa/g, "a").replace(/ee/g, "e").replace(/ii/g, "i").replace(/oo/g, "o").replace(/uu/g, "u");
+  t = t.replace(/kh/g, "k").replace(/gh/g, "g").replace(/jh/g, "j").replace(/th/g, "t").replace(/dh/g, "d");
+  t = t.replace(/ph/g, "f").replace(/bh/g, "b").replace(/sh/g, "s").replace(/ch/g, "c");
+  return t;
+}
+
+function clientElevateToPureEnglish(text) {
+  if (!text) return "";
+  let t = text.trim();
+  const elevations = [
+    [/\bcan't\b/gi, "cannot"],
+    [/\bdon't\b/gi, "do not"],
+    [/\bdidn't\b/gi, "did not"],
+    [/\bwon't\b/gi, "will not"],
+    [/\bi'm\b/gi, "I am"],
+    [/\byou're\b/gi, "you are"],
+    [/\bit's\b/gi, "it is"],
+    [/\bthere's\b/gi, "there is"],
+    [/\bthanks a lot\b/gi, "I express my sincere gratitude"],
+    [/\bthanks\b/gi, "thank you"],
+    [/\bsorry\b/gi, "please accept my apologies"],
+    [/\bhelp\b/gi, "assistance"],
+    [/\ba lot of\b/gi, "a substantial amount of"],
+    [/\bwant\b/gi, "require"],
+    [/\bwill go\b/gi, "shall proceed"],
+    [/\bcall me now\b/gi, "please contact me by telephone at once"],
+    [/\bhow are you\b/gi, "how do you do"],
+    [/\bi am doing well\b/gi, "I am in sound health and good spirits"],
+    [/\byou look very good\b/gi, "you appear exceptionally well"],
+    [/\bconvert this sentence into english\b/gi, "please convert this sentence into English"]
+  ];
+  for (const [p, r] of elevations) {
+    t = t.replace(p, r);
+  }
+  if (t) {
+    t = t[0].toUpperCase() + t.slice(1);
+    if (!/[.!?]$/.test(t)) t += ".";
+  }
+  return t;
+}
+
+function clientTranslateClauseToEnglish(raw) {
+  const clean = raw.trim();
+  if (!clean) return "";
+
+  const detrans = clientDetransliterateTeluguLoanwords(clean);
+  const folded = clientFoldPhonetics(detrans);
+
+  if (/(mer|meru|meeru)\s+(chala|chaala)\s+(bagunaru|bagunnaru|bagunaaru|bagunnaaru)/i.test(folded)) {
+    return "You look very good";
+  }
+  if (/(nuv|nuvu|nuvvu)\s+(chala|chaala)\s+(bagunav|bagunnav)/i.test(folded)) {
+    return "You look very good";
+  }
+  if (/(convert|kanvart|translate|traslet)\s+(this|dis)\s+(an\s+|a\s+|aan\s+)?(sentence|sentns)\s+(in\s*to|into|to)\s+(english|ingles|englis)/i.test(folded)) {
+    return "convert this sentence into english";
+  }
+  if (/(convert|kanvart|translate|traslet)\s+(this|dis)\s+(an\s+|a\s+|aan\s+)?(sentence|sentns)/i.test(folded)) {
+    return "convert this sentence";
+  }
+  if (/^(helo|hello|hi)\s+(ela|yela|ella)\s+(unav|unnav|unaru|unnaru|vunnav)/i.test(folded)) {
+    return "Hello, how are you?";
+  }
+  if (/^(ela|yela|ella)\s+(unav|unnav|unaru|unnaru|vunnav)/i.test(folded)) {
+    return "How are you?";
+  }
+  if (/^(nuv|nuvu|nuvvu)\s+ekada\s+unav/i.test(folded)) {
+    return "Where are you?";
+  }
+  if (/(nenu|nen)\s+(chala\s+)?(bagunanu|bagunnanu)/i.test(folded)) {
+    return "I am doing very well";
+  }
+  if (/^(bagunanu|bagunnanu)/i.test(folded)) {
+    return "I am doing well";
+  }
+  if (/(chala|chaala)\s+(thanks|dhanyavadalu)/i.test(folded)) {
+    return "Thank you very much";
+  }
+  if (/(dhanyavadalu)/i.test(folded)) {
+    return "Thank you";
+  }
+  if (/(namaskaram)/i.test(folded)) {
+    return "Greetings / Hello";
+  }
+  if (/(subhodayam|shubhodayam)/i.test(folded)) {
+    return "Good morning";
+  }
+  if (/(subharatri|shubharatri)/i.test(folded)) {
+    return "Good night";
+  }
+  if (/(bhojanam)\s+(chesava|chesara)/i.test(folded)) {
+    return "Did you have food?";
+  }
+  if (/(naku|naaku)\s+(ardam|ardham|artham)\s+(kaledu)/i.test(folded)) {
+    return "I did not understand";
+  }
+  if (/(malli\s+oka\s+sari)\s+(chepu|cheppu)/i.test(folded)) {
+    return "Please say it once again";
+  }
+  if (/(naku|naaku)\s+nidra\s+vastondi/i.test(folded)) {
+    return "I am feeling sleepy";
+  }
+  if (/(naku|naaku)\s+(urgent\s+ga\s+)?(help|sahayam)\s+kavali/i.test(folded)) {
+    return "I need help urgently";
+  }
+  if (/(office\s+ki\s+vastara|office\s+ki\s+vastunnava)/i.test(folded)) {
+    return "Are you coming to the office?";
+  }
+  if (/(project\s+report\s+ready\s+ayindi)/i.test(folded)) {
+    return "The project report is ready";
+  }
+  if (/(important\s+interview\s+undi)/i.test(folded)) {
+    return "I have an important interview";
+  }
+  if (/(wifi\s+router\s+pani\s+cheyatledu)/i.test(folded)) {
+    return "WiFi router is not working";
+  }
+  if (/(meeting\s+cancel\s+chesaru)/i.test(folded)) {
+    return "meeting was cancelled";
+  }
+
+  const tokens = detrans.split(/\s+/);
+  const engWords = [];
+  for (const t of tokens) {
+    const cleanTok = t.replace(/[^\w\u0C00-\u0C7F]/g, "").toLowerCase();
+    if (CLIENT_PURE_TE_MAP[cleanTok]) {
+      engWords.push(cleanTok);
+    } else if (CLIENT_LOANWORDS.has(cleanTok)) {
+      engWords.push(cleanTok);
+    } else if (cleanTok === "naku" || cleanTok === "నాకు") {
+      engWords.push("to me");
+    } else if (cleanTok === "nenu" || cleanTok === "నేను") {
+      engWords.push("I");
+    } else if (cleanTok === "nuvvu" || cleanTok === "నువ్వు" || cleanTok === "meeru" || cleanTok === "మీరు") {
+      engWords.push("you");
+    } else if (cleanTok === "chala" || cleanTok === "చాలా") {
+      engWords.push("very");
+    } else if (cleanTok === "bagundi" || cleanTok === "బాగుంది" || cleanTok === "bagunaru" || cleanTok === "బాగున్నారు") {
+      engWords.push("good");
+    } else if (cleanTok === "undi" || cleanTok === "ఉంది") {
+      engWords.push("is there");
+    } else if (cleanTok === "ledu" || cleanTok === "లేదు") {
+      engWords.push("is not");
+    } else {
+      engWords.push(t);
+    }
+  }
+  return engWords.join(" ");
+}
+
+function clientTranslateClauseToPureEnglish(raw) {
+  const clean = raw.trim();
+  if (!clean) return "";
+
+  const detrans = clientDetransliterateTeluguLoanwords(clean);
+  const folded = clientFoldPhonetics(detrans);
+
+  if (/(mer|meru|meeru)\s+(chala|chaala)\s+(bagunaru|bagunnaru|bagunaaru|bagunnaaru)/i.test(folded)) {
+    return "You appear exceptionally well";
+  }
+  if (/(nuv|nuvu|nuvvu)\s+(chala|chaala)\s+(bagunav|bagunnav)/i.test(folded)) {
+    return "You appear in excellent health and spirits";
+  }
+  if (/(convert|kanvart|translate|traslet)\s+(this|dis)\s+(an\s+|a\s+|aan\s+)?(sentence|sentns)\s+(in\s*to|into|to)\s+(english|ingles|englis)/i.test(folded)) {
+    return "please convert this sentence into English";
+  }
+  if (/(convert|kanvart|translate|traslet)\s+(this|dis)\s+(an\s+|a\s+|aan\s+)?(sentence|sentns)/i.test(folded)) {
+    return "please translate this sentence";
+  }
+  if (/^(helo|hello|hi)\s+(ela|yela|ella)\s+(unav|unnav|unaru|unnaru|vunnav)/i.test(folded)) {
+    return "Greetings. How do you do? I trust you are well.";
+  }
+  if (/^(ela|yela|ella)\s+(unav|unnav|unaru|unnaru|vunnav)/i.test(folded)) {
+    return "How do you do? I trust you are well.";
+  }
+  if (/^(nuv|nuvu|nuvvu)\s+ekada\s+unav/i.test(folded)) {
+    return "Where are you currently located?";
+  }
+  if (/(nenu|nen)\s+(chala\s+)?(bagunanu|bagunnanu)/i.test(folded)) {
+    return "I am in sound health and very good spirits";
+  }
+  if (/^(bagunanu|bagunnanu)/i.test(folded)) {
+    return "I am doing exceptionally well";
+  }
+  if (/(chala|chaala)\s+(thanks|dhanyavadalu)/i.test(folded)) {
+    return "I express my sincere and heartfelt gratitude";
+  }
+  if (/(dhanyavadalu)/i.test(folded)) {
+    return "Thank you very much. I appreciate your kind assistance.";
+  }
+  if (/(namaskaram)/i.test(folded)) {
+    return "Greetings. It is an honor to speak with you.";
+  }
+  if (/(subhodayam|shubhodayam)/i.test(folded)) {
+    return "A very pleasant morning to you.";
+  }
+  if (/(subharatri|shubharatri)/i.test(folded)) {
+    return "Wishing you a peaceful and restful night.";
+  }
+  if (/(bhojanam)\s+(chesava|chesara)/i.test(folded)) {
+    return "Have you partaken of your meal?";
+  }
+  if (/(naku|naaku)\s+(ardam|ardham|artham)\s+(kaledu)/i.test(folded)) {
+    return "I have not comprehended that.";
+  }
+  if (/(malli\s+oka\s+sari)\s+(chepu|cheppu)/i.test(folded)) {
+    return "Kindly repeat your statement.";
+  }
+  if (/(naku|naaku)\s+nidra\s+vastondi/i.test(folded)) {
+    return "I am feeling drowsy.";
+  }
+  if (/(naku|naaku)\s+(urgent\s+ga\s+)?(help|sahayam)\s+kavali/i.test(folded)) {
+    return "I require immediate assistance.";
+  }
+  if (/(office\s+ki\s+vastara|office\s+ki\s+vastunnava)/i.test(folded)) {
+    return "Will you be attending the office?";
+  }
+  if (/(project\s+report\s+ready\s+ayindi)/i.test(folded)) {
+    return "The project report has been completed and is ready for submission.";
+  }
+  if (/(important\s+interview\s+undi)/i.test(folded)) {
+    return "I have a crucial interview scheduled today.";
+  }
+  if (/(wifi\s+router\s+pani\s+cheyatledu)/i.test(folded)) {
+    return "The office WiFi router is malfunctioning";
+  }
+  if (/(meeting\s+cancel\s+chesaru)/i.test(folded)) {
+    return "the meeting has been cancelled";
+  }
+
+  const enClause = clientTranslateClauseToEnglish(raw);
+  return clientElevateToPureEnglish(enClause);
+}
+
+function clientTranslateToEnglish(text) {
+  if (!text) return "";
+  const clauses = text.split(/([.!?]+)/).filter(Boolean);
+  const out = [];
+
+  for (let i = 0; i < clauses.length; i += 2) {
+    const clause = clauses[i].trim();
+    const punct = clauses[i + 1] || "";
+    if (!clause) continue;
+
+    if (clause.includes(",") || clause.includes(";")) {
+      const sub = clause.split(/[,;]\s*/).filter(Boolean);
+      const subTrans = sub.map(s => clientTranslateClauseToEnglish(s)).filter(Boolean);
+      if (subTrans.length > 0) {
+        let joined = subTrans.join(", ");
+        if (joined) joined = joined[0].toUpperCase() + joined.slice(1);
+        out.push(joined + (punct || "."));
+        continue;
+      }
+    }
+
+    let trans = clientTranslateClauseToEnglish(clause);
+    if (trans) trans = trans[0].toUpperCase() + trans.slice(1);
+    out.push(trans + (punct || "."));
+  }
+
+  return out.join(" ").trim();
+}
+
+function clientTranslateToPureEnglish(text) {
+  if (!text) return "";
+  const clauses = text.split(/([.!?]+)/).filter(Boolean);
+  const out = [];
+
+  for (let i = 0; i < clauses.length; i += 2) {
+    const clause = clauses[i].trim();
+    const punct = clauses[i + 1] || "";
+    if (!clause) continue;
+
+    if (clause.includes(",") || clause.includes(";")) {
+      const sub = clause.split(/[,;]\s*/).filter(Boolean);
+      const subTrans = sub.map(s => clientTranslateClauseToPureEnglish(s)).filter(Boolean);
+      if (subTrans.length > 0) {
+        let joined = subTrans.join("; ");
+        if (joined) joined = joined[0].toUpperCase() + joined.slice(1);
+        out.push(joined + (punct || "."));
+        continue;
+      }
+    }
+
+    let trans = clientTranslateClauseToPureEnglish(clause);
+    if (trans) trans = trans[0].toUpperCase() + trans.slice(1);
+    out.push(trans + (punct || "."));
+  }
+
+  return out.join(" ").trim();
+}
+
 const CLIENT_PHRASE_RULES = [
   {
     regex: /^(hi|hello|hey)\s+(how\s+are\s+you|how\s+r\s+u)[?\.]*$/i,
@@ -1633,6 +1963,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "హాయ్ హౌ ఆర్ యు?",
     rom: "namaskaram, ela unnaru?",
     en: "Hello, how are you?",
+    pureEn: "Greetings; how do you do? I trust you are well.",
     meaning: "Polite greeting inquiring about someone's wellbeing."
   },
   {
@@ -1642,6 +1973,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "హౌ ఆర్ యు?",
     rom: "meeru ela unnaru?",
     en: "How are you?",
+    pureEn: "How do you do? I trust you are well.",
     meaning: "Inquiring about health and state of being."
   },
   {
@@ -1651,6 +1983,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "హలో ఎలా ఉన్నావు?",
     rom: "hello ela unnavu?",
     en: "Hello, how are you?",
+    pureEn: "Greetings; how do you do? I hope you are doing well.",
     meaning: "Conversational greeting asking how you are doing."
   },
   {
@@ -1660,6 +1993,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "ఎలా ఉన్నావు?",
     rom: "ela unnavu?",
     en: "How are you?",
+    pureEn: "How do you do? I trust you are well.",
     meaning: "Friendly inquiry into welfare."
   },
   {
@@ -1669,6 +2003,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "నువ్వు ఎక్కడ ఉన్నావ్, క్లాస్ కి వస్తున్నావా?",
     rom: "nuvvu ekkada unnav, class ki vastunnava?",
     en: "Where are you, are you coming to class?",
+    pureEn: "Where are you located; will you be attending the class?",
     meaning: "Asking a classmate about their whereabouts and attendance."
   },
   {
@@ -1678,6 +2013,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "కాలేజీ లో ప్రాజెక్ట్ రిపోర్ట్ రెడీ అయింది",
     rom: "college lo project report ready ayindi",
     en: "The project report in the college is ready.",
+    pureEn: "The college project report has been completed and is ready for submission.",
     meaning: "The college project documentation has been completed and is ready for submission."
   },
   {
@@ -1687,6 +2023,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "నాకు ఇవాళ కాలేజీ లో ఇంపార్టెంట్ ఇంటర్వ్యూ ఉంది",
     rom: "naku ivala college lo important interview undi",
     en: "I have an important interview at college today.",
+    pureEn: "I have a crucial interview scheduled at the college today.",
     meaning: "Expressing having a crucial academic or job interview scheduled today at campus."
   },
   {
@@ -1696,6 +2033,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "ట్రైన్ టికెట్ కన్ఫర్మ్ అయిందా లేదా మెసేజ్ చెయ్",
     rom: "train ticket confirm ainda leda message chey",
     en: "Message me whether the train ticket is confirmed or not.",
+    pureEn: "Kindly send a message confirming whether the train ticket has been confirmed.",
     meaning: "Requesting an update on railway reservation status."
   },
   {
@@ -1705,6 +2043,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "కాలేజీలో ప్రాజెక్ట్ రిపోర్ట్ రెడీ అయింది",
     rom: "college lo project report ready ayindi",
     en: "The project report in the college is ready.",
+    pureEn: "The college project report has been completed and is ready for submission.",
     meaning: "College project report is completed and ready for submission."
   },
   {
@@ -1714,6 +2053,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "నాకు ఇవాళ ముఖ్యమైన పని ఉంది, సాయంత్రం కలుద్దాం",
     rom: "naku ivala mukhyamaina pani undi, sayantram kaluddam",
     en: "I have important work today, let's meet in the evening.",
+    pureEn: "I have important matters to attend to today; let us convene this evening.",
     meaning: "Busy with critical work today, proposing an evening meeting."
   },
   {
@@ -1723,6 +2063,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "మీరు రేపు ఉదయం ఆఫీస్ కి వస్తారా?",
     rom: "meeru repu udayam office ki vastara?",
     en: "Are you coming to the office tomorrow morning?",
+    pureEn: "Will you be attending the office tomorrow morning?",
     meaning: "Inquiring about office attendance tomorrow morning."
   },
   {
@@ -1732,6 +2073,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "ఈ ప్రాజెక్ట్ ప్రెజెంటేషన్ చాలా బాగుంది",
     rom: "ee project presentation chala bagundi",
     en: "This project presentation is very good.",
+    pureEn: "This project presentation is exceptionally well-executed.",
     meaning: "Praising the quality of the project presentation."
   },
   {
@@ -1741,6 +2083,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "నాకు ఇవాళ కాలేజీ లో ఇంటర్వ్యూ ఉంది",
     rom: "naku ivala college lo interview undi",
     en: "I have an interview at college today.",
+    pureEn: "I have an interview scheduled at the college today.",
     meaning: "Informing about a scheduled interview at the college today."
   },
   {
@@ -1750,6 +2093,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "ఆఫీస్ లో వైఫై రౌటర్ పని చేయట్లేదు, మీటింగ్ క్యాన్సల్ చేశారు",
     rom: "office lo wifi router pani cheyatledu, meeting cancel chesaru",
     en: "The WiFi router in the office is not working, they cancelled the meeting.",
+    pureEn: "The office WiFi router is malfunctioning; the meeting has been cancelled.",
     meaning: "Meeting was cancelled due to an office internet router issue."
   },
   {
@@ -1759,7 +2103,38 @@ const CLIENT_PHRASE_RULES = [
     teScript: "రేపు మార్నింగ్ ప్రెజెంటేషన్ సబ్మిట్ చేయాలి",
     rom: "repu morning presentation submit cheyali",
     en: "Must submit the presentation tomorrow morning.",
+    pureEn: "The presentation must be submitted tomorrow morning.",
     meaning: "Reminder that presentation submission is due tomorrow morning."
+  },
+  {
+    regex: /^మీరు\s+చాలా\s+బాగున్నారు[,\s]+(కన్వర్ట్|కన్వర్ట్\s+దిస్|convert)[\s\S]*$/i,
+    norm: "మీరు చాలా బాగున్నారు, convert this sentence into english",
+    pureTe: "మీరు చాలా బాగున్నారు, ఈ వాక్యాన్ని ఆంగ్లంలోకి అనువదించండి.",
+    teScript: "మీరు చాలా బాగున్నారు, కన్వర్ట్ దిస్ సెంటెన్స్ ఇన్ టు ఇంగ్లీష్",
+    rom: "meeru chala bagunnaru, convert this sentence into english",
+    en: "You look very good, convert this sentence into english.",
+    pureEn: "You appear exceptionally well; please convert this sentence into English.",
+    meaning: "Complimenting the recipient and requesting translation of the statement into English."
+  },
+  {
+    regex: /^(కన్వర్ట్|ట్రాన్స్లేట్)\s+దిస్\s+(ఆన్\s+|ఒక\s+)?(సెంట్న్స్|సెంటెన్స్)\s+(ఇన్\s*టు|లోనికి)\s+ఇంగ్లీష్[?\.]*$/i,
+    norm: "convert this sentence into english",
+    pureTe: "ఈ వాక్యాన్ని ఆంగ్లంలోకి అనువదించండి.",
+    teScript: "కన్వర్ట్ దిస్ సెంటెన్స్ ఇన్ టు ఇంగ్లీష్",
+    rom: "convert this sentence into english",
+    en: "Convert this sentence into English.",
+    pureEn: "Please translate this sentence into English.",
+    meaning: "Instruction requesting translation of the clause into the English language."
+  },
+  {
+    regex: /^మీరు\s+చాలా\s+బాగున్నారు[?\.]*$/i,
+    norm: "మీరు చాలా బాగున్నారు",
+    pureTe: "మీరు చాలా బాగున్నారు",
+    teScript: "మీరు చాలా బాగున్నారు",
+    rom: "meeru chala bagunnaru",
+    en: "You look very good.",
+    pureEn: "You appear exceptionally well.",
+    meaning: "Complimenting someone on their appearance or well-being."
   },
   {
     regex: /^where\s+are\s+you\s+going\s+today[?\.]*$/i,
@@ -1768,6 +2143,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "వేర్ ఆర్ యు గోయింగ్ టుడే?",
     rom: "Where are you going today?",
     en: "Where are you going today?",
+    pureEn: "To which destination are you traveling today?",
     meaning: "Inquiring about destination and plans for today."
   },
   {
@@ -1777,6 +2153,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "వేర్ ఆర్ యు?",
     rom: "Where are you?",
     en: "Where are you?",
+    pureEn: "Where are you currently located?",
     meaning: "Asking about location."
   },
   {
@@ -1786,6 +2163,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "వాట్ ఆర్ యు డూయింగ్?",
     rom: "What are you doing?",
     en: "What are you doing?",
+    pureEn: "What activities are you engaged in at present?",
     meaning: "Inquiring about someone's current activity."
   },
   {
@@ -1795,6 +2173,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "ప్లీజ్ సెండ్ మీ ద ప్రాజెక్ట్ రిపోర్ట్ టుమారో మార్నింగ్",
     rom: "Please send me the project report tomorrow morning",
     en: "Please send me the project report tomorrow morning.",
+    pureEn: "Kindly transmit the project report to me tomorrow morning.",
     meaning: "Polite request for project documents to be sent by tomorrow morning."
   },
   {
@@ -1804,6 +2183,7 @@ const CLIENT_PHRASE_RULES = [
     teScript: "ఐ హావ్ యాన్ ఇంపార్టెంట్ ఇంటర్వ్యూ టుడే ఎట్ యూనివర్సిటీ క్యాంపస్",
     rom: "I have an important interview today at university campus",
     en: "I have an important interview today at university campus.",
+    pureEn: "I have a significant interview scheduled today at the university campus.",
     meaning: "Informing about a significant interview at the university today."
   }
 ];
@@ -1984,6 +2364,7 @@ function clientOmniProcess(text) {
         options: {
           normalized_code_mixed: rule.norm,
           english_translation: rule.en,
+          pure_english: rule.pureEn || rule.en,
           pure_telugu: rule.pureTe,
           all_telugu_script: rule.teScript,
           all_romanized_tanglish: rule.rom,
@@ -2086,12 +2467,16 @@ function clientOmniProcess(text) {
   const glossResult = glossWords.join(" ");
 
   let enTranslation = clean;
+  let pureEnglish = clean;
   let prescribedMeaning = "";
+
   if (modality !== "english") {
-    enTranslation = normResult;
+    enTranslation = clientTranslateToEnglish(clean);
+    pureEnglish = clientTranslateToPureEnglish(clean);
     prescribedMeaning = `Normalized expression conveying: "${clean}".`;
   } else {
     enTranslation = clean;
+    pureEnglish = clientElevateToPureEnglish(clean);
     prescribedMeaning = `English statement: "${clean}".`;
   }
 
@@ -2101,6 +2486,7 @@ function clientOmniProcess(text) {
     options: {
       normalized_code_mixed: normResult,
       english_translation: enTranslation,
+      pure_english: pureEnglish,
       pure_telugu: pureResult,
       all_telugu_script: allTeResult,
       all_romanized_tanglish: allRomResult,
@@ -2338,13 +2724,14 @@ function tagTokens(text) {
 
 function switchTargetView(viewName) {
   currentTargetView = viewName;
-  ["pill_norm", "pill_en", "pill_pure_te", "pill_te", "pill_rom", "pill_gloss", "pill_diag"].forEach(id => {
+  ["pill_norm", "pill_en", "pill_pure_en", "pill_pure_te", "pill_te", "pill_rom", "pill_gloss", "pill_diag"].forEach(id => {
     const el = $(id);
     if (el) el.classList.remove("active");
   });
 
   if (viewName === "normalized_code_mixed") $("pill_norm")?.classList.add("active");
   else if (viewName === "english_translation") $("pill_en")?.classList.add("active");
+  else if (viewName === "pure_english") $("pill_pure_en")?.classList.add("active");
   else if (viewName === "pure_telugu") $("pill_pure_te")?.classList.add("active");
   else if (viewName === "all_telugu_script") $("pill_te")?.classList.add("active");
   else if (viewName === "all_romanized_tanglish") $("pill_rom")?.classList.add("active");
@@ -2370,7 +2757,7 @@ function switchTargetView(viewName) {
     const mCard = $("webPrescribedMeaningCard");
     const mText = $("webPrescribedMeaningText");
     if (mCard && mText) {
-      if (meaning && viewName !== "english_translation") {
+      if (meaning && viewName !== "english_translation" && viewName !== "pure_english") {
         mCard.style.display = "block";
         mText.textContent = meaning;
       } else {
