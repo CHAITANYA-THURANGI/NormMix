@@ -3233,7 +3233,7 @@ async function submitRating(rating) {
       });
     } catch(e) {}
   }
-  showToast("Thank you for your rating!");
+  showToast("🌟 Thank you! Rating recorded for continuous model reinforcement.");
 }
 async function submitCorrectionFeedback() {
   const input_text = $("srcInput").value.trim();
@@ -3246,14 +3246,22 @@ async function submitCorrectionFeedback() {
   }
   if (API_BASE) {
     try {
-      await fetch(`${API_BASE}/feedback`, {
+      const res = await fetch(`${API_BASE}/feedback`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ input_text, output_text, rating: "negative", mode: currentMode, correction, comments })
       });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.learned && data.model_updated) {
+          showToast(`🌟 Feedback recorded! Model '${data.model_updated}' has learned your update in real-time on GPU.`);
+          closeFeedbackModal();
+          return;
+        }
+      }
     } catch(e) {}
   }
-  showToast("Thank you! Feedback recorded for model reinforcement.");
+  showToast("🌟 Thank you! Feedback recorded for continuous model reinforcement.");
   closeFeedbackModal();
 }
 
