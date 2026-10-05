@@ -3,8 +3,9 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.11%2Bcu128-EE4C2C.svg?style=flat&logo=pytorch)](https://pytorch.org/)
 [![CUDA](https://img.shields.io/badge/CUDA-NVIDIA%20RTX%204060-76B900.svg?style=flat&logo=nvidia)](https://developer.nvidia.com/cuda-zone)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
-[![Tests](https://img.shields.io/badge/Tests-47%20Passed-10b981.svg?style=flat)]()
+[![Tests](https://img.shields.io/badge/Tests-58%20Passed-10b981.svg?style=flat)]()
 [![Documentation](https://img.shields.io/badge/Report%20PDF-804%20KB-blue.svg?style=flat)](docs/project_report.pdf)
+[![Master Guide](https://img.shields.io/badge/Master%20Guide%20PDF-961%20KB-059669.svg?style=flat)](docs/PROJECT_COMPLETE_GUIDE_AND_LEARNING_PATH.pdf)
 
 > **Course:** Advanced Artificial Intelligence and Neural Networks (AAN) Mini-Project & Case Study  
 > **Architecture:** 2-Layer BiGRU + Scaled Dot-Product Attention + Pointer-Generator Copy Mechanism  
@@ -61,7 +62,7 @@ Evaluated across standard benchmarks and fine-grained test slices:
 .\.venv\Scripts\activate   # On Windows
 source .venv/bin/activate  # On Linux/macOS
 
-# 2. Run the complete pytest test suite (47 tests)
+# 2. Run the complete pytest test suite (58 tests)
 python -m pytest
 
 # 3. Start the FastAPI backend & Web Studio
@@ -71,7 +72,8 @@ uvicorn api.main:app --host 127.0.0.1 --port 8000 --reload
 ### Accessing the System
 - **Web Translation Studio:** [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 - **Interactive Swagger Documentation:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-- **Publication PDF Report Download:** [http://127.0.0.1:8000/report.pdf](http://127.0.0.1:8000/report.pdf)
+- **Master Architecture & Learning Guide PDF:** [http://127.0.0.1:8000/guide.pdf](http://127.0.0.1:8000/guide.pdf)
+- **Publication Research PDF Report:** [http://127.0.0.1:8000/report.pdf](http://127.0.0.1:8000/report.pdf)
 
 ---
 
