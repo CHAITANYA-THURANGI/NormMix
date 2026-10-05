@@ -65,6 +65,20 @@
     <div id="meaningText" class="meaning-text"></div>
   </div>
 
+  <div id="feedbackBar" class="feedback-bar" style="display:none;">
+    <div class="feedback-prompt">
+      <span>Rate this result:</span>
+      <button class="feedback-btn" id="fbPositive" title="Good output" type="button">👍 Helpful</button>
+      <button class="feedback-btn" id="fbNegative" title="Suggest improvement / correction" type="button">👎 Suggest Correction</button>
+    </div>
+    <div id="correctionBox" class="correction-box" style="display:none;">
+      <input type="text" id="fbCorrectionInput" class="correction-input" placeholder="Type correct translation / text..." />
+      <button type="button" class="submit-correction-btn" id="fbSubmitCorrection">Submit &amp; Train GPU</button>
+    </div>
+  </div>
+
+  <div id="feedbackToast" class="feedback-toast" style="display:none;"></div>
+
   <details>
     <summary>Settings</summary>
     <label>API Base URL<br/><input id="apiBase" type="text" placeholder="http://127.0.0.1:8000" /></label>
