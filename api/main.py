@@ -22,7 +22,11 @@ from fastapi.responses import FileResponse, JSONResponse
 
 import datetime
 import json
+import logging
 import uuid
+import torch
+
+logger = logging.getLogger("normmix.api")
 
 from api.schemas import (BatchNormalizeRequest, BatchNormalizeResponse, HealthResponse, ModelInfo,
                          NormalizeRequest, NormalizeResponse, RomanizeResponse, Hypothesis,
@@ -170,7 +174,43 @@ def feedback_endpoint(req: FeedbackRequest, request: Request):
     feedback_file.parent.mkdir(parents=True, exist_ok=True)
     with open(feedback_file, "a", encoding="utf-8") as f:
         f.write(json.dumps(entry, ensure_ascii=False) + "\n")
-    return FeedbackResponse(status="success", message="Thank you! Feedback recorded for model reinforcement.", feedback_id=feedback_id)
+
+    # Online Continuous Learning: if user provided a correction, fine-tune the neural model immediately on GPU
+    learned = False
+    model_updated = None
+    if req.correction and req.correction.strip():
+        try:
+            from src.training.feedback_learner import online_learn_sample
+            dev = "cuda" if torch.cuda.is_available() else "cpu"
+            learn_res = online_learn_sample(req.input_text, req.correction.strip(), device=dev)
+            if learn_res.get("status") == "success":
+                learned = True
+                model_updated = learn_res.get("model_updated")
+                with registry._lock:
+                    registry._cache.pop(model_updated, None)
+                logger.info(f"Model '{model_updated}' successfully updated on {dev} from feedback {feedback_id}.")
+        except Exception as e:
+            logger.warning(f"Could not immediately fine-tune on feedback: {e}")
+
+    learn_msg = f" Model '{model_updated}' has learned your correction on GPU!" if learned else ""
+    return FeedbackResponse(
+        status="success",
+        message=f"Thank you! Feedback recorded.{learn_msg}",
+        feedback_id=feedback_id,
+        learned=learned,
+        model_updated=model_updated,
+    )
+
+
+@app.post("/feedback/learn")
+def learn_all_feedback():
+    """Trigger complete fine-tuning on all recorded user corrections from data/feedback.jsonl."""
+    from src.training.feedback_learner import retrain_from_all_feedback
+    dev = "cuda" if torch.cuda.is_available() else "cpu"
+    result = retrain_from_all_feedback(device=dev)
+    with registry._lock:
+        registry._cache.clear()
+    return result
 
 
 
@@ -225,7 +265,30 @@ def view_guide_html():
     raise HTTPException(status_code=404, detail="Project learning guide HTML not found.")
 
 
+@app.get("/presentation.pptx")
+def download_presentation_pptx():
+    pptx_path = ROOT / "docs" / "presentation.pptx"
+    if pptx_path.exists():
+        return FileResponse(pptx_path, media_type="application/vnd.openxmlformats-officedocument.presentationml.presentation", filename="NormMix_Presentation_Light_Theme.pptx")
+    raise HTTPException(status_code=404, detail="Presentation PPTX not found.")
+
+
+@app.get("/presentation.html")
+def view_presentation_html():
+    html_path = ROOT / "docs" / "presentation.html"
+    if html_path.exists():
+        return FileResponse(html_path, media_type="text/html")
+    raise HTTPException(status_code=404, detail="Presentation HTML not found.")
+
+
 @app.get("/api")
 def api_info():
-    return {"name": "Telugu-English Code-Mixed Text Normalization API", "docs": "/docs", "health": "/health", "guide": "/guide.pdf"}
+    return {
+        "name": "Telugu-English Code-Mixed Text Normalization API",
+        "docs": "/docs",
+        "health": "/health",
+        "guide": "/guide.pdf",
+        "presentation_pptx": "/presentation.pptx",
+        "presentation_html": "/presentation.html"
+    }
 

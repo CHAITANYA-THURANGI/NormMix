@@ -891,6 +891,12 @@
       <span id="apiStatusDot" style="width:8px; height:8px; border-radius:50%; background:#10b981;"></span>
       <span id="apiStatusText">Engine: Web Client</span>
     </button>
+    <a href="/presentation.html" target="_blank" class="nav-btn" style="border-color: #8b5cf6; color: #8b5cf6;" title="Interactive Animated Presentation Deck">
+      <span>📽️</span> Animated PPT
+    </a>
+    <a href="/presentation.pptx" target="_blank" class="nav-btn" style="border-color: #f59e0b; color: #f59e0b;" title="Download Light Theme PowerPoint (.pptx)">
+      <span>📊</span> Download PPTX
+    </a>
     <a href="/guide.pdf" target="_blank" class="nav-btn" style="border-color: #10b981; color: #10b981;" title="Download Master Architecture & Learning Guide PDF">
       <span>📚</span> Master Guide PDF
     </a>
@@ -1853,6 +1859,9 @@ function clientElevateToPureEnglish(text) {
     [/\b(hello|hi)[,\s]+how are you[?\.]*/gi, "Greetings. How do you do? I trust you are well."],
     [/^how are you[?\.]*/gi, "How do you do? I trust you are well."],
     [/\bhow are you[?\.]*/gi, "how do you do? I trust you are well."],
+    [/\b(and\s+)?good morning\b/gi, "and a very pleasant morning to you"],
+    [/\bgood morning\b/gi, "a very pleasant morning to you"],
+    [/\bgood night\b/gi, "wishing you a peaceful and restful night"],
     [/\bi am doing well\b/gi, "I am in sound health and good spirits"],
     [/\byou look very good\b/gi, "you appear exceptionally well"],
     [/\bconvert this sentence into english\b/gi, "please convert this sentence into English"]
@@ -1860,6 +1869,7 @@ function clientElevateToPureEnglish(text) {
   for (const [p, r] of elevations) {
     t = t.replace(p, r);
   }
+  t = t.replace(/\.\s+and\b/gi, ", and");
   if (t) {
     t = t[0].toUpperCase() + t.slice(1);
     if (!/[.!?]$/.test(t)) t += ".";

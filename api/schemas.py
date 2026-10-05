@@ -1,7 +1,7 @@
 """Pydantic request/response schemas for the normalization API."""
 from __future__ import annotations
 
-from typing import Literal
+from typing import Literal, Any
 
 from pydantic import BaseModel, Field, field_validator
 
@@ -160,7 +160,7 @@ class OmniProcessResponse(BaseModel):
 class FeedbackRequest(BaseModel):
     input_text: str = Field(..., max_length=MAX_TEXT_CHARS)
     output_text: str = Field(..., max_length=MAX_TEXT_CHARS)
-    rating: Literal["positive", "negative"]
+    rating: Any = "positive"
     mode: str = "auto"
     correction: str | None = None
     comments: str | None = None
@@ -170,5 +170,7 @@ class FeedbackResponse(BaseModel):
     status: str
     message: str
     feedback_id: str
+    learned: bool = False
+    model_updated: str | None = None
 
 

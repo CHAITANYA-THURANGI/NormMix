@@ -67,7 +67,10 @@ COMMON_ENGLISH_WORDS = {
     "them", "see", "other", "than", "then", "now", "look", "only", "come", "its", "over", "think",
     "also", "back", "after", "use", "two", "how", "our", "work", "first", "well", "way", "even",
     "new", "want", "because", "any", "these", "give", "day", "most", "us", "are", "where", "today",
-    "tomorrow", "yesterday", "going", "send", "sent", "please", "help", "need", "urgent", "report"
+    "tomorrow", "yesterday", "going", "send", "sent", "please", "help", "need", "urgent", "report",
+    "hi", "hello", "hey", "morning", "evening", "night", "afternoon", "fine", "thank", "thanks",
+    "welcome", "bye", "okay", "ok", "yes", "great", "awesome", "dear", "friend", "sir", "madam",
+    "is", "am", "was", "were", "has", "had", "does", "did", "very", "much", "too", "here", "why"
 }
 
 
@@ -172,7 +175,15 @@ def fold_phonetics(s: str) -> str:
     tokens = w.split()
     folded = []
     for tok in tokens:
-        if tok in LOANWORD_TO_TELUGU or tok in {"class", "meeting", "office", "college", "report", "notes", "interview", "important"}:
+        if (
+            tok in COMMON_ENGLISH_WORDS
+            or tok in LOANWORD_TO_TELUGU
+            or tok in {
+                "class", "meeting", "office", "college", "school", "report", "notes",
+                "interview", "important", "good", "morning", "evening", "night", "food",
+                "water", "time", "help", "need", "urgent", "thanks", "please", "sorry"
+            }
+        ):
             folded.append(tok)
             continue
         # Convert sh -> s for Telugu romanized words (e.g. cheshava -> chesava, shubharatri -> subharatri)
@@ -473,12 +484,14 @@ def _translate_single_clause_to_english(raw: str, normalized: str = "") -> str:
     low_words = [re.sub(r"[^\w]", "", w.lower()) for w in words]
     if te_chars == 0 and all(
         w in LOANWORD_TO_TELUGU
+        or w in COMMON_ENGLISH_WORDS
         or w in {
             "the", "a", "an", "is", "are", "i", "you", "we", "he", "she", "it", "they",
             "in", "to", "for", "with", "from", "on", "at", "what", "where", "when", "why",
             "how", "hello", "hi", "good", "morning", "night", "thanks", "thank", "please",
             "not", "do", "does", "did", "have", "has", "had", "will", "would", "can", "could",
-            "coming", "going", "come", "go", "came", "went", "doing", "help", "need", "want"
+            "coming", "going", "come", "go", "came", "went", "doing", "help", "need", "want",
+            "and", "or", "but", "so", "am", "my", "your", "his", "her", "their", "our"
         }
         or not w
         for w in low_words
@@ -799,13 +812,20 @@ def elevate_to_pure_english(text: str) -> str:
         (r"\bwant\b", "require"),
         (r"\bwill go\b", "shall proceed"),
         (r"\bcall me now\b", "please contact me by telephone at once"),
-        (r"\bhow are you\b", "how do you do"),
+        (r"\b(hello|hi)[,\s]+how are you[?\.]*", "Greetings. How do you do? I trust you are well."),
+        (r"^how are you[?\.]*", "How do you do? I trust you are well."),
+        (r"\bhow are you[?\.]*", "how do you do? I trust you are well."),
+        (r"\b(and\s+)?good morning\b", "and a very pleasant morning to you"),
+        (r"\bgood morning\b", "a very pleasant morning to you"),
+        (r"\bgood night\b", "wishing you a peaceful and restful night"),
         (r"\bi am doing well\b", "I am in sound health and good spirits"),
         (r"\byou look very good\b", "you are doing exceptionally well"),
         (r"\bconvert this sentence into english\b", "please translate this sentence into English"),
     ]
     for pat, rep in elevations:
         t = re.sub(pat, rep, t, flags=re.IGNORECASE)
+
+    t = re.sub(r"\.\s+and\b", ", and", t, flags=re.IGNORECASE)
 
     if t:
         t = t[0].upper() + t[1:]
@@ -1847,9 +1867,15 @@ def detect_modality(text: str, english_vocab: set[str] | None = None, telugu_lex
         label = "Pure English"
         conf = 0.92
     elif te_roman_tokens > 0 and en_tokens > 0:
-        modality = "romanized_tanglish"
-        label = "Romanized Tanglish (Telugu-English Code-Mixed)"
-        conf = 0.96
+        total_words = en_tokens + te_roman_tokens
+        if te_chars == 0 and en_tokens / max(1, total_words) >= 0.75 and te_roman_tokens <= 1:
+            modality = "pure_english"
+            label = "Pure English"
+            conf = 0.92
+        else:
+            modality = "romanized_tanglish"
+            label = "Romanized Tanglish (Telugu-English Code-Mixed)"
+            conf = 0.96
     elif te_roman_tokens > 0 and en_tokens == 0:
         modality = "romanized_telugu_pure"
         label = "Romanized Telugu (Tanglish)"
@@ -1926,7 +1952,7 @@ class OmniProcessor:
         pure_english_text = translate_to_pure_english(raw, normalized=normalized_text)
 
         # If neural GPU translation is available and requested:
-        if engine == "neural" and self.registry:
+        if engine in ("neural", "auto") and self.registry and detected["modality"] != "pure_english":
             neural_preds = self.registry.translate([raw], model_name="translation_sota")
             if neural_preds and neural_preds[0] and len(neural_preds[0].strip()) > 2:
                 neural_en = neural_preds[0].strip()
