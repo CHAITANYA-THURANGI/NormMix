@@ -300,6 +300,14 @@
           <div class="meta-label">Production Deliverables</div>
           <div class="meta-value">FastAPI Backend, Web Studio SPA, Chrome Extension</div>
         </div>
+        <div class="meta-item">
+          <div class="meta-label">Live Web Studio</div>
+          <div class="meta-value"><a href="https://chaitanya-thurangi.github.io/NormMix/" style="color:#2563eb; text-decoration:none;">chaitanya-thurangi.github.io/NormMix</a></div>
+        </div>
+        <div class="meta-item">
+          <div class="meta-label">Live Cloud API (Render)</div>
+          <div class="meta-value"><a href="https://normmix-api.onrender.com" style="color:#059669; text-decoration:none;">normmix-api.onrender.com</a> (Swagger: /docs)</div>
+        </div>
       </div>
 
       <div class="callout callout-success">
@@ -568,10 +576,17 @@ logits = torch.log(p_final.clamp(min=1e-12))</code></pre>
     <li><strong>Pure English Translation:</strong> Word-by-word glossing and grammatical elevation to natural English.</li>
   </ol>
 
-  <h3>Level 9: Full-Stack Serving & Active Learning</h3>
+  <h3>Level 9: Full-Stack Serving, Cloud Ecosystem & Hybrid Dual-Engine Architecture</h3>
   <p>
-    The FastAPI backend connects to <code>web/index.html</code> (supporting Web Audio TTS, speech recognition, and virtual Telugu keyboard) and <code>chrome-extension/</code> (Manifest V3 context menu). Every user thumbs-up/down is appended to <code>data/feedback.jsonl</code> for active learning model fine-tuning.
+    The production ecosystem operates across 100% free hosting tiers:
   </p>
+  <ul>
+    <li><strong>Live Web Studio (GitHub Pages):</strong> Hosted at <code>https://chaitanya-thurangi.github.io/NormMix/</code> with Web Speech API (TTS & Speech Dictation), Virtual Telugu Keyboard drawer, and real-time phonetic suggestions.</li>
+    <li><strong>Live Neural API (Render Cloud):</strong> Containerized Docker service hosted at <code>https://normmix-api.onrender.com</code> running FastAPI + PyTorch 2.11 CPU with interactive Swagger UI at <code>/docs</code>.</li>
+    <li><strong>Hybrid Dual-Engine Failover:</strong> Web requests enforce a 5-second <code>AbortSignal</code> timeout. If the cloud service is sleeping or offline, the system transparently falls back to the <strong>In-Browser SOTA Client Engine</strong> (native phonetic rule matrix + 64k lexicon lookup) with 0ms downtime.</li>
+    <li><strong>Chrome Extension (Manifest V3):</strong> Distributed via GitHub Releases (v0.5.0) with context-menu normalization on WhatsApp Web, Twitter, and Gmail.</li>
+    <li><strong>Active Learning on GPU:</strong> User feedback (👍/👎) logs to <code>data/feedback.jsonl</code>, enabling iterative fine-tuning. Verified with <strong>62 passing automated tests</strong>.</li>
+  </ul>
 
   <!-- ==================== SECTION 4 ==================== -->
   <h2>4. Codebase Anatomy: Where to Find Every Line of Code</h2>

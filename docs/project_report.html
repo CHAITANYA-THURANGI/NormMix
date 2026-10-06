@@ -323,6 +323,8 @@
         <h4>System Specifications & Release</h4>
         <p>NormMix SOTA v2.0 (Production Release)</p>
         <p style="font-size:9.5pt; color:#64748b; font-weight:normal; margin-top:3px;">Hardware: NVIDIA GeForce RTX 4060 GPU (CUDA 12.8)</p>
+        <p style="font-size:9pt; color:#2563eb; font-weight:600; margin-top:3px;">Live Web: chaitanya-thurangi.github.io/NormMix</p>
+        <p style="font-size:9pt; color:#059669; font-weight:600; margin-top:2px;">Live Cloud API: normmix-api.onrender.com</p>
       </div>
     </div>
   </div>
@@ -738,6 +740,54 @@
       </ol>
     </li>
   </ul>
+
+  <h2>6.4 Production Cloud Ecosystem & Hybrid Dual-Engine Resilience</h2>
+  <p>
+    To guarantee 100% availability for global users without operational expenses, the system was containerized with Docker and published across free hosting tiers under a resilient <strong>Hybrid Dual-Engine Architecture</strong>:
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>Hosting Platform</th>
+        <th>Public Endpoint</th>
+        <th>Operational Architecture</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Web Studio (Frontend)</strong></td>
+        <td>GitHub Pages</td>
+        <td><code>chaitanya-thurangi.github.io/NormMix</code></td>
+        <td>Static HTML5/JS SPA + Client-Side SOTA Fallback Engine</td>
+      </tr>
+      <tr>
+        <td><strong>Neural API (Backend)</strong></td>
+        <td>Render Cloud</td>
+        <td><code>normmix-api.onrender.com</code></td>
+        <td>FastAPI + PyTorch CPU Docker Container (Uvicorn)</td>
+      </tr>
+      <tr>
+        <td><strong>Interactive Docs</strong></td>
+        <td>FastAPI Swagger</td>
+        <td><code>normmix-api.onrender.com/docs</code></td>
+        <td>OpenAPI 3.0 Interactive Testing Sandbox</td>
+      </tr>
+      <tr>
+        <td><strong>Browser Extension</strong></td>
+        <td>GitHub Releases</td>
+        <td><code>NormMix Release v0.5.0</code></td>
+        <td>Manifest V3 Unpacked Extension ZIP (11.7 KB)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-success">
+    <div class="callout-title">Zero-Downtime Failover Mechanism</div>
+    <p style="margin:0;">
+      API queries from the Web Studio enforce an asynchronous 5-second <code>AbortSignal</code> timeout. If the free-tier cloud backend is recovering from cold sleep or the client loses internet connectivity, execution instantly and transparently falls back to the <strong>In-Browser SOTA Client Engine</strong> (native phonetic rule matrix + 64k lexicon lookup). Users experience 0ms interruption and zero error modals.
+    </p>
+  </div>
 
 
   <!-- ==================== CONCLUSION & FUTURE WORK ==================== -->

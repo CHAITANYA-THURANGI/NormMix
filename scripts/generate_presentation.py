@@ -693,19 +693,20 @@ def create_presentation():
     add_header(slide12, "Client Deployment: Web Translation Studio & Chrome Extension")
 
     deploy_cards = [
-        ("Enterprise Web Translation Studio (web/index.html)", 
-         "• Responsive glassmorphism interface with instant typing reactivity.\n"
+        ("Live Web Studio & Cloud API Ecosystem", 
+         "• Live Web Studio on GitHub Pages: https://chaitanya-thurangi.github.io/NormMix/\n"
+         "• Live Neural API Backend on Render: https://normmix-api.onrender.com (FastAPI Docker).\n"
+         "• Hybrid Dual-Engine Architecture: 5s cloud timeout + 0ms client fallback in browser.\n"
          "• Real-time Google Input Tools style phonetic suggestions dropdown (1. నాకు 2. నాకూ 3. నకు).\n"
          "• Web Speech API integration: Microphone voice dictation (🎙️ Speak) and Web Audio TTS (🔊 Listen).\n"
-         "• Virtual Telugu on-screen keyboard drawer with vowels, consonants, and guninthalu matras.\n"
-         "• Active Learning feedback loop (👍 / 👎) logging user corrections to data/feedback.jsonl.\n"
-         "• 1-Click WhatsApp export and downloadable text file generation."),
-        ("Manifest V3 Browser Extension (chrome-extension/)", 
-         "• Production browser extension supporting Google Chrome and Microsoft Edge.\n"
-         "• Popup quick-translator for rapid text normalization without leaving the current tab.\n"
-         "• Context Menu integration: Right-click selected text on WhatsApp Web, Twitter, LinkedIn, or Gmail.\n"
-         "• In-page DOM replacement: Normalizes text inside active input fields and textareas seamlessly.\n"
-         "• Background Service Worker with offline rule baseline fallback for zero-downtime operation.")
+         "• Active Learning feedback loop (👍 / 👎) with real-time continuous fine-tuning on GPU."),
+        ("Manifest V3 Browser Extension (v0.5.0 Release)", 
+         "• Released via GitHub Releases as an installable package (v0.5.0 ZIP).\n"
+         "• Universal In-Page Support: Works on WhatsApp Web, Twitter/X, LinkedIn, and Gmail.\n"
+         "• Dedicated popup translator with all synchronized view modalities and feedback bar.\n"
+         "• Context Menu: Right-click selected text to normalize/transliterate instantly in-place.\n"
+         "• In-Browser Fallback Engine: Zero-downtime operation even during network disconnects.\n"
+         "• Verified with 62 passing automated unit and integration tests across the framework.")
     ]
 
     for i, (title, content) in enumerate(deploy_cards):

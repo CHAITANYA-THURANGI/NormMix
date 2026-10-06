@@ -68,7 +68,7 @@ Here is the exact breakdown of all directories and critical files across your co
 | [`chrome-extension/`](file:///c:/projects/NormMix/chrome-extension) | **Manifest V3 Browser Extension.** Normalizes Tanglish text on any website (WhatsApp Web, Twitter, LinkedIn, Gmail). | `manifest.json`, `popup/`, `content/`, `background/` | Installed in Google Chrome / Edge via "Load unpacked". |
 | [`mobile/`](file:///c:/projects/NormMix/mobile) | **Flutter Cross-Platform Mobile Client.** Mobile client app communicating with the FastAPI backend. | `flutter_app/lib/main.dart`, `pubspec.yaml` | Compiled to Android APK or iOS app via Flutter CLI. |
 | [`scripts/`](file:///c:/projects/NormMix/scripts) | **CLI Automation Scripts.** Standalone scripts to download datasets, train models, run benchmarks, and generate presentation slides. | `train.py`, `evaluate.py`, `prepare_data.py`, `generate_presentation.py` | Executed directly from terminal (`python scripts/...`). |
-| [`tests/`](file:///c:/projects/NormMix/tests) | **Automated Test Suite.** 58 unit and integration tests verifying tensor shapes, attention masking, API responses, and translation. | `test_models_forward.py`, `test_api.py`, `test_omni_processor.py` | Executed via `pytest` to guarantee zero regressions. |
+| [`tests/`](file:///c:/projects/NormMix/tests) | **Automated Test Suite.** 62 unit and integration tests verifying tensor shapes, attention masking, API responses, and translation. | `test_models_forward.py`, `test_api.py`, `test_omni_processor.py` | Executed via `pytest` to guarantee zero regressions. |
 | [`docs/`](file:///c:/projects/NormMix/docs) | **Documentation & Publications.** Master technical reports, academic case study, PowerPoint slides, and PDF publications. | `project_report.pdf`, `presentation.pptx`, `00_master_report.md` | Academic review, presentation defense, and offline reading. |
 | [`.venv/` & `.venv-gpu/`](file:///c:/projects/NormMix/.venv) | **Python Virtual Environments.** Isolated virtual environments containing Python binaries, PyTorch, CUDA libraries, and dependencies. | `Scripts/python.exe`, `Lib/site-packages/` | Activated before running any command (`.\.venv\Scripts\activate`). |
 
@@ -203,12 +203,14 @@ NormMix implements and empirically evaluates three attention families:
 
 ---
 
-### Level 9: Production Serving, Web Studio UI, Chrome Extension & Active Learning
-- **FastAPI Backend:** Asynchronous REST API with sub-10ms response times, automated OpenAPI documentation (`/docs`), and CORS middleware.
+### Level 9: Production Serving, Cloud Ecosystem, Chrome Extension & Active Learning
+- **Live Cloud Neural API (Render.com):** Asynchronous REST API hosted at `https://normmix-api.onrender.com` running FastAPI + PyTorch 2.11 CPU in an optimized Docker container, complete with OpenAPI Swagger docs (`/docs`).
+- **Live Web Studio (GitHub Pages):** Hosted globally at `https://chaitanya-thurangi.github.io/NormMix/` featuring real-time phonetic auto-suggestions, Web Audio Text-to-Speech playback, Web Speech API speech recognition, and virtual on-screen Telugu keyboard.
+- **Hybrid Dual-Engine Architecture:** Guarantees 100% uptime with zero downtime. Web and extension requests use a 5-second `AbortSignal` timeout to query the cloud API, instantly failing over to the **In-Browser SOTA Client Engine** (phonetic rule matrix + 64k lexicon lookup) if the cloud server is asleep or the user is offline.
 - **Model Registry & Dynamic Caching:** Singleton manager in [`api/services/model_registry.py`](file:///c:/projects/NormMix/api/services/model_registry.py) that pre-loads PyTorch weights into GPU VRAM on startup and maintains an in-memory fallback to `RuleBaseline`.
-- **Web Translation Studio:** Single-page application with modern glassmorphism UI, real-time phonetic auto-suggestions, Web Audio Text-to-Speech playback, Web Speech API speech recognition, and virtual on-screen Telugu keyboard.
-- **Active Learning GPU Feedback Loop:** Users can click 👍 or 👎 and submit manual corrections from both the Web Studio and Chrome Extension. Submissions are saved immediately to [`data/feedback.jsonl`](file:///c:/projects/NormMix/data/feedback.jsonl), and [`src/training/feedback_learner.py`](file:///c:/projects/NormMix/src/training/feedback_learner.py) executes real-time continuous fine-tuning on the NVIDIA GPU, dynamically updating the neural checkpoints on disk and invalidating runtime caches with immediate notification toasts.
-- **Chrome Extension (Manifest V3):** Features a popup translator with all 7 synchronized view modalities, integrated user feedback buttons (👍 / 👎 Suggest Correction) with real-time GPU training triggers, offline client-side fallback, and a context menu ("Normalize Tanglish") allowing users to normalize text on WhatsApp Web, Twitter, LinkedIn, and Gmail in-place.
+- **Active Learning GPU Feedback Loop:** Users can click 👍 or 👎 and submit manual corrections from both the Web Studio and Chrome Extension. Submissions are saved immediately to [`data/feedback.jsonl`](file:///c:/projects/NormMix/data/feedback.jsonl), and [`src/training/feedback_learner.py`](file:///c:/projects/NormMix/src/training/feedback_learner.py) executes real-time continuous fine-tuning on the NVIDIA GPU, dynamically updating the neural checkpoints on disk.
+- **Chrome Extension (Manifest V3 v0.5.0):** Released via GitHub Releases with popup translator, offline client-side fallback, and context menu ("Normalize Tanglish") allowing users to normalize text on WhatsApp Web, Twitter, LinkedIn, and Gmail in-place.
+- **Quality Assurance:** Backed by **62 automated pytest tests** covering tensor shapes, attention masking, translations, and API contracts.
 
 ---
 

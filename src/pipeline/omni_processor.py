@@ -1952,13 +1952,24 @@ class OmniProcessor:
         pure_english_text = translate_to_pure_english(raw, normalized=normalized_text)
 
         # If neural GPU translation is available and requested:
-        if engine in ("neural", "auto") and self.registry and detected["modality"] != "pure_english":
+        if engine == "neural" and self.registry and detected["modality"] != "pure_english":
             neural_preds = self.registry.translate([raw], model_name="translation_sota")
             if neural_preds and neural_preds[0] and len(neural_preds[0].strip()) > 2:
                 neural_en = neural_preds[0].strip()
                 if not any(c in neural_en for c in ["<unk>", "<pad>"]):
                     english_translation_text = neural_en
                     pure_english_text = elevate_to_pure_english(neural_en)
+        elif engine == "auto" and self.registry and detected["modality"] != "pure_english":
+            # In auto mode, use neural model if semantic translation is generic or empty,
+            # or if the neural translation doesn't contradict detailed semantic phrase matches.
+            has_explicit_translation = any(k in english_translation_text.lower() for k in ["convert", "sentence", "please", "yesterday", "tomorrow", "doing well"])
+            if not has_explicit_translation:
+                neural_preds = self.registry.translate([raw], model_name="translation_sota")
+                if neural_preds and neural_preds[0] and len(neural_preds[0].strip()) > 2:
+                    neural_en = neural_preds[0].strip()
+                    if not any(c in neural_en for c in ["<unk>", "<pad>"]):
+                        english_translation_text = neural_en
+                        pure_english_text = elevate_to_pure_english(neural_en)
 
         prescribed_meaning = english_translation_text
 
