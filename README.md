@@ -1,6 +1,7 @@
 # NormMix AI: An Attention-Based Sequence-to-Sequence Framework for Telugu-English Code-Mixed Text Normalization & Universal Translation
 
 [![Live Web Studio](https://img.shields.io/badge/Live%20Web%20Studio-Online%20(Free)-38bdf8?style=for-the-badge&logo=githubpages&logoColor=white)](https://chaitanya-thurangi.github.io/NormMix/)
+[![Live Cloud API](https://img.shields.io/badge/Live%20Cloud%20API-normmix--api.onrender.com-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://normmix-api.onrender.com/docs)
 [![Chrome Extension](https://img.shields.io/badge/Chrome%20Extension-v0.5.0%20Release-f59e0b?style=for-the-badge&logo=googlechrome&logoColor=white)](https://github.com/CHAITANYA-THURANGI/NormMix/releases/tag/v0.5.0)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.11%2Bcu128-EE4C2C.svg?style=flat&logo=pytorch)](https://pytorch.org/)
 [![CUDA](https://img.shields.io/badge/CUDA-NVIDIA%20RTX%204060-76B900.svg?style=flat&logo=nvidia)](https://developer.nvidia.com/cuda-zone)
