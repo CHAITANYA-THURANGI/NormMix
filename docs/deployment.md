@@ -1,113 +1,95 @@
-# NormMix Deployment Guide
+# NormMix Production Deployment Guide
 
-This document covers the various deployment options for the Telugu-English code-mixed text normalization project, including local development, web application deployment, browser extension, mobile application, and model export strategies.
+This document covers the production cloud deployment, local development, containerization, and browser extension distribution for the **NormMix AI** Telugu-English Code-Mixed Normalization and Translation framework.
 
-## 1. Local Development
+---
 
-### Setting up the virtual environment
+## 🌟 Live Production Ecosystem
 
-It is recommended to use a virtual environment to manage dependencies:
+| Component | Platform | Live URL / Target | Architecture |
+| :--- | :--- | :--- | :--- |
+| **Web Studio (Frontend)** | **GitHub Pages** | [chaitanya-thurangi.github.io/NormMix](https://chaitanya-thurangi.github.io/NormMix/) | Static HTML5/CSS3/Vanilla JS + Client-Side SOTA Fallback Engine |
+| **Neural API (Backend)** | **Render Cloud** | [normmix-api.onrender.com](https://normmix-api.onrender.com) | FastAPI + PyTorch 2.11 CPU + Uvicorn via Docker Container |
+| **Interactive Docs** | **FastAPI Swagger** | [normmix-api.onrender.com/docs](https://normmix-api.onrender.com/docs) | OpenAPI 3.0 Interactive Documentation |
+| **Telemetry & Health** | **Render Health** | [normmix-api.onrender.com/health](https://normmix-api.onrender.com/health) | Continuous uptime and hardware monitoring |
+| **Chrome Extension** | **GitHub Releases** | [NormMix v0.5.0 Release](https://github.com/CHAITANYA-THURANGI/NormMix/releases/tag/v0.5.0) | Manifest V3 Unpacked Extension ZIP (11.7 KB) |
 
-```bash
-# Create a virtual environment
-python -m venv venv
+---
 
-# Activate the virtual environment
-# On Windows:
-venv\Scripts\activate
-# On macOS/Linux:
-source venv/bin/activate
+## 1. Cloud Architecture & Failover Strategy
+
+NormMix implements a **Hybrid Dual-Engine Architecture**:
+
+```mermaid
+graph TD
+    User["Web Browser / Mobile Visitor"] --> GH["GitHub Pages (Static Host)<br/>https://chaitanya-thurangi.github.io/NormMix/"]
+    GH -->|Primary API Request (5s timeout)| Render["Render Cloud Backend (Docker)<br/>https://normmix-api.onrender.com"]
+    Render -->|Neural Inference| BiGRU["3.05M BiGRU Pointer-Generator + 64k Lexicon"]
+    GH -.->|Cold Start / Offline Failover (0ms)| ClientEngine["In-Browser Client SOTA Engine<br/>(Native JS Rule & Lexicon Matrix)"]
 ```
 
-### Installing dependencies
+1. **Primary Route:** The client sends an asynchronous HTTP POST request to `https://normmix-api.onrender.com/omni/process` with a 5-second `AbortSignal` timeout.
+2. **Seamless Fallback:** If the cloud service is spinning up from cold sleep (>5s) or the client is offline, execution instantly and transparently switches to the **In-Browser Client Engine**. The user never experiences an error.
+3. **No Mixed Content / CORS Errors:** Both GitHub Pages and Render operate over secure **HTTPS**. Render's CORS configuration explicitly allows `["*"]`, enabling requests from web browsers and Chrome Extensions.
 
-Install the required packages from `requirements.txt`:
+---
 
-```bash
-pip install -r requirements.txt
-```
+## 2. Docker Containerization (Render & Cloud Run)
 
-### Running the API server
-
-Start the FastAPI server using `uvicorn`:
-
-```bash
-uvicorn api.main:app --reload
-```
-
-The API will be available at `http://127.0.0.1:8000`. You can access the interactive API documentation at `http://127.0.0.1:8000/docs`.
-
-### Testing the web interface
-
-If the web interface is served statically, you can open `web/index.html` in your browser. Alternatively, if it is served by the FastAPI application, navigate to the appropriate route (e.g., `http://127.0.0.1:8000/`).
-
-## 2. Web Application Deployment
-
-### Architecture
-
-The web application follows a client-server architecture:
-**Frontend (`web/index.html`) → FastAPI (`api/main.py`) → Model Inference**
-
-### Local deployment with uvicorn
-
-For local testing, as mentioned above:
-```bash
-uvicorn api.main:app --reload
-```
-
-### Production deployment with gunicorn/uvicorn workers
-
-For production, use `gunicorn` with `uvicorn` workers to handle multiple concurrent requests:
-
-```bash
-gunicorn api.main:app -w 4 -k uvicorn.workers.UvicornWorker
-```
-*(Adjust the number of workers `-w` based on your server's CPU cores).*
-
-### Docker containerization
-
-You can containerize the application using Docker.
-
-**Sample `Dockerfile`:**
+The production container is defined in [`Dockerfile`](file:///c:/projects/NormMix/Dockerfile):
 
 ```dockerfile
-FROM python:3.9-slim
+FROM python:3.11-slim
 
-WORKDIR /app
+# Setup non-root user with UID 1000 (Security standard)
+RUN useradd -m -u 1000 user
+WORKDIR /home/user/app
+
+# Install lightweight system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential curl git && rm -rf /var/lib/apt/lists/*
+
+# Install CPU-optimized PyTorch (~180MB instead of 2.5GB CUDA)
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+COPY --chown=user:user . /home/user/app
 
-EXPOSE 8000
+RUN mkdir -p data/processed experiments/checkpoints experiments/logs && \
+    chown -R user:user /home/user/app
 
-CMD ["gunicorn", "api.main:app", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8000"]
+USER user
+ENV HOME=/home/user PATH=/home/user/.local/bin:$PATH PORT=7860 PYTHONUNBUFFERED=1
+
+EXPOSE 7860 8000
+
+CMD ["sh", "-c", "uvicorn api.main:app --host 0.0.0.0 --port ${PORT:-7860}"]
 ```
 
-Build and run the container:
+### Key Optimizations:
+- **CPU-Optimized Wheel:** Downloads the official CPU PyTorch wheel (~180 MB) instead of CUDA binaries (2.5 GB), reducing container build times from 8 minutes to under 2 minutes.
+- **Dynamic Port Binding:** Automatically binds to `${PORT:-7860}`, enabling compatibility across Render (`PORT=10000`), Hugging Face Spaces (`PORT=7860`), and Google Cloud Run (`PORT=8080`).
+- **Non-Root User:** Operates under unprivileged UID `1000` to prevent privilege escalation.
+
+---
+
+## 3. Local Development & GPU Training
+
 ```bash
-docker build -t normmix-api .
-docker run -p 8000:8000 normmix-api
+# 1. Activate Virtual Environment
+.\.venv\Scripts\activate   # Windows PowerShell
+source .venv/bin/activate  # Linux / macOS
+
+# 2. Run Test Suite (62 automated pytest checks)
+python -m pytest
+
+# 3. Launch Local FastAPI Server (CUDA GPU Acceleration)
+uvicorn api.main:app --host 127.0.0.1 --port 8000 --reload
 ```
-
-### Google Cloud Run deployment (free tier)
-
-1. Build and push the Docker image to Google Container Registry (GCR) or Artifact Registry.
-2. Deploy to Cloud Run:
-```bash
-gcloud run deploy normmix-api --image gcr.io/[PROJECT-ID]/normmix-api --platform managed --region us-central1 --allow-unauthenticated
-```
-This leverages the Google Cloud free tier for serverless deployment.
-
-### Environment variables and configuration
-
-Use a `.env` file or environment variables for configuration. Key variables might include:
-- `MODEL_PATH`: Path to the trained model weights.
-- `LOG_LEVEL`: Logging level (e.g., INFO, DEBUG).
-- `ALLOWED_ORIGINS`: Allowed origins for CORS.
-
-## 3. Chrome Extension
+Local Swagger UI: `http://127.0.0.1:8000/docs`
 
 ### Loading the extension in Chrome (developer mode)
 

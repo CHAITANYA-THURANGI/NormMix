@@ -6,7 +6,7 @@
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.11%2Bcu128-EE4C2C.svg?style=flat&logo=pytorch)](https://pytorch.org/)
 [![CUDA](https://img.shields.io/badge/CUDA-NVIDIA%20RTX%204060-76B900.svg?style=flat&logo=nvidia)](https://developer.nvidia.com/cuda-zone)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
-[![Tests](https://img.shields.io/badge/Tests-58%20Passed-10b981.svg?style=flat)]()
+[![Tests](https://img.shields.io/badge/Tests-62%20Passed-10b981.svg?style=flat)]()
 [![Documentation](https://img.shields.io/badge/Report%20PDF-804%20KB-blue.svg?style=flat)](docs/project_report.pdf)
 [![Master Guide](https://img.shields.io/badge/Master%20Guide%20PDF-961%20KB-059669.svg?style=flat)](docs/PROJECT_COMPLETE_GUIDE_AND_LEARNING_PATH.pdf)
 
@@ -66,7 +66,7 @@ Evaluated across standard benchmarks and fine-grained test slices:
 .\.venv\Scripts\activate   # On Windows
 source .venv/bin/activate  # On Linux/macOS
 
-# 2. Run the complete pytest test suite (58 tests)
+# 2. Run the complete pytest test suite (62 tests)
 python -m pytest
 
 # 3. Start the FastAPI backend & Web Studio
@@ -111,14 +111,16 @@ uvicorn api.main:app --host 127.0.0.1 --port 8000 --reload
 │   └── index.html               # Enterprise Web Translation Studio (Audio, Voice, Keyboard, Suggestions)
 ├── chrome-extension/            # Manifest V3 browser extension (Popup, Context Menu, Content Script)
 ├── docs/
+│   ├── ONLINE_PUBLISHING_GUIDE.md # Live cloud publishing & deployment guide
 │   ├── project_report.pdf       # Formal Academic & Industry Publication Report (804 KB, A4)
-│   ├── project_report.html      # Academic source document
 │   ├── 00_master_report.md      # Full Markdown technical report
-│   └── deployment.md            # Cloud deployment guide (Docker, Cloud Run, Render)
+│   ├── deployment.md            # Cloud deployment guide (Docker, Render, Cloud Run)
+│   ├── api.md                   # OpenAPI & REST API specification
+│   └── PROJECT_COMPLETE_GUIDE_AND_LEARNING_PATH.pdf # Master Architecture Guide
 ├── data/
 │   ├── processed/               # Zero-leakage train/val/test splits & rule baseline (64k entries)
 │   └── feedback.jsonl           # Real-time user feedback and active learning logs
-└── tests/                       # 47 automated PyTest unit tests
+└── tests/                       # 62 automated PyTest unit tests
 ```
 
 ---

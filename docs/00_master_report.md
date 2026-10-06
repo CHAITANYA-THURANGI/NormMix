@@ -4,6 +4,9 @@
 **Domain:** Computational Linguistics, Deep Learning, Indic NLP, Low-Resource Script Normalization  
 **Hardware Accelerator:** NVIDIA GeForce RTX 4060 Laptop GPU (8.0 GB GDDR6), CUDA 12.8  
 **Framework:** PyTorch 2.11 + CUDA AMP (FP16), FastAPI, Uvicorn, SentencePiece  
+**Live Web Studio:** [chaitanya-thurangi.github.io/NormMix](https://chaitanya-thurangi.github.io/NormMix/)  
+**Live Cloud Neural API:** [normmix-api.onrender.com](https://normmix-api.onrender.com) (Swagger: [/docs](https://normmix-api.onrender.com/docs))  
+**Chrome Extension:** [GitHub Release v0.5.0](https://github.com/CHAITANYA-THURANGI/NormMix/releases/tag/v0.5.0)  
 **Publication PDF:** [`docs/project_report.pdf`](file:///c:/projects/NormMix/docs/project_report.pdf)  
 
 ---
@@ -87,38 +90,62 @@ Models were trained and evaluated on an **NVIDIA GeForce RTX 4060 Laptop GPU** w
 
 ---
 
-## 5. Deployment, Web Studio & Universal Auto-Detect Pipeline
+## 5. Production Ecosystem & Universal Auto-Detect Pipeline
 
-The framework is packaged for production serving:
-- **FastAPI Endpoints:**
-  - `POST /omni/process`: Universal Auto-Detection pipeline classifying input modalities (Pure English, Pure Telugu, Tanglish, Bi-scriptal) and computing all 4 target representations simultaneously.
-  - `POST /normalize`: High-throughput code-mixed normalization.
-  - `POST /romanize`: Reverse phonetic transliteration (Telugu &rarr; Tanglish).
-  - `GET /dictionary/lookup`: Instant queried search over the 64,421-word corpus.
-  - `GET /report.pdf`: Direct download of the academic project documentation PDF.
-  - `GET /health` & `GET /models`: Runtime telemetry and hardware inspection.
-- **Enterprise Web UI (`web/index.html`):**
-  - **Universal Auto-Detect Engine**: Automatically senses language and script distribution.
-  - **Multi-Option Target Switcher**: Allows 1-click toggling between Standard Normalized, All Telugu Script, All Romanized Tanglish, English Meaning, and Token Diagnostics.
-  - Real-time debounced live typing (sub-10ms neural latency on GPU).
-  - Language Identification color-coded token badges (`[TE]`, `[EN]`, `[SYM]`).
-  - Interactive 64k lexicon search explorer.
+### 5.1 Live Production Endpoints
+The NormMix platform is deployed and publicly accessible worldwide across 100% free hosting tiers:
 
+| Component | Platform | Live URL / Target | Architecture |
+| :--- | :--- | :--- | :--- |
+| **Web Studio (Frontend)** | **GitHub Pages** | [chaitanya-thurangi.github.io/NormMix](https://chaitanya-thurangi.github.io/NormMix/) | Static HTML5/CSS3/Vanilla JS + Client-Side SOTA Fallback Engine |
+| **Neural API (Backend)** | **Render Cloud** | [normmix-api.onrender.com](https://normmix-api.onrender.com) | FastAPI + PyTorch 2.11 CPU + Uvicorn via Docker Container |
+| **Interactive Docs** | **FastAPI Swagger** | [normmix-api.onrender.com/docs](https://normmix-api.onrender.com/docs) | OpenAPI 3.0 Interactive Testing Sandbox |
+| **Telemetry & Health** | **Render Health** | [normmix-api.onrender.com/health](https://normmix-api.onrender.com/health) | Continuous uptime and hardware monitoring |
+| **Chrome Extension** | **GitHub Releases** | [NormMix v0.5.0 Release](https://github.com/CHAITANYA-THURANGI/NormMix/releases/tag/v0.5.0) | Manifest V3 Unpacked Extension ZIP (11.7 KB) |
+
+### 5.2 Hybrid Dual-Engine Resilience
+NormMix implements a fault-tolerant hybrid client-cloud architecture:
+- **Cloud Primary Route:** Queries `https://normmix-api.onrender.com/omni/process` with a 5-second `AbortSignal` timeout.
+- **Client Fallback (0ms):** If the cloud backend is sleeping or unreachable, the frontend automatically falls back to an **In-Browser SOTA Client Engine** (JavaScript phonetic rule matrix + 64k lexicon lookup). Users experience zero downtime and zero error modals.
+
+### 5.3 OmniProcessor Multi-Modal Outputs
+For every input sequence, the system computes:
+1. **Standard Normalized:** Telugu in Telugu Unicode script, English loanwords preserved with 100% fidelity.
+2. **All Telugu Script (అచ్చ తెలుగు):** Entire sentence in Telugu script (English loanwords phonetically transliterated).
+3. **All Romanized Tanglish:** Entire sentence in Latin phonetic script.
+4. **English Semantic Meaning & Gloss:** Word-by-word bilingual gloss and overall English translation.
+
+### 5.4 Web Studio Features (`web/index.html`):
+- **Phonetic Suggestion Dropdown:** Google Input Tools-style candidate list (`1. నాకు 2. నాకూ 3. నకు`).
+- **Text-to-Speech (TTS):** Browser Web Speech API pronunciation in native Telugu and English.
+- **Voice Dictation:** Live microphone speech-to-text recognition.
+- **Virtual Telugu Keyboard:** On-screen clickable character and matra drawer.
+- **Active Learning User Feedback:** Thumbs-up / Thumbs-down logging directly to `data/feedback.jsonl`.
 
 ---
 
-## 6. How to Run
+## 6. How to Run & Verify
 
+### 6.1 Local Development
 ```bash
 # 1. Activate environment
 .\.venv\Scripts\activate
 
-# 2. Run unit tests
+# 2. Run unit tests (62 automated pytest checks)
 python -m pytest
 
 # 3. Launch FastAPI & Web Studio
 uvicorn api.main:app --host 127.0.0.1 --port 8000 --reload
+# Open in browser: http://127.0.0.1:8000
+```
 
-# Open in browser:
-# http://127.0.0.1:8000
+### 6.2 Testing Live Cloud Endpoints
+```bash
+# Health check
+curl -s https://normmix-api.onrender.com/health
+
+# Multi-modal prediction
+curl -X POST https://normmix-api.onrender.com/omni/process \
+  -H "Content-Type: application/json" \
+  -d '{"text": "naku ivala college lo important interview undi"}'
 ```
